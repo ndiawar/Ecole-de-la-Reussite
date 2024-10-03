@@ -1,0 +1,44 @@
+# Ignorer les fichiers de cache
+/cache/
+tmp/
+
+# Ignorer les logs
+/logs/
+*.log
+
+# Ignorer les fichiers générés
+/vendor/
+node_modules/
+public/assets/
+*.cache
+*.pid
+
+# Ignorer les fichiers d'environnement
+.env
+.env.local
+.env.*.local
+
+# Ignorer les fichiers temporaires
+*.tmp
+*.temp
+
+# Ignorer les fichiers de l'éditeur
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers de sauvegarde
+*~
+*.bak
+*.orig
+
+# Ignorer les répertoires de tests
+/tests/
+
+# Ignorer le répertoire de l'historique
+.history/
+
+# Ignorer le répertoire de stockage et son contenu
+/storage/
+!storage/.gitkeep  # Optionnel : si vous souhaitez garder un fichier .gitkeep dans storage

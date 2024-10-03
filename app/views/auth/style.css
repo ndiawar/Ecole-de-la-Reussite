@@ -1,0 +1,56 @@
+body {
+    background-color: #f7f9fc;
+}
+
+/* login */
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+.form-control {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-radius: 8px;
+    padding: 10px;
+    border: none;
+    width: 100%;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.text-center a {
+    color: #007bff;
+}
+.text-center a:hover {
+    text-decoration: underline;
+}
+/* Register */
+.btn-success {
+    background-color: #28a745;
+    border-radius: 8px;
+    padding: 10px;
+    border: none;
+    width: 100%;
+}
+.btn-success:hover {
+    background-color: #218838;
+}
+.text-center a {
+    color: #28a745;
+}
+.text-center a:hover {
+    text-decoration: underline;
+}
