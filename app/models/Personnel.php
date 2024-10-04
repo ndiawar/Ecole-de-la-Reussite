@@ -28,7 +28,7 @@ class Personnel {
     }
 
     // Ajouter un nouvel personnel
-    public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire) {
+    public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
         // Vérification des champs obligatoires
         if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
             throw new Exception("Tous les champs sont obligatoires.");
@@ -45,7 +45,7 @@ class Personnel {
         }
     
         $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire)");
+        $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
     
         return $stmt->execute([
             ':nom' => $nom,
@@ -57,7 +57,8 @@ class Personnel {
             ':sexe' => $sexe,
             ':role' => $role,
             ':statut_compte' => $statut_compte,
-            ':id_salaire' => $id_salaire
+            ':id_salaire' => $id_salaire,
+            ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
         ]);
     }
     

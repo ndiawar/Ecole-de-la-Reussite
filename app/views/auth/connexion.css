@@ -1,0 +1,128 @@
+/* Styles de base */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* Conteneur principal */
+.container {
+    display: flex;
+    width: 800px;
+    height: 500px; /* Ajustez la hauteur si nécessaire */
+    border-radius: 10px; /* Arrondi sur les coins du conteneur principal */
+    border-top-left-radius: 0; /* Pas d'arrondi pour le coin supérieur gauche */
+    border-bottom-left-radius: 0; /* Pas d'arrondi pour le coin inférieur gauche */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Pour s'assurer que les bords arrondis fonctionnent bien */
+}
+
+/* Section de l'image */
+.image-section {
+    width: 35%; /* Largeur de la section d'image */
+    background-color: #004d40; /* teal foncé */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+}
+
+.image-section img.logo {
+    width: 200px; /* Agrandir le logo */
+    height: auto;
+    margin-bottom: 40px; /* Réduire l'espace entre le logo et l'image de fond */
+    text-align: center;
+}
+
+.image-section img.image {
+    width: 350px; /* Agrandir l'image de connexion */
+    height: auto;
+    margin-top: -50px; /* Déplacer l'image de connexion vers le haut */
+}
+
+/* Section du formulaire */
+.form-section {
+    width: 65%; /* Largeur de la section du formulaire */
+    background-color: #ffffff;
+    padding: 40px;
+    border-top-right-radius: 10px; /* Bord arrondi en haut à droite */
+    border-bottom-right-radius: 10px; /* Bord arrondi en bas à droite */
+}
+
+.form-section h2 {
+    text-align: center; /* Centrer le titre */
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333;
+}
+/* Styles pour les champs du formulaire */
+.input-container {
+    margin-bottom: 40px; /* Espace entre les labels et les inputs */
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 15px; /* Augmenter l'espace entre le label et l'input */
+    font-size: 14px;
+    color: #666;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc; /* Trait en bas de l'input */
+    outline: none;
+    font-size: 16px;
+    transition: border-bottom-color 0.3s ease; /* Transition pour le changement de couleur */
+}
+
+input:focus {
+    border-bottom-color: #004d40; /* Couleur du trait au focus */
+}
+
+
+
+/* Style pour l'icône d'œil */
+.toggle-password {
+    cursor: pointer;
+    font-size: 18px; /* Ajustez la taille de l'icône */
+    position: absolute; /* Position absolue pour placer l'icône */
+    right: 2px; /* Alignement à droite dans le conteneur */
+    top: 80%; /* Centre l'icône verticalement */
+    transform: translateY(-50%); /* Ajustement pour le centrage vertical */
+}
+
+/* Bouton pour se connecter */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #004d40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #00332e;
+}
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.input-error {
+    border: 1px solid red;
+}

@@ -1,0 +1,59 @@
+form {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold; /* Met le texte des labels en gras */
+}
+
+.required {
+    color: red; /* Change la couleur des étoiles en rouge */
+}
+
+/* Styles pour les inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    margin-bottom: 15px; /* Espace entre les champs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007bff; /* Change la couleur de la bordure au focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une ombre */
+}
+
+button {
+    background-color: #008080; /* Couleur du bouton */
+    color: white; /* Couleur du texte du bouton */
+    border-radius: 5px; /* Pas de bordure */
+    padding: 10px 15px; /* Espace interne */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Changer le curseur en pointeur */
+    transition: background-color 0.3s; /* Transition pour la couleur du bouton */
+}
+
+button:hover {
+    background-color: #0056b3; /* Couleur du bouton au survol */
+}
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.input-error {
+    border: 1px solid red;
+}
