@@ -74,7 +74,7 @@ class PersonnelController {
             }
         } else {
             $personnel = $this->personnelModel::find($id);
-            require '../app/views/personnel/edit.php'; // Formulaire de modification
+            require '../app/views/personnel/editPersonnel.php'; // Formulaire de modification
         }
     }
 
