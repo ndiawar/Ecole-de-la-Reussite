@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validation de la dernière connexion (non vide)
     if (derniere_connexion.value.trim() === '') {
-        showError(derniere_connexion, "La dernière connexion est obligatoire.");
+        showError(derniere_connexion, "La date de prise de poste est obligatoire.");
         isValid = false;
     }
 

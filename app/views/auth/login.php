@@ -1,6 +1,6 @@
 <?php
 // Démarrer la session pour gérer les erreurs ou les succès de la connexion
-session_start();
+// sessionstart();
 
 // Inclusion du fichier AuthController
 require_once(__DIR__ . '/../../controllers/AuthController.php');
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
     <!-- Lien vers le fichier CSS -->
-    <link rel="stylesheet" href="../app/views/auth/connexion.css">
+    <link rel="stylesheet" href="../app/views/auth/css/connexion.css">
 </head>
 
 <body>
@@ -65,24 +65,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3 input-container password-container">
                     <label for="password" class="form-label">Mot de passe</label>
                     <input type="password" id="password" name="password" class="form-control" required>
-                    <span id="toggle-password" class="toggle-password"><i class="fas fa-eye-slash"></i></span>
+                    <!-- <span id="toggle-password" class="toggle-password"><i class="fas fa-eye-slash"></i></span> -->
                 </div>
 
                 <button id="login-button" type="submit">Se connecter</button>
-                <!-- Afficher le message d'erreur ici -->
-        <?php
-        if (isset($_SESSION['error_message'])) {
-            echo '<p style="color: red;">' . $_SESSION['error_message'] . '</p>';
-            unset($_SESSION['error_message']); // Effacer le message après l'affichage
-        }
-        ?>
+                        <!-- Afficher le message d'erreur ici -->
+                <?php
+                if (isset($_SESSION['error_message'])) {
+                    echo '<p style="color: red;">' . $_SESSION['error_message'] . '</p>';
+                    unset($_SESSION['error_message']); // Effacer le message après l'affichage
+                }
+                ?>
             </form>
         </div>
     </div>
-    
 
     <!-- Lien vers le fichier JavaScript -->
-<script src="../app/views/auth/connexion.js"></script>
+<script src="../app/views/auth/js/connexion.js"></script>
 </body>
 
 </html>

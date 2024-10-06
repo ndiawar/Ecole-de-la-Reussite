@@ -39,6 +39,8 @@ class AuthController {
             // Démarrer la session pour l'utilisateur
             $_SESSION['personnel_id'] = $personnel['id_personnel'];
             $_SESSION['role'] = $personnel['role'];
+            // Ajouter un message de succès à la session
+            $_SESSION['success_message'] = "Bienvenue, vous êtes connecté !";
             // Redirection vers le tableau de bord
             header("Location: /Ecole-de-la-Reussite/public/index.php?action=Dashboard");
             exit();
@@ -103,7 +105,9 @@ class AuthController {
         try {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hachage du mot de passe
             $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $hashedPassword, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
-            header("Location: /Ecole-de-la-Reussite/public/index.php?action=login.php"); // Rediriger vers la page de connexion
+             // Ajouter un message de succès à la session
+            $_SESSION['success_message'] = "Personnel, ajouté avec succés !";
+            header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion
             exit(); // Terminer le script
         } catch (Exception $e) {
             // Stocker le message d'erreur dans la session
@@ -153,7 +157,7 @@ class AuthController {
     public function logout() {
         session_start();
         session_destroy(); // Détruire la session
-        header("Location: login.php"); // Rediriger vers la page de connexion
+        header("Location: /Ecole-de-la-Reussite/public/index.php?action=login");
         exit(); // Terminer le script
     }
 

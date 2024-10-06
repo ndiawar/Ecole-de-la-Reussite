@@ -1,0 +1,327 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.btn-deconnexion {
+    padding: 10px 15px;
+    background-color: #004d40; /* Couleur de fond du bouton */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+   position: relative;
+   left: 1450px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.search-container input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 70%; /* Augmenter la largeur du champ de recherche */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-add {
+    padding: 10px 50px;
+    background-color: #004d40; /* Couleur de fond du bouton Ajouter */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 250px; /* Espacement à droite pour le bouton Ajouter */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%; /* S'assure que le tableau occupe toute la largeur */
+    border-collapse: collapse; /* Supprime les espaces entre les cellules */
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ffffff; /* Bordure en bas de chaque cellule */
+}
+
+table th {
+    background-color: #e0e0e0; /* Couleur de fond des en-têtes */
+    color: black; /* Couleur du texte des en-têtes */
+}
+
+table td {
+    background-color: white; /* Couleur de fond par défaut des cellules */
+}
+
+/* Alternance des lignes */
+table tr:nth-child(odd) td {
+    background-color: white; /* Couleur des lignes impaires */
+}
+
+table tr:nth-child(even) td {
+    background-color: rgba(235, 246, 255, 0.5); /* Couleur des lignes paires avec 50% d'opacité */
+}
+
+.icon {
+    font-size: 18px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.pagination {
+    display: flex;
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre les éléments verticalement */
+    list-style: none;
+    padding: 0;
+}
+
+.pagination ul {
+    display: flex; /* Affiche les éléments de la liste horizontalement */
+    padding: 0; /* Assurez-vous qu'il n'y a pas de padding sur l'ul */
+    margin: 0; /* Assurez-vous qu'il n'y a pas de margin sur l'ul */
+
+}
+
+.pagination li {
+    margin: 0 5px; /* Marge horizontale entre les éléments */
+    list-style: none;
+
+}
+
+.pagination li a {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #00796b;
+    transition: background-color 0.3s, color 0.3s; /* Transition pour un effet de hover plus fluide */
+
+}
+
+.pagination li a.active {
+    background-color: #008080; /* Numéro actif avec un fond vert */
+    color: white;
+}
+
+.pagination li a:hover {
+    background-color: #00796b; /* Couleur d'arrière-plan au survol */
+    color: white;
+}
+
+.pagination li a:not(.active) {
+    background-color: #f0f0f0; /* Autres en gris léger */
+}
+
+.pagination li a.disabled {
+    color: #ccc; /* Couleur pour le lien désactivé */
+    pointer-events: none; /* Désactive le clic sur le lien */
+    background-color: transparent; /* Fond transparent pour le lien désactivé */
+}
+
+.fas {
+    color: #004d40;
+}
+
+.modal-content {
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    padding-left: 235px; /* Laisse de l'espace pour l'icône */
+    border: none; /* Supprime les bordures */
+    background-color: #f0f0f0; /* Grey 200 */
+    border-radius: 5px; /* Donne des bords arrondis */
+    height: 50px; /* Hauteur de l'input */
+    outline: none; /* Supprime le contour lors du focus */
+    transition: background-color 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #999; /* Couleur du texte placeholder */
+    left: 15px;
+    padding-left: 40px;
+}
+
+.input-group .input-icon {
+    position: absolute;
+    left: 5px;
+    color: #999; /* Couleur de l'icône */
+}
+
+.input-group input:focus {
+    background-color: #e0e0e0; /* Changement de couleur lors du focus */
+}
+
+.fa-search {
+    color: #999; /* Couleur de l'icône */
+    left: 5px;
+}
+
+form {
+
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold; /* Met le texte des labels en gras */
+}
+
+.required {
+    color: red; /* Change la couleur des étoiles en rouge */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    margin-bottom: 15px; /* Espace entre les champs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007bff; /* Change la couleur de la bordure au focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une ombre */
+}
+
+button {
+    background-color: #008080;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005f5f; /* Couleur du bouton au hover */
+}
+
+.ajout {
+    background-color: #004D40;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.modal-lg {
+    max-width: 90%; /* Augmente la largeur du modal */
+}
+
+
+
+
+
+
+
+form {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold; /* Met le texte des labels en gras */
+}
+
+.required {
+    color: red; /* Change la couleur des étoiles en rouge */
+}
+
+/* Styles pour les inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    margin-bottom: 15px; /* Espace entre les champs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007bff; /* Change la couleur de la bordure au focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une ombre */
+}
+
+button {
+    background-color: #008080; /* Couleur du bouton */
+    color: white; /* Couleur du texte du bouton */
+    border-radius: 5px; /* Pas de bordure */
+    padding: 10px 15px; /* Espace interne */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Changer le curseur en pointeur */
+    transition: background-color 0.3s; /* Transition pour la couleur du bouton */
+}
+
+ 
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.input-error {
+    border: 1px solid red;
+}
+.ajout {
+    background-color: #004D40;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}

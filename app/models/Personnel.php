@@ -9,13 +9,22 @@ class Personnel {
         $this->pdo = $db->getPDO();
     }
 
-    // Récupérer tous les personnel
+
+    public function getActifPersonnels() {
+        $query = "SELECT * FROM personnel WHERE statut_compte = 'Actif'";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+   // Récupérer tous les personnels actifs
     public static function all() {
         $db = new Database();
         $pdo = $db->getPDO();
-        $stmt = $pdo->query("SELECT * FROM personnel");
+        $stmt = $pdo->prepare("SELECT * FROM personnel WHERE statut_compte = 'Actif'"); // Ajouter la condition pour le statut
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
     // Récupérer un personnel par son ID
     public static function find($id) {
@@ -103,9 +112,12 @@ class Personnel {
 
     // Archiver un personnel
     public function archive($id) {
-        $stmt = $this->pdo->prepare("UPDATE personnel SET statut_compte = 'archivé' WHERE id_personnel = :id");
-        return $stmt->execute([':id' => $id]);
+        $query = "UPDATE personnel SET statut_compte = 'Inactif' WHERE id_personnel = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
     }
+    
 
     // Restaurer un personnel archivé
     public function restore($id) {
@@ -131,6 +143,30 @@ class Personnel {
         $stmt->bindParam(':email', $identifiant);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+    
+      // Récupérer les personnels avec pagination
+      public function getPersonnelWithPagination($start, $limit) {
+        $sql = "SELECT * FROM personnel LIMIT :start, :limit";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourner tous les personnels paginés
+    }
+
+    // Compter le nombre total de personnels
+    public function countPersonnel() {
+        $sql = "SELECT COUNT(*) as total FROM personnel";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total']; // Retourner le nombre total de personnels
+    }
+    public function getNomPersonnel($id) {
+        $query = "SELECT nom FROM personnel WHERE id_personnel = :id"; // Ajustez la requête selon votre schéma
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetchColumn(); // Retourne le nom du personnel
     }
     
 }

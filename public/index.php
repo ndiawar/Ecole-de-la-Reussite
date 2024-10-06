@@ -6,11 +6,14 @@ error_reporting(E_ALL);
 // Inclusion des fichiers nécessaires
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
+require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
 require_once '../app/models/Personnel.php'; // 
 
 
 // Instancier le modèle Personel
 $personnelModel = new Personnel(); // Assurez-vous que l'instanciation de Personnel est correcte
+// Instancier le contrôleur Personnel
+$personnelController = new PersonnelController();
 
 // Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
@@ -64,19 +67,32 @@ switch ($action) {
         $authController->logout();
         break;
 
-    case 'archive':
-        // Archiver un personnel
-        // Implémentez la logique ici pour archiver un personnel
-        break;
+        case 'listPersonnel':
+            $personnelController->index(); // Liste des personnels
+            break;
 
-    case 'restore':
-        // Restaurer un personnel archivé
-        // Implémentez la logique ici pour restaurer un personnel
-        break;
+        case 'editPersonnel':
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $personnelController->edit($id); // Modifier un personnel
+            }
+            break;
 
-    // Ajouter d'autres routes selon vos besoins
-    default:
-        // Par défaut, rediriger vers la page de connexion
-        header("Location: index.php?action=login");
-        break;
-}
+        case 'archivePersonnel':
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $personnelController->archive($id); // Archiver un personnel
+            }
+            break;
+
+        case 'restorePersonnel':
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $personnelController->restore($id); // Restaurer un personnel
+            }
+            break;
+
+        default:
+            header("Location: index.php?action=login");
+            break;
+    }

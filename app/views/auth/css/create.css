@@ -45,9 +45,7 @@ button {
     transition: background-color 0.3s; /* Transition pour la couleur du bouton */
 }
 
-button:hover {
-    background-color: #0056b3; /* Couleur du bouton au survol */
-}
+ 
 .error-message {
     color: red;
     font-size: 0.9em;
@@ -56,4 +54,10 @@ button:hover {
 
 .input-error {
     border: 1px solid red;
+}
+.ajout {
+    background-color: #004D40;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }

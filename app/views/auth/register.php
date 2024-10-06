@@ -1,6 +1,6 @@
 <?php
 // Démarrer la session pour gérer les erreurs ou les succès de l'inscription
-session_start();
+// session_start();
 
 // Inclusion du fichier AuthController
 require_once(__DIR__ . '/../../controllers/AuthController.php');
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un Employé</title>
-    <link rel="stylesheet" href="../app/views/auth/create.css">
+    <link rel="stylesheet" href="../app/views/auth/css/create.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Lien vers Bootstrap -->
 </head>
 <body>
@@ -93,6 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
         <input type="password" class="form-control" id="password" placeholder="Entrez le mot de passe" name="password" required>
       </div>
+      <div class="mb-3">
+        <label for="adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="adresse" placeholder="Entrez l'adresse" name="adresse" required>
+      </div>   
     </div>
   </div>
 
@@ -101,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="row">
     <div class="col-md-6">
       <div class="mb-3">
-        <label for="role" class="form-label">Rôle <span class="text-danger">*</span></label>
+        <label for="role" class="form-label">Poste <span class="text-danger">*</span></label>
         <select class="form-select" id="role" name="role" required>
           <option value="Directeur">Directeur</option>
           <option value="Surveillant">Surveillant</option>
@@ -119,32 +123,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </select>
       </div>
 
-      <div class="mb-3">
-        <label for="id_salaire" class="form-label">ID Salaire <span class="text-danger">*</span></label>
-        <select class="form-select" id="id_salaire" name="id_salaire" required>
-          <option value="1">Salaire fixe employé</option>
-          <option value="2">Salaire fixe enseignant</option>
-          <option value="3">Salaire horaire enseignant</option>
-        </select>
-      </div>
     </div>
 
     <div class="col-md-6">
+    <div class="mb-3">
+        <label for="id_salaire" class="form-label">Salaire <span class="text-danger">*</span></label>
+        <select class="form-select" id="id_salaire" name="id_salaire" required>
+          <option value="1">Salaire fixe employé</option>
+          <option value="2">Salaire fixe enseignant</option>
+          <option value="3">Salaire Professeur(Horaire)</option>
+        </select>
+      </div>
       <div class="mb-3">
         <label for="derniere_connexion" class="form-label">Date de prise de poste <span class="text-danger">*</span></label>
         <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" required>
       </div>
-      
-      <div class="mb-3">
-        <label for="adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="adresse" placeholder="Entrez l'adresse" name="adresse" required>
-      </div>   
     </div>
   </div>
 
   <!-- Bouton d'ajout -->
   <div class="text-center">
-    <button id="register-button" type="submit" class="btn btn-success ">Ajouter</button>
+    <button id="register-button" type="submit" class="ajout">Ajouter</button>
   </div>
          <!-- Afficher le message d'erreur ici -->
          <?php
@@ -155,6 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ?>
 </form>
 
-<script src="../app/views/auth/create.js"></script>
+<script src="../app/views/auth/js/create.js"></script>
 </body>
 </html>

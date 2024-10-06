@@ -1,61 +1,82 @@
-body {
-    background-color: #f8f9fa;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
+/* Style de la sidebar */
 .sidebar {
-    background-color: #343a40;
-    color: white;
-    min-height: 100vh;
-    width: 250px;
+    background-color: #004D40;
+    height: 100vh; /* Occupe toute la hauteur verticale de la page */
+    padding-top: 20px;
     position: fixed;
+    width: 250px;
     top: 0;
     left: 0;
-    padding-top: 20px;
 }
-.sidebar a {
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-    margin: 5px 0;
+
+.sidebar h4 {
+    color: #fff;
 }
-.sidebar a:hover {
-    background-color: #495057;
-    border-radius: 4px;
+
+.sidebar .nav-link {
+    color: #fff;
 }
-.sidebar .active {
-    background-color: #007bff;
+
+.sidebar .nav-link.active {
+    font-weight: bold;
+    color: #fff;
 }
+
+/* Style du header avec déconnexion et notifications */
 .header {
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: right;
-    padding-right: 40px;
     margin-left: 250px;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    width: calc(100% - 250px);
+    top: 0;
 }
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-    float: left;
-    padding-left: 40px;
+
+/* Style du bouton de déconnexion */
+.header .btn-danger {
+    background-color: #004D40;
+    border-color: #004D40;
 }
+
+.header .btn {
+    margin-left: 10px;
+}
+
+/* Contenu principal avec marge pour la sidebar */
 .content {
     margin-left: 250px;
+    margin-top: 60px;
     padding: 20px;
-    margin-top: 80px;
-    flex-grow: 1;
 }
-footer {
-    background-color: #343a40;
+
+
+/* Style pour l'élément actif (par défaut, Dashboard sera actif) */
+.sidebar .nav-link.active {
+    background-color: #20B2AA; /* Couleur Light Sea Green */
     color: white;
-    padding: 15px;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    width: calc(100% - 250px);
-    margin-left: 250px;
+}
+
+/* Style pour les éléments de menu par défaut */
+.sidebar .nav-link {
+    background-color: transparent;
+    color: white;
+}
+
+/* Style pour le menu déroulant quand actif */
+.dropdown-menu {
+    background-color: #20B2AA; /* Couleur Light Sea Green pour le fond du dropdown */
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #20B2AA; /* Même couleur pour l'élément actif dans le dropdown */
+    color: white;
+}
+
+/* Pour les liens non actifs */
+.sidebar .nav-link:hover, .dropdown-item:hover {
+    background-color: #20B2AA; /* Couleur Light Sea Green au survol */
+    color: white;
 }
