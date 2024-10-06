@@ -1,3 +1,4 @@
+
 <?php
 ob_start();  // Démarre la capture du contenu
 ?>

@@ -14,94 +14,133 @@ body {
 .container {
     display: flex;
     width: 800px;
-    height: 500px; /* Ajustez la hauteur si nécessaire */
-    border-radius: 10px; /* Arrondi sur les coins du conteneur principal */
-    border-top-left-radius: 0; /* Pas d'arrondi pour le coin supérieur gauche */
-    border-bottom-left-radius: 0; /* Pas d'arrondi pour le coin inférieur gauche */
+    height: 500px;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Pour s'assurer que les bords arrondis fonctionnent bien */
+    overflow: hidden;
 }
 
 /* Section de l'image */
 .image-section {
-    width: 35%; /* Largeur de la section d'image */
-    background-color: #004d40; /* teal foncé */
+    width: 35%;
+    background-color: #004d40;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
     padding: 20px;
 }
 
 .image-section img.logo {
-    width: 200px; /* Agrandir le logo */
+    width: 200px;
     height: auto;
-    margin-bottom: 40px; /* Réduire l'espace entre le logo et l'image de fond */
-    text-align: center;
+    margin-bottom: 40px;
 }
 
 .image-section img.image {
-    width: 350px; /* Agrandir l'image de connexion */
+    width: 350px;
     height: auto;
-    margin-top: -50px; /* Déplacer l'image de connexion vers le haut */
+    margin-top: -50px;
 }
 
 /* Section du formulaire */
 .form-section {
-    width: 65%; /* Largeur de la section du formulaire */
+    width: 65%;
     background-color: #ffffff;
     padding: 40px;
-    border-top-right-radius: 10px; /* Bord arrondi en haut à droite */
-    border-bottom-right-radius: 10px; /* Bord arrondi en bas à droite */
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .form-section h2 {
-    text-align: center; /* Centrer le titre */
+    text-align: center;
     margin-bottom: 30px;
     font-size: 24px;
     color: #333;
 }
-/* Styles pour les champs du formulaire */
-.input-container {
-    margin-bottom: 40px; /* Espace entre les labels et les inputs */
-    position: relative;
-}
 
+/* Styles pour les champs du formulaire */
 .form-label {
     display: block;
-    margin-bottom: 15px; /* Augmenter l'espace entre le label et l'input */
+    margin-bottom: 10px; /* Réduit l'espacement sous le label */
     font-size: 14px;
     color: #666;
 }
 
+/* Conteneur des champs avec messages d'erreur */
+.input-container {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* Champ de mot de passe et icône */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+#password {
+    width: 100%;
+    padding-right: 0; /* Espace pour l'icône œil */
+}
+
+.toggle-password {
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+
+.toggle-password i {
+    pointer-events: none;
+}
+
+/* Message d'erreur avec une hauteur fixe */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    height: 1.2em; /* Hauteur fixe pour éviter le déplacement */
+    
+}
+
+/* Rendre visible le message d'erreur lorsqu'il y a une erreur */
+.input-error + .error-message {
+    visibility: visible;
+}
+
+/* Si erreur, border-bottom rouge */
+.input-error {
+    border-bottom-color: red;
+}
+.input-error {
+    border-bottom-color: red; /* Changer la couleur de la bordure en rouge */
+}
+
+/* Champ de formulaire */
 input {
     width: 100%;
     padding: 10px;
     border: none;
-    border-bottom: 2px solid #ccc; /* Trait en bas de l'input */
+    border-bottom: 2px solid #ccc; /* Trait initial */
     outline: none;
     font-size: 16px;
-    transition: border-bottom-color 0.3s ease; /* Transition pour le changement de couleur */
+    transition: border-bottom-color 0.3s ease;
 }
 
 input:focus {
     border-bottom-color: #004d40; /* Couleur du trait au focus */
 }
 
-
-
-/* Style pour l'icône d'œil */
-.toggle-password {
-    cursor: pointer;
-    font-size: 18px; /* Ajustez la taille de l'icône */
-    position: absolute; /* Position absolue pour placer l'icône */
-    right: 2px; /* Alignement à droite dans le conteneur */
-    top: 80%; /* Centre l'icône verticalement */
-    transform: translateY(-50%); /* Ajustement pour le centrage vertical */
+.input-error:focus {
+    border-bottom-color: red;
 }
 
-/* Bouton pour se connecter */
+/* Bouton */
 button {
     width: 100%;
     padding: 10px;
@@ -112,17 +151,9 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 20px; /* Ajuste l'espace au-dessus du bouton */
 }
 
 button:hover {
     background-color: #00332e;
-}
-.error-message {
-    color: red;
-    font-size: 0.9em;
-    margin-top: 5px;
-}
-
-.input-error {
-    border: 1px solid red;
 }

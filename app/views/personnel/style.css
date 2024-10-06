@@ -62,10 +62,7 @@ table {
     margin-bottom: 20px;
 }
 
-table {
-    width: 100%; /* S'assure que le tableau occupe toute la largeur */
-    border-collapse: collapse; /* Supprime les espaces entre les cellules */
-}
+
 
 table th, table td {
     padding: 12px;
