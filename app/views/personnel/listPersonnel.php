@@ -202,29 +202,35 @@ ob_start();  // Démarre la capture du contenu
                                     </div>
 
                                 </div>
+
+
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $p['id_personnel'] ?>">
                                     <i class="fas fa-edit" title="Modifier"></i>
                                 </button>
                                 <div class="modal fade" id="editModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="editModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
                                     <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Modifier les informations</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Modifier les informations</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Formulaire de modification du personnel ici</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-warning">Enregistrer</button>
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <p>Formulaire de modification du personnel ici</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-warning">Enregistrer</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#showModal<?= $p['id_personnel'] ?>">
                                     <i class="fas fa-eye" title="Afficher"></i>
                                 </button>
+
+
+                                
                                 <div class="modal fade" id="showModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="showModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
