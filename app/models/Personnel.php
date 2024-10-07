@@ -24,6 +24,78 @@ class Personnel {
         $stmt = $pdo->prepare("SELECT * FROM personnel WHERE statut_compte = 'Actif'"); // Ajouter la condition pour le statut
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    //Ajout d'un personnel
+    // public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion = null) {
+    //     // Vérification des champs obligatoires
+    //     if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
+    //         throw new Exception("Tous les champs sont obligatoires.");
+    //     }
+
+    //     // Validation de l'email
+    //     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    //         throw new Exception("L'adresse email n'est pas valide.");
+    //     }
+
+    //     // Validation du numéro de téléphone (doit avoir 9 chiffres)
+    //     if (!preg_match('/^[0-9]{9}$/', $telephone)) {
+    //         throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
+    //     }
+
+    //     // Hachage du mot de passe
+    //     $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
+
+    //     // Préparation de la requête SQL
+    //     $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
+
+    //     // Exécution de la requête avec les données
+    //     return $stmt->execute([
+    //         ':nom' => $nom,
+    //         ':prenom' => $prenom,
+    //         ':email' => $email,
+    //         ':telephone' => $telephone,
+    //         ':matricule' => $matricule,
+    //         ':mot_passe' => $hashedPassword,
+    //         ':sexe' => $sexe,
+    //         ':role' => $role,
+    //         ':statut_compte' => $statut_compte,
+    //         ':id_salaire' => $id_salaire,
+    //         ':derniere_connexion' => $derniere_connexion // Ajout de la dernière connexion
+    //     ]);
+    // }
+ // Ajouter un nouvel personnel
+ public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
+    // Vérification des champs obligatoires
+    if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
+        throw new Exception("Tous les champs sont obligatoires.");
+    }
+
+    // Validation de l'email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new Exception("L'adresse email n'est pas valide.");
+    }
+
+    // Validation du numéro de téléphone (doit avoir 9 chiffres)
+    if (!preg_match('/^[0-9]{9}$/', $telephone)) {
+        throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
+    }
+
+    $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
+    $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
+
+    return $stmt->execute([
+        ':nom' => $nom,
+        ':prenom' => $prenom,
+        ':email' => $email,
+        ':telephone' => $telephone,
+        ':matricule' => $matricule,
+        ':mot_passe' => $hashedPassword,
+        ':sexe' => $sexe,
+        ':role' => $role,
+        ':statut_compte' => $statut_compte,
+        ':id_salaire' => $id_salaire,
+        ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
+    ]);
+}
 
 
     // Récupérer un personnel par son ID
@@ -36,42 +108,7 @@ class Personnel {
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    // Ajouter un nouvel personnel
-    public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
-        // Vérification des champs obligatoires
-        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
-            throw new Exception("Tous les champs sont obligatoires.");
-        }
-    
-        // Validation de l'email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("L'adresse email n'est pas valide.");
-        }
-    
-        // Validation du numéro de téléphone (doit avoir 9 chiffres)
-        if (!preg_match('/^[0-9]{9}$/', $telephone)) {
-            throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
-        }
-    
-        $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
-    
-        return $stmt->execute([
-            ':nom' => $nom,
-            ':prenom' => $prenom,
-            ':email' => $email,
-            ':telephone' => $telephone,
-            ':matricule' => $matricule,
-            ':mot_passe' => $hashedPassword,
-            ':sexe' => $sexe,
-            ':role' => $role,
-            ':statut_compte' => $statut_compte,
-            ':id_salaire' => $id_salaire,
-            ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
-        ]);
-    }
-    
-        // Mise à jour un personnel
+    // Mise à jour un personnel
     public function update($id, $nom, $prenom, $email, $telephone, $matricule, $sexe, $role, $statut_compte, $id_salaire) {
         // Vérification des champs obligatoires
         if (empty($id) || empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
@@ -145,22 +182,25 @@ class Personnel {
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
     
-      // Récupérer les personnels avec pagination
-      public function getPersonnelWithPagination($start, $limit) {
-        $sql = "SELECT * FROM personnel LIMIT :start, :limit";
-        $stmt = $this->pdo->prepare($sql);
+    // Récupérer les personnels actifs avec pagination
+    public function getPersonnelWithPagination($start, $limit) {
+        $db = new Database();
+        $pdo = $db->getPDO();
+        $stmt = $pdo->prepare("SELECT * FROM personnel WHERE statut_compte = 'Actif' LIMIT :start, :limit");
         $stmt->bindValue(':start', $start, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourner tous les personnels paginés
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Compter le nombre total de personnels
+    // Compter le nombre total de personnels actifs
     public function countPersonnel() {
-        $sql = "SELECT COUNT(*) as total FROM personnel";
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetch(PDO::FETCH_ASSOC)['total']; // Retourner le nombre total de personnels
+        $db = new Database();
+        $pdo = $db->getPDO();
+        $stmt = $pdo->query("SELECT COUNT(*) FROM personnel WHERE statut_compte = 'Actif'");
+        return $stmt->fetchColumn();
     }
+
     public function getNomPersonnel($id) {
         $query = "SELECT nom FROM personnel WHERE id_personnel = :id"; // Ajustez la requête selon votre schéma
         $stmt = $this->pdo->prepare($query);

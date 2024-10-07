@@ -10,12 +10,12 @@ class AuthController {
         $this->personnelModel = $personnelModel; // Initialiser le modèle Personnel
     }
 
-    public function login($identifiant, $password) {
+    public function login($identifiant, $mot_passe) {
         // Démarrer la session
         session_start();
     
         // Vérifier si les champs sont vides
-        if (empty($identifiant) || empty($password)) {
+        if (empty($identifiant) || empty($mot_passe)) {
             // Stocker le message d'erreur dans la session
             $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
             // Rediriger vers login.php
@@ -35,7 +35,7 @@ class AuthController {
         }
     
         // Vérifier si le mot de passe est correct
-        if (password_verify($password, $personnel['mot_passe'])) {
+        if (password_verify($mot_passe, $personnel['mot_passe'])) {
             // Démarrer la session pour l'utilisateur
             $_SESSION['personnel_id'] = $personnel['id_personnel'];
             $_SESSION['role'] = $personnel['role'];
@@ -53,6 +53,7 @@ class AuthController {
         }
     }
 
+    // Inscription d'un nouveau personnel
     public function register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
         // Démarrer la session
         session_start();
@@ -103,11 +104,10 @@ class AuthController {
     
         // Créer un nouvel personnel
         try {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hachage du mot de passe
-            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $hashedPassword, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
              // Ajouter un message de succès à la session
             $_SESSION['success_message'] = "Personnel, ajouté avec succés !";
-            header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion
+             header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion
             exit(); // Terminer le script
         } catch (Exception $e) {
             // Stocker le message d'erreur dans la session
@@ -117,41 +117,8 @@ class AuthController {
             exit();
         }
     }
-    
-    // Inscription d'un nouveau personnel
-    // public function register($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire) {
-    //     // Vérification si le personnel existe déjà
-    //     if ($this->personnelModel->findByMatricule($matricule)) {
-    //         return "Matricule déjà pris."; // Message d'erreur si le personnel existe
-    //     }
-    
-    //     // Validation des champs
-    //     if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($password) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
-    //         return "Tous les champs doivent être remplis."; // Vérification des champs obligatoires
-    //     }
-    
-    //     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    //         return "Adresse email invalide."; // Validation de l'email
-    //     }
-    
-    //     if (!preg_match('/^[0-9]{9}$/', $telephone)) {
-    //         return "Le numéro de téléphone doit contenir 9 chiffres."; // Validation du numéro de téléphone
-    //     }
-    
-    //     if (strlen($password) < 8) {
-    //         return "Le mot de passe doit contenir au moins 8 caractères."; // Validation de la longueur du mot de passe
-    //     }
-    
-    //     // Créer un nouvel personnel
-    //     try {
-    //         $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire);
-    //         header("Location: auth/login.php"); // Rediriger vers la page de connexion
-    //         exit(); // Terminer le script
-    //     } catch (Exception $e) {
-    //         return $e->getMessage(); // Retourner le message d'erreur
-    //     }
-    // }
-    
+   
+
 
     // Déconnexion du personnel
     public function logout() {

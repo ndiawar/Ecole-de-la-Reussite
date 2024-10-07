@@ -18,11 +18,17 @@ $personnelController = new PersonnelController();
 // Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
 
+
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
 
 // Gestion du routage
 switch ($action) {
+    // case 'createPersonnel':
+    //     // Gestion de la création d'un nouveau personnel
+    //     $personnelController->create();
+    //     break;
+
     case 'login':
         // Connexion d'un personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,34 +39,32 @@ switch ($action) {
             require '../app/views/auth/login.php'; // Afficher le formulaire de connexion
         }
         break;
+    case 'register':
+        // Inscription d'un nouveau personnel
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom = $_POST['nom'];
+            $prenom = $_POST['prenom'];
+            $email = $_POST['email'];
+            $telephone = $_POST['telephone'];
+            $password = $_POST['password'];
+            $sexe = $_POST['sexe'];
+            $role = $_POST['role'];
+            $statut_compte = $_POST['statut_compte'];
+            $id_salaire = $_POST['id_salaire'];
+            
+            // Initialiser derniere_connexion à NULL ou à la date actuelle
+            $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
+    
+            // Appeler la méthode register en incluant derniere_connexion
+            echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+        } else {
+            require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
+        }
+        break;
 
     case 'Dashboard':
         require '../app/views/Dashboard.php'; // Inclure la vue du tableau de bord
         break;
-
-        case 'register':
-            // Inscription d'un nouveau personnel
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $nom = $_POST['nom'];
-                $prenom = $_POST['prenom'];
-                $email = $_POST['email'];
-                $telephone = $_POST['telephone'];
-                $password = $_POST['password'];
-                $sexe = $_POST['sexe'];
-                $role = $_POST['role'];
-                $statut_compte = $_POST['statut_compte'];
-                $id_salaire = $_POST['id_salaire'];
-                
-                // Initialiser derniere_connexion à NULL ou à la date actuelle
-                $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
-        
-                // Appeler la méthode register en incluant derniere_connexion
-                echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
-            } else {
-                require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
-            }
-            break;
-        
 
     case 'logout':
         // Déconnexion du personnel

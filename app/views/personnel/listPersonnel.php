@@ -144,9 +144,11 @@ ob_start();  // Démarre la capture du contenu
     </div>
 </div>
 
-    <?php if (!empty($personnels)): ?>
-        <div class="table-responsive"> <!-- Ajout de table-responsive pour la réactivité -->
-            <table class="table table-striped table-bordered">
+
+<?php if (!empty($personnels)): ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Prénom</th>
@@ -158,8 +160,8 @@ ob_start();  // Démarre la capture du contenu
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php foreach ($personnels as $p): ?>
+            <tbody>
+            <?php foreach ($personnels as $p): ?>
                         <tr>
                             <td><?= htmlspecialchars($p['prenom']) ?></td>
                             <td><?= htmlspecialchars($p['nom']) ?></td>
@@ -248,30 +250,29 @@ ob_start();  // Démarre la capture du contenu
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
+    </div>
 
-        <nav aria-label="Pagination" class="d-flex justify-content-center">
-            <ul class="pagination">
-                <li class="page-item <?= ($page == 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?action=listPersonnel&page=<?= max(1, $page - 1) ?>">Précédent</a>
+    <!-- Pagination -->
+    <nav aria-label="Pagination" class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item <?= ($page == 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?action=listPersonnel&page=<?= max(1, $page - 1) ?>">Précédent</a>
+            </li>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                    <a class="page-link" href="?action=listPersonnel&page=<?= $i ?>"><?= $i ?></a>
                 </li>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?action=listPersonnel&page=<?= $i ?>"><?= $i ?></a>
-                    </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($page == $totalPages) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?action=listPersonnel&page=<?= min($totalPages, $page + 1) ?>">Suivant</a>
-                </li>
-            </ul>
-        </nav>
-    <?php else: ?>
-        <p>Aucun personnel trouvé.</p>
-    <?php endif; ?>
-
-
+            <?php endfor; ?>
+            <li class="page-item <?= ($page == $totalPages) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?action=listPersonnel&page=<?= min($totalPages, $page + 1) ?>">Suivant</a>
+            </li>
+        </ul>
+    </nav>
+<?php else: ?>
+    <p>Aucun personnel actif trouvé.</p>
+<?php endif; ?>
 
      <!-- Toast pour afficher le message de succès après la connexion -->
      <div class="toast-container position-fixed top-0 end-0 p-3"> <!-- Positionné en haut à droite -->
