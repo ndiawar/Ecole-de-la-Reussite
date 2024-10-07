@@ -7,7 +7,12 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
-require_once '../app/models/Personnel.php'; // 
+require '../app/controllers/EleveController.php'; // Inclure le contrôleur Élèves
+require_once '../app/models/Personnel.php'; // require '../app/controllers/eleve.php'; // Inclure le contrôleur Élève
+require_once '../app/models/Eleve.php'; // Modèle Élève
+
+
+
 
 
 // Instancier le modèle Personel
@@ -17,6 +22,16 @@ $personnelController = new PersonnelController();
 
 // Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
+
+
+// Vérifiez si $db est défini dans config.php avant de continuer
+if (isset($db)) {
+    // Instanciez le modèle avec la base de données
+    $eleveModel = new Eleve($db); // Passer l'argument $db
+
+    // Instanciez le contrôleur avec le modèle
+    $EleveController = new EleveController($eleveModel); // Instanciation du contrôleur
+}
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
@@ -92,6 +107,9 @@ switch ($action) {
             }
             break;
 
+            case 'listEleves':
+                $EleveController->index(); // Appeler la méthode index qui récupère les élèves
+                break;
         default:
             header("Location: index.php?action=login");
             break;

@@ -49,7 +49,7 @@
                 Gestion des Inscriptions
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownInscription">
-                <li><a class="dropdown-item" href="#">Élèves</a></li>
+                <li><a class="dropdown-item" href="?action=listEleves">Élèves</a></li>
                 <li><a class="dropdown-item" href="?action=listPersonnel">Employés</a></li>
             </ul>
         </li>
