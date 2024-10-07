@@ -114,15 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </select>
       </div>
 
-      <div class="mb-3">
-        <label for="statut_compte" class="form-label">Statut du compte <span class="text-danger">*</span></label>
-        <select class="form-select" id="statut_compte" name="statut_compte" required>
-          <option value="actif">Actif</option>
-          <option value="inactif">Inactif</option>
-          <!-- Ajoute d'autres statuts si nécessaire -->
-        </select>
-      </div>
-
     </div>
 
     <div class="col-md-6">

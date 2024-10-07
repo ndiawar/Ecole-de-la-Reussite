@@ -31,6 +31,7 @@ ob_start();  // Démarre la capture du contenu
 </div>
 
 <!-- Modal Large -->
+<!-- Modal Large -->
 <div class="modal fade" id="ajoutPersonnelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -101,6 +102,7 @@ ob_start();  // Démarre la capture du contenu
                             <div class="mb-3">
                                 <label for="role" class="form-label">Poste <span class="text-danger">*</span></label>
                                 <select class="form-select" id="role" name="role" required>
+                                    <option  placeholder="Sélectionner un Poste"> </option>
                                     <option value="Directeur">Directeur</option>
                                     <option value="Surveillant">Surveillant</option>
                                     <option value="Enseignant">Enseignant</option>
@@ -109,12 +111,11 @@ ob_start();  // Démarre la capture du contenu
                             </div>
 
                             <div class="mb-3">
-                                <label for="statut_compte" class="form-label">Statut du compte <span class="text-danger">*</span></label>
-                                <select class="form-select" id="statut_compte" name="statut_compte" required>
-                                    <option value="actif">Actif</option>
-                                    <option value="inactif">Inactif</option>
-                                </select>
+                                <label for="derniere_connexion" class="form-label">Date de prise de poste <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" required>
                             </div>
+
+                             
                         </div>
 
                         <div class="col-md-6">
@@ -127,10 +128,7 @@ ob_start();  // Démarre la capture du contenu
                                 </select>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="derniere_connexion" class="form-label">Date de prise de poste <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" required>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -143,6 +141,8 @@ ob_start();  // Démarre la capture du contenu
         </div>
     </div>
 </div>
+
+
 
     <?php if (!empty($personnels)): ?>
         <div class="table-responsive"> <!-- Ajout de table-responsive pour la réactivité -->

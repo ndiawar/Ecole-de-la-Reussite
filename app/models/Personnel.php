@@ -36,73 +36,90 @@ class Personnel {
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    // Ajouter un nouvel personnel
-    public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
-        // Vérification des champs obligatoires
-        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
-            throw new Exception("Tous les champs sont obligatoires.");
-        }
-    
-        // Validation de l'email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("L'adresse email n'est pas valide.");
-        }
-    
-        // Validation du numéro de téléphone (doit avoir 9 chiffres)
-        if (!preg_match('/^[0-9]{9}$/', $telephone)) {
-            throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
-        }
-    
-        $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
-    
-        return $stmt->execute([
-            ':nom' => $nom,
-            ':prenom' => $prenom,
-            ':email' => $email,
-            ':telephone' => $telephone,
-            ':matricule' => $matricule,
-            ':mot_passe' => $hashedPassword,
-            ':sexe' => $sexe,
-            ':role' => $role,
-            ':statut_compte' => $statut_compte,
-            ':id_salaire' => $id_salaire,
-            ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
-        ]);
+   // Ajouter un nouvel personnel
+   public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
+    // Vérification des champs obligatoires
+    if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
+        throw new Exception("Tous les champs sont obligatoires.");
     }
+
+    // Validation de l'email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new Exception("L'adresse email n'est pas valide.");
+    }
+
+    // Validation du numéro de téléphone (doit avoir 9 chiffres)
+    if (!preg_match('/^[0-9]{9}$/', $telephone)) {
+        throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
+    }
+
+    $hashedPassword = password_hash($mot_passe, PASSWORD_BCRYPT);
+    $stmt = $this->pdo->prepare("INSERT INTO personnel (nom, prenom, email, telephone, matricule, mot_passe, sexe, role, statut_compte, id_salaire, derniere_connexion) VALUES (:nom, :prenom, :email, :telephone, :matricule, :mot_passe, :sexe, :role, :statut_compte, :id_salaire, :derniere_connexion)");
+
+    return $stmt->execute([
+        ':nom' => $nom,
+        ':prenom' => $prenom,
+        ':email' => $email,
+        ':telephone' => $telephone,
+        ':matricule' => $matricule,
+        ':mot_passe' => $hashedPassword,
+        ':sexe' => $sexe,
+        ':role' => $role,
+        ':statut_compte' => $statut_compte,
+        ':id_salaire' => $id_salaire,
+        ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
+    ]);
+}
+
     
         // Mise à jour un personnel
-    public function update($id, $nom, $prenom, $email, $telephone, $matricule, $sexe, $role, $statut_compte, $id_salaire) {
-        // Vérification des champs obligatoires
-        if (empty($id) || empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
-            throw new Exception("Tous les champs sont obligatoires.");
+        public function update($id, $nom, $prenom, $email, $telephone, $matricule, $sexe, $role, $statut_compte, $id_salaire) {
+            // Vérification des champs obligatoires
+            if (empty($id) || empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
+                throw new Exception("Tous les champs sont obligatoires.");
+            }
+        
+            // Validation de l'email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("L'adresse email n'est pas valide.");
+            }
+        
+            // Validation du numéro de téléphone (doit avoir 9 chiffres)
+            if (!preg_match('/^[0-9]{9}$/', $telephone)) {
+                throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
+            }
+        
+            // Affiche la requête SQL et les paramètres pour déboguer
+            $stmt = $this->pdo->prepare("UPDATE personnel SET nom = :nom, prenom = :prenom, email = :email, telephone = :telephone, matricule = :matricule, sexe = :sexe, role = :role, statut_compte = :statut_compte, id_salaire = :id_salaire WHERE id_personnel = :id");
+            
+            var_dump($stmt->queryString); // Affiche la requête SQL préparée
+            var_dump([
+                ':id' => $id,
+                ':nom' => $nom,
+                ':prenom' => $prenom,
+                ':email' => $email,
+                ':telephone' => $telephone,
+                ':matricule' => $matricule,
+                ':sexe' => $sexe,
+                ':role' => $role,
+                ':statut_compte' => $statut_compte,
+                ':id_salaire' => $id_salaire
+            ]); // Affiche les paramètres
+        
+            // Exécution de la requête
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de la mise à jour : " . implode(", ", $stmt->errorInfo()));
+            }
+        
+            // Vérification des lignes affectées
+            if ($stmt->rowCount() === 0) {
+                throw new Exception("Aucun enregistrement n'a été mis à jour. Vérifiez que l'ID existe.");
+            }
+        
+            return true; // Retourne vrai si la mise à jour est réussie
         }
-    
-        // Validation de l'email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("L'adresse email n'est pas valide.");
-        }
-    
-        // Validation du numéro de téléphone (doit avoir 9 chiffres)
-        if (!preg_match('/^[0-9]{9}$/', $telephone)) {
-            throw new Exception("Le numéro de téléphone doit contenir 9 chiffres.");
-        }
-    
-        $stmt = $this->pdo->prepare("UPDATE personnel SET nom = :nom, prenom = :prenom, email = :email, telephone = :telephone, matricule = :matricule, sexe = :sexe, role = :role, statut_compte = :statut_compte, id_salaire = :id_salaire WHERE id_personnel = :id");
-    
-        return $stmt->execute([
-            ':id' => $id,
-            ':nom' => $nom,
-            ':prenom' => $prenom,
-            ':email' => $email,
-            ':telephone' => $telephone,
-            ':matricule' => $matricule,
-            ':sexe' => $sexe,
-            ':role' => $role,
-            ':statut_compte' => $statut_compte,
-            ':id_salaire' => $id_salaire
-        ]);
-    }
+        
+        
     
     // Supprimer un personnel
     public function delete($id) {

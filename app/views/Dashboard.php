@@ -19,9 +19,6 @@ ob_start();  // Démarre la capture du contenu
                 <strong class="me-auto">Succès</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Connexion réussie !
-            </div>
         </div>
     </div>
 

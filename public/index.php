@@ -38,6 +38,7 @@ switch ($action) {
         require '../app/views/Dashboard.php'; // Inclure la vue du tableau de bord
         break;
 
+
         case 'register':
             // Inscription d'un nouveau personnel
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

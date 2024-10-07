@@ -150,7 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="inactif" <?= ($personnelData['statut_compte'] === 'inactif') ? 'selected' : '' ?>>Inactif</option>
                 </select>
             </div>
-
+        </div>
+        <div class="col md-6">
             <!-- Champ du salaire -->
             <div class="mb-3">
                 <label for="id_salaire" class="form-label">Salaire <span class="text-danger">*</span></label>
@@ -160,14 +161,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="3" <?= ($personnelData['id_salaire'] == 3) ? 'selected' : '' ?>>Salaire Professeur (Horaire)</option>
                 </select>
             </div>
-
-            <!-- Champ de la dernière connexion
-            <div class="mb-3">
-                <label for="derniere_connexion" class="form-label">Dernière connexion <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" value="<?= htmlspecialchars($personnelData['derniere_connexion'] ?? '') ?>" required>
-            </div> -->
-            
-            <!-- Champ de la date de prise de poste -->
             <div class="mb-3">
                 <label for="date_prise_de_poste" class="form-label">Date de prise de poste <span class="text-danger">*</span></label>
                 <input type="date" class="form-control" id="date_prise_de_poste" name="date_prise_de_poste" value="<?= htmlspecialchars($personnelData['date_prise_de_poste'] ?? '') ?>" required>
@@ -176,9 +169,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="text-center">
-    <a href="index.php?action=listPersonnel"<button type="submit" class="btn btn-modifier">Mettre à jour</button></a>
-        <a href="index.php?action=listPersonnel" class="btn btn-retour">Retour</a> <!-- Bouton de retour -->
-    </div>
+    <!-- Bouton Mettre à jour avec couleur personnalisée -->
+    <a href="index.php?action=listPersonnel"<button type="submit" class="btn" style="background-color: #004D40; color: white;">Mettre à jour</button></a>
+
+    <!-- Bouton Retour avec couleur personnalisée -->
+    <a href="index.php?action=listPersonnel" class="btn" style="background-color: #004D40; color: white;">Retour</a>
+</div>
+
 
 </form>
 
