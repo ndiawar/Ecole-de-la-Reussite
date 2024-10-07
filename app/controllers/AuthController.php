@@ -103,8 +103,7 @@ class AuthController {
     
         // Créer un nouvel personnel
         try {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hachage du mot de passe
-            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $hashedPassword, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
              // Ajouter un message de succès à la session
             $_SESSION['success_message'] = "Personnel, ajouté avec succés !";
             header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion

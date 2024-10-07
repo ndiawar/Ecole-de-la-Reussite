@@ -170,3 +170,35 @@ class Personnel {
     }
     
 }
+
+
+
+class PersonnelModel {
+    private $conn;
+
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    // Fonction pour récupérer les informations d'un employé via son matricule
+    public function getPersonnelByMatricule($matricule) {
+        $query = "SELECT * FROM personnel WHERE matricule = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $matricule);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    // Fonction pour mettre à jour les informations du personnel
+    public function updatePersonnel($data) {
+        $query = "UPDATE personnel SET nom = ?, prenom = ?, sexe = ?, date_naissance = ?, adresse = ?, telephone = ?, email = ?, poste = ?, status = ?, heures_travail = ?, montant = ? WHERE matricule = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("sssssssssssi", 
+            $data['nom'], $data['prenom'], $data['sexe'], $data['date_naissance'], $data['adresse'], 
+            $data['telephone'], $data['email'], $data['poste'], $data['status'], 
+            $data['heures_travail'], $data['montant'], $data['matricule']
+        );
+        return $stmt->execute();
+    }
+}
+?>
