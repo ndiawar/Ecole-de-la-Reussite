@@ -54,11 +54,11 @@ class AuthController {
     }
 
     // Inscription d'un nouveau personnel
-    public function register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
+    public function register($nom, $prenom, $email, $telephone, $password, $sexe, $role,  $id_salaire, $derniere_connexion) {
         // Démarrer la session
         session_start();
         // Validation des champs
-        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
+        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($sexe) || empty($role) || empty($id_salaire)) {
             // Stocker le message d'erreur dans la session
             $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
             // Rediriger vers register.php
@@ -104,7 +104,7 @@ class AuthController {
     
         // Créer un nouvel personnel
         try {
-            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $id_salaire, $derniere_connexion);
              // Ajouter un message de succès à la session
             $_SESSION['success_message'] = "Personnel, ajouté avec succés !";
              header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion

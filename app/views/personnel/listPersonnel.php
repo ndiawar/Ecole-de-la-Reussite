@@ -8,10 +8,16 @@ ob_start();  // Démarre la capture du contenu
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste du Personnel</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
     <!-- Ton fichier CSS personnalisé -->
     <link rel="stylesheet" href="/Ecole-de-la-Reussite/app/views/personnel/style.css">
 </head>
@@ -71,6 +77,7 @@ ob_start();  // Démarre la capture du contenu
                             <div class="mb-3">
                                 <label for="sexe" class="form-label">Sexe <span class="text-danger">*</span></label>
                                 <select class="form-select" id="sexe" name="sexe" required>
+                                    <option value="" disabled selected>-- Sélectionnez un sexe --</option>
                                     <option value="masculin">Masculin</option>
                                     <option value="feminin">Féminin</option>
                                 </select>
@@ -85,13 +92,25 @@ ob_start();  // Démarre la capture du contenu
 
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" id="password" placeholder="Entrez le mot de passe" name="password" required>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" placeholder="Entrez le mot de passe" name="password" required>
+                                    <span class="input-group-text">
+                                        <i class="fa fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="adresse" placeholder="Entrez l'adresse" name="adresse" required>
+                                <label for="confirm-password" class="form-label">Confirmez le mot de passe <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirmez le mot de passe" required>
+                                    <span class="input-group-text">
+                                        <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+                                    </span>
+                                </div>
+                                <small id="password-error" style="color: red; display: none;">Les mots de passe ne correspondent pas.</small>
                             </div>
+
                         </div>
                     </div>
 
@@ -99,22 +118,21 @@ ob_start();  // Démarre la capture du contenu
                     <div><hr><p>Informations professionnelles</p></div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="role" class="form-label">Poste <span class="text-danger">*</span></label>
-                                <select class="form-select" id="role" name="role" required>
-                                    <option value="Directeur">Directeur</option>
-                                    <option value="Surveillant">Surveillant</option>
-                                    <option value="Enseignant">Enseignant</option>
-                                    <option value="Comptable">Comptable</option>
-                                </select>
-                            </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Poste <span class="text-danger">*</span></label>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="" disabled selected>-- Sélectionnez un poste --</option>
+                                <option value="Directeur">Directeur</option>
+                                <option value="Surveillant">Surveillant</option>
+                                <option value="Enseignant">Enseignant</option>
+                                <option value="Comptable">Comptable</option>
+                            </select>
+                        </div>
+
 
                             <div class="mb-3">
-                                <label for="statut_compte" class="form-label">Statut du compte <span class="text-danger">*</span></label>
-                                <select class="form-select" id="statut_compte" name="statut_compte" required>
-                                    <option value="actif">Actif</option>
-                                    <option value="inactif">Inactif</option>
-                                </select>
+                                <label for="adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="adresse" placeholder="Entrez l'adresse" name="adresse" required>
                             </div>
                         </div>
 
@@ -122,6 +140,7 @@ ob_start();  // Démarre la capture du contenu
                             <div class="mb-3">
                                 <label for="id_salaire" class="form-label">ID Salaire <span class="text-danger">*</span></label>
                                 <select class="form-select" id="id_salaire" name="id_salaire" required>
+                                    <option value="" disabled selected>-- Sélectionnez un Salaire --</option>
                                     <option value="1">Salaire fixe employé</option>
                                     <option value="2">Salaire fixe enseignant</option>
                                     <option value="3">Salaire Professeur(Horaire)</option>
@@ -130,8 +149,10 @@ ob_start();  // Démarre la capture du contenu
 
                             <div class="mb-3">
                                 <label for="derniere_connexion" class="form-label">Date de prise de poste <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" required>
+                                <input type="date" class="form-control" id="derniere_connexion" name="derniere_connexion" required 
+                                    value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y-m-d'); ?>">
                             </div>
+
                         </div>
                     </div>
 
@@ -147,30 +168,23 @@ ob_start();  // Démarre la capture du contenu
 
 
 <?php if (!empty($personnels)): ?>
-    <div class="table-responsive">
+    <div class="table-responsive mb-4"> <!-- Ajout de la classe mb-4 pour un espace en bas -->
         <table class="table table-striped table-bordered">
-        <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Prénom</th>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Poste</th>
-                        <th>Matricule</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Matricule</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
             <tbody>
-            <?php foreach ($personnels as $p): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($p['prenom']) ?></td>
-                            <td><?= htmlspecialchars($p['nom']) ?></td>
-                            <td><?= htmlspecialchars($p['email']) ?></td>
-                            <td><?= htmlspecialchars($p['telephone']) ?></td>
-                            <td><?= htmlspecialchars($p['role']) ?></td>
-                            <td><?= htmlspecialchars($p['matricule']) ?></td>
-                            <td>
+                <?php foreach ($personnels as $p): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($p['prenom']) ?></td>
+                        <td><?= htmlspecialchars($p['nom']) ?></td>
+                        <td><?= htmlspecialchars($p['matricule']) ?></td>
+                        <td>
                                 <!-- Bouton pour archiver -->
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#archiveModal<?= $p['id_personnel'] ?>">
                                     <i class="fas fa-archive" title="Archiver"></i>
@@ -225,37 +239,52 @@ ob_start();  // Démarre la capture du contenu
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Bouton pour afficher la modal -->
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#showModal<?= $p['id_personnel'] ?>">
                                     <i class="fas fa-eye" title="Afficher"></i>
                                 </button>
+
+                                <!-- Modal pour afficher les détails du personnel -->
                                 <div class="modal fade" id="showModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="showModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog"> <!-- Utilisation d'un modal large -->
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Détails du personnel</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
                                             <div class="modal-body">
-                                                <p>Prénom: <?= htmlspecialchars($p['prenom']) ?></p>
-                                                <p>Nom: <?= htmlspecialchars($p['nom']) ?></p>
-                                                <p>Email: <?= htmlspecialchars($p['email']) ?></p>
-                                                <p>Téléphone: <?= htmlspecialchars($p['telephone']) ?></p>
-                                                <p>Poste: <?= htmlspecialchars($p['role']) ?></p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                <!-- Carte d'information du personnel -->
+                                                <div class="card" style="width: 100%; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                                    <div class="card-body text-center">
+                                                        <!-- Avatar (Icône) -->
+                                                        <div class="avatar mb-3">
+                                                            <img src="https://via.placeholder.com/100" alt="Avatar" class="rounded-circle" style="width: 100px; height: 100px;">
+                                                            <span class="badge bg-success position-absolute" style="top: 75px; left: 155px;">ER</span>
+                                                        </div>
+                                                        <h5 class="card-title"><?= htmlspecialchars($p['prenom']) ?> <?= htmlspecialchars($p['nom']) ?></h5>
+                                                        <p class="card-text text-muted"><?= htmlspecialchars($p['role']) ?> à <span class="text-success">École De La Réussite</span></p>
+                                                        <div class="d-flex justify-content-center">
+                                                            <a href="tel:<?= htmlspecialchars($p['telephone']) ?>" class="btn btn-outline-success me-2">
+                                                                <i class="fas fa-phone"></i> <?= htmlspecialchars($p['telephone']) ?>
+                                                            </a>
+                                                            <a href="mailto:<?= htmlspecialchars($p['email']) ?>" class="btn btn-outline-success">
+                                                                <i class="fas fa-envelope"></i> <?= htmlspecialchars($p['email']) ?>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </td>
-                        </tr>
-                    <?php endforeach; ?>
+
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 
-    <!-- Pagination -->
+   <!-- Pagination -->
+<div class="pagination-container">
     <nav aria-label="Pagination" class="d-flex justify-content-center">
         <ul class="pagination">
             <li class="page-item <?= ($page == 1) ? 'disabled' : '' ?>">
@@ -271,9 +300,12 @@ ob_start();  // Démarre la capture du contenu
             </li>
         </ul>
     </nav>
+</div>
+
 <?php else: ?>
     <p>Aucun personnel actif trouvé.</p>
 <?php endif; ?>
+
 
      <!-- Toast pour afficher le message de succès après la connexion -->
      <div class="toast-container position-fixed top-0 end-0 p-3"> <!-- Positionné en haut à droite -->
@@ -297,6 +329,8 @@ ob_start();  // Démarre la capture du contenu
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/Ecole-de-la-Reussite/app/views/personnel/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 </html>
 <?php

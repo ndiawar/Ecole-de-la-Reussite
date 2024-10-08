@@ -49,14 +49,13 @@ switch ($action) {
             $password = $_POST['password'];
             $sexe = $_POST['sexe'];
             $role = $_POST['role'];
-            $statut_compte = $_POST['statut_compte'];
             $id_salaire = $_POST['id_salaire'];
             
             // Initialiser derniere_connexion à NULL ou à la date actuelle
             $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
     
             // Appeler la méthode register en incluant derniere_connexion
-            echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+            echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $id_salaire, $derniere_connexion);
         } else {
             require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
         }
