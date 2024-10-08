@@ -70,9 +70,17 @@ switch ($action) {
         $authController->logout();
         break;
 
+        // case 'listPersonnel':
+        //     $personnelController->index(); // Liste des personnels
+        //     break;
         case 'listPersonnel':
-            $personnelController->index(); // Liste des personnels
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                // Debugging: Ajoutez un message pour vérifier que cette ligne est atteinte
+                error_log("Accès à la liste des employés");
+                $personnelController->index(); // Liste des personnels
+            }
             break;
+            
 
         case 'editPersonnel':
             $id = $_GET['id'] ?? null;
