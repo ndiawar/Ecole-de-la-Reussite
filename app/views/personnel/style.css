@@ -5,6 +5,14 @@ body {
     background-color: #f4f4f4;
 }
 
+.img-fluid {
+    width: 100%; /* Ajuste l'image pour qu'elle prenne toute la largeur disponible */
+    max-width: 150px; /* Limite la largeur maximale pour éviter qu'elle ne devienne trop grande */
+    height: auto; /* Garde les proportions de l'image */
+    margin: 20px 0; /* Ajoute un espace au-dessus et en dessous du logo */
+    display: block; /* S'assure que l'image est affichée en tant que bloc */
+    object-fit: contain; /* Assure que le logo garde ses proportions sans être étiré */
+}
 
 .input-group-text {
     background-color: transparent;
