@@ -29,56 +29,60 @@ class PersonnelController {
         // Charger la vue avec les données paginées
         require '../app/views/personnel/listPersonnel.php';
     }
-
-    // Autres méthodes du contrôleur (index, show, edit, archive, restore)...
-
-    // Afficher un personnel par ID
-    public function show($id) {
-        $personnel = $this->personnelModel::find($id);
-        //require '../app/views/personnel/show.php'; // Afficher les détails du personnel
-    }
-
-    // Modifier un personnel
+    
     public function edit($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = $_POST['nom'];
-            $prenom = $_POST['prenom'];
-            $email = $_POST['email'];
-            $telephone = $_POST['telephone'];
-            $matricule = $_POST['matricule'];
-            $sexe = $_POST['sexe'];
-            $role = $_POST['role'];
-            $statut_compte = $_POST['statut_compte'];
-            $id_salaire = $_POST['id_salaire'];
+            $data = [
+                'nom' => $_POST['nom'] ?? '',
+                'prenom' => $_POST['prenom'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'telephone' => $_POST['telephone'] ?? '',
+                'sexe' => $_POST['sexe'] ?? '',
+                'role' => $_POST['role'] ?? '',
+                'id_salaire' => $_POST['id_salaire'] ?? '',
+                'derniere_connexion' => $_POST['derniere_connexion'] ?? ''
+            ];
 
-            // Validation des champs
-            if (empty($nom) || empty($prenom) || empty($email) || empty($telephone)) {
-                $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
-                header('Location: index.php?action=editPersonnel&id=' . $id);
-                exit();
-            }
+            $errors = $this->personnelModel->validate($data);
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $_SESSION['error_message'] = "Adresse email invalide.";
-                header('Location: index.php?action=editPersonnel&id=' . $id);
-                exit();
-            }
-
-            try {
-                $this->personnelModel->update($id, $nom, $prenom, $email, $telephone, $matricule, $sexe, $role, $statut_compte, $id_salaire);
+            if (empty($errors)) {
+                $this->personnelModel->update($id, $data);
                 $_SESSION['success_message'] = "Personnel modifié avec succès.";
                 header('Location: index.php?action=listPersonnel');
                 exit();
-            } catch (Exception $e) {
-                $_SESSION['error_message'] = "Erreur lors de la modification: " . $e->getMessage();
-                header('Location: index.php?action=editPersonnel&id=' . $id);
+            } else {
+                $_SESSION['error_message'] = implode(", ", $errors);
+            }
+        }
+
+        $personnelInfo = $this->personnelModel->findById($id);
+        if (!$personnelInfo) {
+            $_SESSION['error_message'] = "Personnel non trouvé.";
+            header('Location: index.php?action=listPersonnel');
+            exit();
+        }
+
+        require '../app/views/personnel/editPersonnel.php';
+    }
+    
+    public function getPersonnel($id) {
+        return $this->personnelModel->findById($id); // Remplacez cette ligne par votre logique de récupération
+    }
+    
+    
+    
+        public function show($id) {
+            $personnel = $this->personnelModel->find($id);
+            if ($personnel) {
+                require '../app/views/personnel/show.php'; // Afficher les détails du personnel
+            } else {
+                $_SESSION['error_message'] = "Personnel non trouvé.";
+                header('Location: index.php?action=listPersonnel');
                 exit();
             }
-        } else {
-            $personnel = $this->personnelModel::find($id);
-            require '../app/views/personnel/edit.php'; // Formulaire de modification
         }
-    }
+    
+    
 
 
     public function archive($id) {

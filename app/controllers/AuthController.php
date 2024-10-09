@@ -54,11 +54,11 @@ class AuthController {
     }
 
     // Inscription d'un nouveau personnel
-    public function register($nom, $prenom, $email, $telephone, $password, $sexe, $role,  $id_salaire, $derniere_connexion) {
+    public function register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role,  $id_salaire, $derniere_connexion) {
         // Démarrer la session
         session_start();
         // Validation des champs
-        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($sexe) || empty($role) || empty($id_salaire)) {
+        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($confirmPassword) || empty($sexe) || empty($role) || empty($id_salaire)) {
             // Stocker le message d'erreur dans la session
             $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
             // Rediriger vers register.php
@@ -89,9 +89,15 @@ class AuthController {
             header("Location: /Ecole-de-la-Reussite/public/index.php?action=register");
             exit();
         }
+        // Vérification que les mots de passe correspondent
+        if ($password !== $confirmPassword) {
+            $_SESSION['error_message'] = "Les mots de passe ne correspondent pas.";
+            header("Location: /Ecole-de-la-Reussite/public/index.php?action=register");
+            exit();
+        }
     
         // Générer un matricule unique
-        $matricule = strtoupper(substr($prenom, 0, 2) . substr($nom, 0, 2) . uniqid()); // Ex. : "JODO613b86ef0d9e"
+        $matricule = strtoupper(substr($prenom, 0, 2) . substr($nom, 0, 2) .substr(uniqid(), -4)); // Ex. : "JDOS1234"
     
         // Vérification si le personnel existe déjà
         if ($this->personnelModel->findByMatricule($matricule)) {

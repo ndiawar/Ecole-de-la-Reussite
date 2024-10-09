@@ -251,12 +251,6 @@ button:hover {
     max-width: 90%; /* Augmente la largeur du modal */
 }
 
-
-
-
-
-
-
 form {
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -314,12 +308,22 @@ button {
 .input-error {
     border: 1px solid red;
 }
-.ajout {
+#buttonAJ {
     background-color: #004D40;
-    border-radius: 10px;
+    color: #fff;
+    border-radius: 5px;
     font-size: 18px;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
+
+#buttonAJ:hover {
+    background-color: #008080;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 .card {
     transition: transform 0.2s;
 }
@@ -330,4 +334,7 @@ button {
 
 .avatar {
     position: relative; /* Nécessaire pour positionner le badge */
+}
+.is-invalid {
+    border-color: #dc3545; /* Rouge Bootstrap */
 }

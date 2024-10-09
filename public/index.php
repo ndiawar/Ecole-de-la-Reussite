@@ -24,10 +24,6 @@ $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
 
 // Gestion du routage
 switch ($action) {
-    // case 'createPersonnel':
-    //     // Gestion de la création d'un nouveau personnel
-    //     $personnelController->create();
-    //     break;
 
     case 'login':
         // Connexion d'un personnel
@@ -55,7 +51,7 @@ switch ($action) {
             $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
     
             // Appeler la méthode register en incluant derniere_connexion
-            echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $id_salaire, $derniere_connexion);
+            echo $authController->register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role, $id_salaire, $derniere_connexion);
         } else {
             require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
         }
@@ -70,9 +66,6 @@ switch ($action) {
         $authController->logout();
         break;
 
-        // case 'listPersonnel':
-        //     $personnelController->index(); // Liste des personnels
-        //     break;
         case 'listPersonnel':
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 // Debugging: Ajoutez un message pour vérifier que cette ligne est atteinte
@@ -83,11 +76,12 @@ switch ($action) {
             
 
         case 'editPersonnel':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                $personnelController->edit($id); // Modifier un personnel
-            }
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            $personnelController->edit($id);
             break;
+        
+        
+        
 
         case 'archivePersonnel':
             $id = $_GET['id'] ?? null;

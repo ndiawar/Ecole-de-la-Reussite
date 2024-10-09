@@ -49,7 +49,8 @@ ob_start();  // Démarre la capture du contenu
             </div>
             <div class="modal-body">
                 <!-- Formulaire d'ajout -->
-                <form action="index.php?action=register" method="POST">                    
+                <form action="index.php?action=register" method="POST">  
+                    <div id="error-message" style="color: red; display: none;"></div>                  
                     <!-- Afficher un message d'erreur s'il y en a -->
                     <?php if (!empty($errorMessage)) : ?>
                         <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage) ?></div>
@@ -219,26 +220,10 @@ ob_start();  // Démarre la capture du contenu
                                     </div>
 
                                 </div>
-                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $p['id_personnel'] ?>">
-                                    <i class="fas fa-edit" title="Modifier"></i>
-                                </button>
-                                <div class="modal fade" id="editModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="editModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Modifier les informations</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Formulaire de modification du personnel ici</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-warning">Enregistrer</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a href="index.php?action=editPersonnel&id=<?= htmlspecialchars($p['id_personnel']) ?>" class="btn" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
                                 <!-- Bouton pour afficher la modal -->
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#showModal<?= $p['id_personnel'] ?>">
                                     <i class="fas fa-eye" title="Afficher"></i>
@@ -254,7 +239,7 @@ ob_start();  // Démarre la capture du contenu
                                                     <div class="card-body text-center">
                                                         <!-- Avatar (Icône) -->
                                                         <div class="avatar mb-3">
-                                                            <img src="https://via.placeholder.com/100" alt="Avatar" class="rounded-circle" style="width: 100px; height: 100px;">
+                                                         <img src="https://via.placeholder.com/100" alt="Avatar" class="rounded-circle" style="width: 100px; height: 100px;">
                                                             <span class="badge bg-success position-absolute" style="top: 75px; left: 155px;">ER</span>
                                                         </div>
                                                         <h5 class="card-title"><?= htmlspecialchars($p['prenom']) ?> <?= htmlspecialchars($p['nom']) ?></h5>
@@ -321,6 +306,7 @@ ob_start();  // Démarre la capture du contenu
     </div>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -330,30 +316,9 @@ ob_start();  // Démarre la capture du contenu
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/Ecole-de-la-Reussite/app/views/personnel/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </body>
 </html>
 <?php
 $content = ob_get_clean();  // Récupère le contenu capturé
 require __DIR__ . '/../layout.php'; // Inclure le fichier de mise en page
 ?>
-
-<?php if (isset($_SESSION['success_message'])) : ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var successToast = new bootstrap.Toast(document.getElementById('successToast'));
-            successToast.show();  // Affiche le toast immédiatement après le chargement de la page
-        });
-    </script>
-    <?php unset($_SESSION['success_message']); // Supprime le message après affichage ?>
-<?php endif; ?>
-
-<?php if (isset($_SESSION['archive_success_message'])) : ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var archiveToast = new bootstrap.Toast(document.getElementById('archiveToast'));
-            archiveToast.show();  // Affiche le toast immédiatement après le chargement de la page
-        });
-    </script>
-    <?php unset($_SESSION['archive_success_message']); // Supprime le message après affichage ?>
-<?php endif; ?>
