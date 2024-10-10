@@ -1,8 +1,8 @@
 // Fonction de validation du formulaire d'inscription
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('register-button').addEventListener('click', function(event) {
-        const nom = document.getElementById('nom');
-        const prenom = document.getElementById('prenom');
+        const nom = sanitizeInput(document.getElementById("nom").value.trim());
+        const prenom = sanitizeInput(document.getElementById("prenom").value.trim());
         const email = document.getElementById('email');
         const telephone = document.getElementById('telephone');
         const password = document.getElementById('password');
@@ -57,6 +57,16 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
 
+
+        // Validation de la confirmation du mot de passe
+        if (confirmPassword.value.trim() === '') {
+            showError(confirmPassword, "Veuillez confirmer votre mot de passe.");
+            isValid = false;
+        } else if (password.value !== confirmPassword.value) {
+            showError(confirmPassword, "Les mots de passe ne correspondent pas.");
+            isValid = false;
+        }
+
         // Validation du sexe (non vide)
         if (sexe.value.trim() === '') {
             showError(sexe, "Le sexe est obligatoire.");
@@ -85,6 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isValid) {
             event.preventDefault();
         }
+         // Vérification des caractères spéciaux dans le nom et le prénom
+        if (!/^[a-zA-ZÀ-ÿ' ]+$/.test(nom)) {
+            errors.push("Le nom ne doit contenir que des lettres et des espaces.");
+        }
+        if (!/^[a-zA-ZÀ-ÿ' ]+$/.test(prenom)) {
+            errors.push("Le prénom ne doit contenir que des lettres et des espaces.");
+        }
     });
 
     // Fonction pour afficher un message d'erreur sous le champ
@@ -104,9 +121,17 @@ document.addEventListener('DOMContentLoaded', function() {
         inputs.forEach(input => input.classList.remove('input-error'));
     }
 
-    // Fonction pour valider le format de l'email
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
+        return re.test(email);
+    }
+
+    function sanitizeInput(input) {
+        // Supprime les caractères non alphanumériques sauf les espaces et les apostrophes
+        return input.replace(/[^a-zA-ZÀ-ÿ' ]/g, "");
+    }
+
+    function toTitleCase(str) {
+        return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
     }
 });

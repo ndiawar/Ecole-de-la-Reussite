@@ -1,32 +1,41 @@
-/* Style de la sidebar */
 .sidebar {
     background-color: #004D40;
-    height: 100vh; /* Occupe toute la hauteur verticale de la page */
     padding-top: 20px;
     position: fixed;
-    width: 250px;
+    width: 300px;
     top: 0;
     left: 0;
+    min-height: 100vh;
+    text-align: center;
 }
-
-.sidebar h4 {
-    color: #fff;
-}
-
 .sidebar .nav-link {
-    color: #fff;
+    color: #ffffff;
+    padding: 10px 15px; /* 10px en haut et en bas, 15px à gauche et à droite */
+
 }
 
-.sidebar .nav-link.active {
-    font-weight: bold;
+#icon_menu{
     color: #fff;
+    font-size: 18px;
 }
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: #20B2AA;
+    color: #ffffff;
+    
+}
+
+a{
+    padding: 10px 55px; /* 10px en haut et en bas, 15px à gauche et à droite */
+
+}
+
 
 /* Style du header avec déconnexion et notifications */
 .header {
     margin-left: 250px;
     padding: 15px 20px;
-    background-color: #f8f9fa;
+    background-color: #e8e8e9;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -52,31 +61,12 @@
     padding: 20px;
 }
 
+        /* Style du dropdown menu */
+        .dropdown-menu {
+            background-color: #20B2AA; /* Couleur Light Sea Green */
+        }
 
-/* Style pour l'élément actif (par défaut, Dashboard sera actif) */
-.sidebar .nav-link.active {
-    background-color: #20B2AA; /* Couleur Light Sea Green */
-    color: white;
-}
-
-/* Style pour les éléments de menu par défaut */
-.sidebar .nav-link {
-    background-color: transparent;
-    color: white;
-}
-
-/* Style pour le menu déroulant quand actif */
-.dropdown-menu {
-    background-color: #20B2AA; /* Couleur Light Sea Green pour le fond du dropdown */
-}
-
-.dropdown-item.active, .dropdown-item:active {
-    background-color: #20B2AA; /* Même couleur pour l'élément actif dans le dropdown */
-    color: white;
-}
-
-/* Pour les liens non actifs */
-.sidebar .nav-link:hover, .dropdown-item:hover {
-    background-color: #20B2AA; /* Couleur Light Sea Green au survol */
-    color: white;
-}
+        .dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
+            background-color: #20B2AA;
+            color: white;
+        }
