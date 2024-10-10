@@ -1,0 +1,24 @@
+
+body {
+    background-color: #E8F5E9; /* Couleur de fond douce */
+}
+
+.header {
+    background-color: #004D40; /* Couleur principale */
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.table-header {
+    background-color: #004D40; /* Couleur d'arrière-plan des en-têtes */
+    color: white;
+}
+
+.table th, .table td {
+    vertical-align: middle; /* Aligne le texte au centre */
+}
+
+.highlight {
+    background-color: #B2DFDB; /* Couleur d'accentuation pour les lignes */
+}

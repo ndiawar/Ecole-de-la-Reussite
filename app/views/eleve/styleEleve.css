@@ -1,0 +1,30 @@
+/* Styles personnalisés pour la liste des élèves */
+
+.table-container {
+    margin: 20px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn-action {
+    margin-right: 5px;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+.btn-ajouter {
+    background-color: #004e92;
+    color: white;
+}
+
+.btn-ajouter:hover {
+    background-color: #003366;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 78, 146, 0.05); /* Teinte bleue pour les lignes impaires */
+}
