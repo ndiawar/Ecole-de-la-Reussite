@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
+require '../app/controllers/PaiementController.php'; // Inclure le contrôleur Pour le Paiement
 require_once '../app/models/Personnel.php'; // 
 
 
@@ -15,12 +16,18 @@ $personnelModel = new Personnel(); // Assurez-vous que l'instanciation de Person
 // Instancier le contrôleur Personnel
 $personnelController = new PersonnelController();
 
+$paiementController = new PaiementController();
+
 // Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
 
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
+
+
+
+
 
 // Gestion du routage
 switch ($action) {
@@ -35,6 +42,28 @@ switch ($action) {
             require '../app/views/auth/login.php'; // Afficher le formulaire de connexion
         }
         break;
+
+        case 'initiatePayment':
+        case 'payment':
+            // Appel de la méthode du contrôleur pour initier un paiement
+            $paiementController->initiatePayment();
+            break;
+    
+        case 'success':
+            // Logique en cas de succès de la transaction
+            require_once '../app/views/success.php';
+            break;
+    
+        case 'cancel':
+            // Logique en cas d'annulation de la transaction
+            require_once '../app/views/cancel.php';
+            break;
+    
+        case 'error':
+            // Logique en cas d'erreur de la transaction
+            require_once '../app/views/error.php';
+            break;
+
     case 'register':
         // Inscription d'un nouveau personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
