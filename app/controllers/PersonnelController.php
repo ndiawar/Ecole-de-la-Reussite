@@ -68,23 +68,16 @@ class PersonnelController {
     public function getPersonnel($id) {
         return $this->personnelModel->findById($id); // Remplacez cette ligne par votre logique de récupération
     }
-    
-    
-    
-        public function show($id) {
-            $personnel = $this->personnelModel->find($id);
-            if ($personnel) {
-                require '../app/views/personnel/show.php'; // Afficher les détails du personnel
-            } else {
-                $_SESSION['error_message'] = "Personnel non trouvé.";
-                header('Location: index.php?action=listPersonnel');
-                exit();
-            }
+    public function show($id) {
+        $personnel = $this->personnelModel->find($id);
+        if ($personnel) {
+            require '../app/views/personnel/show.php'; // Afficher les détails du personnel
+        } else {
+            $_SESSION['error_message'] = "Personnel non trouvé.";
+            header('Location: index.php?action=listPersonnel');
+            exit();
         }
-    
-    
-
-
+    }
     public function archive($id) {
         try {
             // Récupérer le nom du personnel à partir de l'ID

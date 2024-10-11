@@ -7,31 +7,24 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
-require '../app/controllers/PaiementController.php'; // Inclure le contrôleur Pour le Paiement
-require_once '../app/models/Personnel.php'; // 
+require '../app/controllers/EleveController.php'; // Inclure le contrôleur Eleve
+require_once '../app/models/Personnel.php'; // Inclure le modèle Personnel
+require_once '../app/models/EleveModel.php'; // Inclure le modèle Eleve
 
+// Instancier les modèles
+$personnelModel = new Personnel();
+$eleveModel = new EleveModel();
 
-// Instancier le modèle Personel
-$personnelModel = new Personnel(); // Assurez-vous que l'instanciation de Personnel est correcte
-// Instancier le contrôleur Personnel
+// Instancier les contrôleurs
 $personnelController = new PersonnelController();
-
-$paiementController = new PaiementController();
-
-// Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
-
+$eleveController = new EleveController();
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
 
-
-
-
-
 // Gestion du routage
 switch ($action) {
-
     case 'login':
         // Connexion d'un personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -43,27 +36,6 @@ switch ($action) {
         }
         break;
 
-        case 'initiatePayment':
-        case 'payment':
-            // Appel de la méthode du contrôleur pour initier un paiement
-            $paiementController->initiatePayment();
-            break;
-    
-        case 'success':
-            // Logique en cas de succès de la transaction
-            require_once '../app/views/success.php';
-            break;
-    
-        case 'cancel':
-            // Logique en cas d'annulation de la transaction
-            require_once '../app/views/cancel.php';
-            break;
-    
-        case 'error':
-            // Logique en cas d'erreur de la transaction
-            require_once '../app/views/error.php';
-            break;
-
     case 'register':
         // Inscription d'un nouveau personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -72,13 +44,14 @@ switch ($action) {
             $email = $_POST['email'];
             $telephone = $_POST['telephone'];
             $password = $_POST['password'];
+            $confirmPassword = $_POST['confirm_password']; // Assurez-vous d'inclure ce champ
             $sexe = $_POST['sexe'];
             $role = $_POST['role'];
             $id_salaire = $_POST['id_salaire'];
-            
+
             // Initialiser derniere_connexion à NULL ou à la date actuelle
             $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
-    
+
             // Appeler la méthode register en incluant derniere_connexion
             echo $authController->register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role, $id_salaire, $derniere_connexion);
         } else {
@@ -95,38 +68,133 @@ switch ($action) {
         $authController->logout();
         break;
 
-        case 'listPersonnel':
+    case 'listPersonnel':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            error_log("Accès à la liste des employés");
+            $personnelController->index(); // Liste des personnels
+        }
+        break;
+
+    case 'editPersonnel':
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if ($id) {
+            $personnelController->edit($id);
+        } else {
+            // Gérer l'erreur d'ID invalide
+            header('Location: index.php?action=listPersonnel');
+            exit;
+        }
+        break;
+
+    case 'archivePersonnel':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $personnelController->archive($id); // Archiver un personnel
+        }
+        break;
+
+    case 'restorePersonnel':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $personnelController->restore($id); // Restaurer un personnel
+        }
+        break;
+
+        case 'ajouterEleve':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $data = [
+                    'eleve_nom' => $_POST['eleve_nom'],
+                    'eleve_prenom' => $_POST['eleve_prenom'],
+                    'eleve_adresse' => $_POST['eleve_adresse'],
+                    'eleve_email' => $_POST['eleve_email'],
+                    'eleve_telephone' => $_POST['eleve_telephone'],
+                    'eleve_date_naissance' => $_POST['eleve_date_naissance'],
+                    'classe_id' => $_POST['classe_id'],
+                    'tuteur_nom' => $_POST['tuteur_nom'],
+                    'tuteur_prenom' => $_POST['tuteur_prenom'],
+                    'tuteur_telephone' => $_POST['tuteur_telephone'],
+                    'tuteur_adresse' => $_POST['tuteur_adresse'],
+                    'tuteur_email' => $_POST['tuteur_email']
+                ];
+                
+                // Appeler la méthode d'ajout d'élève
+                $result = $eleveModel->ajouterEleve($data);
+                
+                if ($result['success']) {
+                    // Rediriger ou afficher un message de succès
+                    header("Location: /Ecole-de-la-Reussite/public/index.php?action=Dashboard");
+                    exit;
+                } else {
+                    // Gérer les erreurs
+                    $errors = $result['errors'];
+                    $classes = $eleveModel->getClasses(); // Fetch classes again to display in the form
+                    require '../app/views/eleve/ajoutEleve.php'; // Pass errors to the view
+                }
+            } else {
+                $classes = $eleveModel->getClasses(); // Ensure classes are fetched when showing the form
+                require '../app/views/eleve/ajoutEleve.php'; // Ensure this path is correct
+            }
+            break;
+        
+        case 'listeEleves':
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Debugging: Ajoutez un message pour vérifier que cette ligne est atteinte
-                error_log("Accès à la liste des employés");
-                $personnelController->index(); // Liste des personnels
+                error_log("Accès à la liste des élèves"); // Ajoute un log ici
+                $eleveController->afficherTousLesEleves();
             }
             break;
             
 
-        case 'editPersonnel':
+    case 'detailsEleve':
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if ($id) {
+            $eleveController->afficherEleveParId($id); // Afficher les détails d'un élève
+        } else {
+            // Gérer l'erreur d'ID invalide
+            header('Location: index.php?action=listeEleves');
+            exit;
+        }
+        break;
+
+        case 'modifierEleve':
             $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-            $personnelController->edit($id);
-            break;
-        
-        
-        
-
-        case 'archivePersonnel':
-            $id = $_GET['id'] ?? null;
             if ($id) {
-                $personnelController->archive($id); // Archiver un personnel
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $data = [
+                        'eleve_nom' => $_POST['nom'],
+                        'eleve_prenom' => $_POST['prenom'],
+                        'eleve_email' => $_POST['email'],
+                        'eleve_telephone' => $_POST['telephone'],
+                        'eleve_adresse' => $_POST['adresse'],
+                        'eleve_date_naissance' => $_POST['date_naissance'],
+                        'eleve_niveau' => $_POST['niveau'],
+                        'tuteur_nom' => $_POST['tuteur_nom'],
+                        'tuteur_prenom' => $_POST['tuteur_prenom'],
+                        'tuteur_telephone' => $_POST['tuteur_telephone'],
+                        'tuteur_adresse' => $_POST['tuteur_adresse'],
+                        'tuteur_email' => $_POST['tuteur_email'],
+                        'classe_id' => $_POST['classe_id'] // Ajouter si nécessaire
+                    ];
+                    $eleveController->modifierEleve($id, $data); // Modifier l'élève
+                } else {
+                    // Afficher le formulaire de modification
+                    $eleveController->afficherEleveParId($id);
+                }
+            } else {
+                // Gérer l'erreur d'ID invalide
+                header('Location: index.php?action=listeEleves');
+                exit;
             }
             break;
+        
 
-        case 'restorePersonnel':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                $personnelController->restore($id); // Restaurer un personnel
-            }
-            break;
+    case 'supprimerEleve':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $eleveController->supprimerEleve($id); // Supprimer l'élève
+        }
+        break;
 
-        default:
-            header("Location: index.php?action=login");
-            break;
-    }
+    default:
+        header("Location: index.php?action=login");
+        break;
+}

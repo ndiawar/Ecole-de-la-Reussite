@@ -4,7 +4,7 @@ class Database {
 
     public function __construct() {
         $host = 'localhost';
-        $db = 'reussite';
+        $db = 'ecole-de-la-reussite';
         $user = 'root';
         $pass = '';
         $options = [

@@ -245,7 +245,18 @@ button:hover {
     border-radius: 10px;
     font-size: 18px;
     font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #f0f0f0;
 }
+
+.ajout:hover {
+    background-color: #008080;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #f0f0f0;
+}
+
+
 
 .modal-lg {
     max-width: 90%; /* Augmente la largeur du modal */
@@ -337,8 +348,4 @@ button {
 }
 .is-invalid {
     border-color: #dc3545; /* Rouge Bootstrap */
-}
-.input-error {
-    border: 2px solid red; /* Bordure rouge */
-    background-color: #ffe6e6; /* Fond léger pour indiquer une erreur */
 }

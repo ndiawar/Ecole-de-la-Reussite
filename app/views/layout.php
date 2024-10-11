@@ -65,7 +65,7 @@ $currentAction = $_GET['action'] ?? 'Dashboard';
                         </a>
                         <ul class="collapse nav flex-column ms-1" id="submenuInscription" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0">Élèves</a>
+                                <a href="?action=listeEleves" class="nav-link px-0 <?php echo $currentAction === 'listeEleves' ? 'active' : ''; ?>">Élèves</a>
                             </li>
                             <li>
                                 <a href="?action=listPersonnel" class="nav-link px-0 <?php echo $currentAction === 'listPersonnel' ? 'active' : ''; ?>">Employés</a>
@@ -107,11 +107,6 @@ $currentAction = $_GET['action'] ?? 'Dashboard';
 <!-- Scripts Bootstrap et autres -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script>
-    document.getElementById('menuToggle').addEventListener('click', function() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.toggle('show'); // Ajoute ou enlève la classe show
-    });
-</script>
+
 </body>
 </html>
