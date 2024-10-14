@@ -7,7 +7,11 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
-require_once '../app/models/Personnel.php'; // 
+require '../app/controllers/PaiementController.php'; // Inclure le contrôleur Paiement
+
+
+
+//require_once '../app/models/Personnel.php'; // 
 
 
 // Instancier le modèle Personel
@@ -17,6 +21,8 @@ $personnelController = new PersonnelController();
 
 // Instancier le contrôleur AuthController avec le modèle Personnel
 $authController = new AuthController($personnelModel);
+//Instancier le contrôleur  PaiementControlleur
+$paiementController= new PaiementController();
 
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
@@ -71,32 +77,50 @@ switch ($action) {
         $authController->logout();
         break;
 
-        case 'listPersonnel':
-            $personnelController->index(); // Liste des personnels
-            break;
+    case 'listPersonnel':
+        $personnelController->index(); // Liste des personnels
+        break;
+       
+    case 'editPersonnel':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $personnelController->edit($id); // Modifier un personnel
+        }
+        break;
 
-        case 'editPersonnel':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                $personnelController->edit($id); // Modifier un personnel
-            }
-            break;
+    case 'archivePersonnel':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $personnelController->archive($id); // Archiver un personnel
+        }
+        break;
 
-        case 'archivePersonnel':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                $personnelController->archive($id); // Archiver un personnel
-            }
-            break;
+   
 
-        case 'restorePersonnel':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                $personnelController->restore($id); // Restaurer un personnel
-            }
-            break;
+    case 'restorePersonnel':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            $personnelController->restore($id); // Restaurer un personnel
+        }
+        break;
 
-        default:
-            header("Location: index.php?action=login");
-            break;
+    case 'liste_archives':
+        // Récupérer les personnels archivés
+        $personnelsArchives = $personnelController->listArchivedPersonnel(); // Assurez-vous que cette méthode existe et fonctionne
+        include '..//app/views/personnel/listPersonnelArchived.php';
+        break;
+
+      
+         // Nouvelle route pour afficher la vue des paiements
+    case 'listPaiements':
+        $paiementController->index();
+
+        break;
+
+    
+   
+    
+    default:
+       // header("Location: index.php?action=login");
+        break;
     }

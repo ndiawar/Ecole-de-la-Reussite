@@ -154,6 +154,17 @@ class Personnel {
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
+
+
+    // Récupérer la liste des personnels archivés
+    public function getArchivedPersonnel() {
+    $query = "SELECT * FROM personnel WHERE statut_compte = 'Inactif'";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute();
+    // Retourne tous les personnels archivés
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
     
 
     // Restaurer un personnel archivé
@@ -193,6 +204,20 @@ class Personnel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+  /*  // Modèle : PersonnelModel.php
+
+public function getArchivedPersonnelWithPagination($start, $limit) {
+    $db = new Database();
+    $pdo = $db->getPDO();
+    $stmt = $pdo->prepare("SELECT * FROM personnel WHERE statut_compte = 'Inactif' LIMIT :start, :limit");
+    $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+*/
+
     // Compter le nombre total de personnels actifs
     public function countPersonnel() {
         $db = new Database();
@@ -201,6 +226,16 @@ class Personnel {
         return $stmt->fetchColumn();
     }
 
+
+    /*public function countArchivedPersonnel() {
+        $db = new Database();
+        $pdo = $db->getPDO();
+        $stmt = $pdo->query("SELECT COUNT(*) FROM personnel WHERE statut_compte = 'Inactif'");
+        return $stmt->fetchColumn();
+    }
+*/
+
+
     public function getNomPersonnel($id) {
         $query = "SELECT nom FROM personnel WHERE id_personnel = :id"; // Ajustez la requête selon votre schéma
         $stmt = $this->pdo->prepare($query);
@@ -208,8 +243,33 @@ class Personnel {
         $stmt->execute();
         return $stmt->fetchColumn(); // Retourne le nom du personnel
     }
+ 
     
+    // Récupérer les personnels archivés avec pagination
+public function getArchivedPersonnelWithPagination($start, $limit) {
+    $sql = "SELECT * FROM personnels WHERE archiver = 'archivé' LIMIT :start, :limit";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+
+// Compter le nombre total de personnels archivés
+public function countArchivedPersonnel() {
+    $sql = "SELECT COUNT(*) AS total FROM personnels WHERE archiver = 'archivé'";
+    $stmt = $this->db->query($sql);
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
+
+}
+
+
+
+
 
 
 
@@ -241,4 +301,11 @@ class PersonnelModel {
         return $stmt->execute();
     }
 }
+
+
+
+
+
+
+
 ?>

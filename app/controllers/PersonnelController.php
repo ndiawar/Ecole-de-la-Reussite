@@ -1,5 +1,6 @@
 <?php
-require_once(__DIR__ . '/../models/Personnel.php'); // Assurez-vous que le chemin est correct
+require_once '../config/config.php';
+require_once(__DIR__ . '/../models/paiement.php'); // Assurez-vous que le chemin est correct
 
 class PersonnelController {
     private $personnelModel;
@@ -8,6 +9,7 @@ class PersonnelController {
         //session_start(); // Démarrer la session pour gérer les messages d'erreur et de succès
         $this->personnelModel = new Personnel();
     }
+    
 
     // Récupérer les personnels actifs avec pagination
     public function index() {
@@ -21,15 +23,46 @@ class PersonnelController {
         // Récupérer les personnels actifs avec pagination
         $personnelModel = new Personnel();
         $personnels = $personnelModel->getPersonnelWithPagination($start, $limit);
-    
+      
         // Compter le nombre total de personnels actifs
         $totalPersonnels = $personnelModel->countPersonnel(); 
         $totalPages = ceil($totalPersonnels / $limit);
     
         // Charger la vue avec les données paginées
+        var_dump($totalPages, $totalPersonnels, $personnels);
         require '../app/views/personnel/listPersonnel.php';
     }
 
+    /*public function indexArchived() {
+        // Nombre de personnels par page
+        $totalPages = $totalPages ?? 0; // Initialiser à 0 si non défini
+        $limit = 9; 
+        // Page actuelle
+        $page = $_GET['page'] ?? 1; 
+        // Calcul du début
+        $start = ($page - 1) * $limit; 
+    
+        // Récupérer les personnels archivés avec pagination
+        $personnelModel = new Personnel();
+        $personnels = $personnelModel->getArchivedPersonnelWithPagination($start, $limit);
+    
+        // Compter le nombre total de personnels archivés
+        $totalPersonnels = $personnelModel->countArchivedPersonnel();
+        $totalPages = 0; // Initialiser à 0 par défaut
+    
+        // Vérifier qu'il y a des personnels pour calculer le nombre de pages
+        if ($totalPersonnels > 0) {
+            $totalPages = ceil($totalPersonnels / $limit);
+        }
+    
+        // Charger la vue avec les données paginées
+        require '../app/views/personnel/listPersonnelArchived.php';
+    }
+    */
+
+   
+    
+    
     // Autres méthodes du contrôleur (index, show, edit, archive, restore)...
 
     // Afficher un personnel par ID
@@ -103,6 +136,34 @@ class PersonnelController {
     }
 
 
+    public function listArchivedPersonnel() {
+        try {
+            // Récupérer la liste des personnels archivés depuis le modèle
+            $archivedPersonnel = $this->personnelModel->getArchivedPersonnel();
+    
+            // Si la liste est vide, on peut ajouter un message
+            if (empty($archivedPersonnel)) {
+                $_SESSION['no_archived_message'] = "Aucun personnel archivé pour le moment.";
+            } else {
+                
+                return $archivedPersonnel;
+            }
+    
+            // Stocker la liste dans une variable de session ou directement passer à la vue
+            //$_SESSION['archived_personnel'] = $archivedPersonnel;
+    
+        } catch (Exception $e) {
+            // Gérer les erreurs et ajouter un message d'erreur dans la session
+            $_SESSION['archive_error_message'] = "Erreur lors de la récupération des personnels archivés : " . $e->getMessage();
+        } /*finally {
+            // Rediriger vers la vue de la liste des personnels archivés
+            header('Location: index.php?action=listArchivedPersonnel');
+            exit();
+        }*/
+    }
+    
+
+
     // Restaurer un personnel archivé
     public function restore($id) {
         try {
@@ -116,6 +177,7 @@ class PersonnelController {
             exit();
         }
     }
+
 }
 
 
