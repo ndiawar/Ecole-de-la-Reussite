@@ -144,7 +144,7 @@ switch ($action) {
                     'eleve_prenom' => $_POST['eleve_prenom'],
                     'eleve_adresse' => $_POST['eleve_adresse'],
                     'eleve_email' => $_POST['eleve_email'],
-                    'eleve_telephone' => $_POST['eleve_telephone'],
+                    'eleve_sexe' => $_POST['eleve_sexe'],
                     'eleve_date_naissance' => $_POST['eleve_date_naissance'],
                     'classe_id' => $_POST['classe_id'],
                     'tuteur_nom' => $_POST['tuteur_nom'],
@@ -158,7 +158,7 @@ switch ($action) {
                 $result = $eleveModel->ajouterEleve($data);
                 
                 if ($result['success']) {
-                    header("Location: /Ecole-de-la-Reussite/public/index.php?action=Dashboard");
+                    header("Location: /Ecole-de-la-Reussite/public/index.php?action=listeEleve");
                     exit;
                 } else {
                     $errors = $result['errors'];
@@ -198,40 +198,40 @@ switch ($action) {
             exit();
         }
         break;
-
-    case 'modifierEleve':
-        if ($authController->isAuthenticated()) {
-            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-            if ($id) {
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $data = [
-                        'eleve_nom' => $_POST['nom'],
-                        'eleve_prenom' => $_POST['prenom'],
-                        'eleve_email' => $_POST['email'],
-                        'eleve_telephone' => $_POST['telephone'],
-                        'eleve_adresse' => $_POST['adresse'],
-                        'eleve_date_naissance' => $_POST['date_naissance'],
-                        'eleve_niveau' => $_POST['niveau'],
-                        'tuteur_nom' => $_POST['tuteur_nom'],
-                        'tuteur_prenom' => $_POST['tuteur_prenom'],
-                        'tuteur_telephone' => $_POST['tuteur_telephone'],
-                        'tuteur_adresse' => $_POST['tuteur_adresse'],
-                        'tuteur_email' => $_POST['tuteur_email'],
-                        'classe_id' => $_POST['classe_id']
-                    ];
-                    $eleveController->modifierEleve($id, $data); // Modifier l'élève
-                } else {
-                    $eleveController->afficherEleveParId($id);
-                }
+        case 'modifierEleve':
+            $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $data = [
+                    'eleve_nom' => $_POST['eleve_nom'],
+                    'eleve_prenom' => $_POST['eleve_prenom'],
+                    'eleve_email' => $_POST['eleve_email'],
+                    'eleve_sexe' => $_POST['eleve_sexe'],
+                    'eleve_adresse' => $_POST['eleve_adresse'],
+                    'eleve_date_naissance' => $_POST['eleve_date_naissance'],
+                    'tuteur_nom' => $_POST['tuteur_nom'],
+                    'tuteur_prenom' => $_POST['tuteur_prenom'],
+                    'tuteur_telephone' => $_POST['tuteur_telephone'],
+                    'tuteur_email' => $_POST['tuteur_email'],
+                    'tuteur_adresse' => $_POST['tuteur_adresse'],
+                    'classe_id' => $_POST['classe_id']
+                ];
+                $eleveController->modifierEleve($data); // Assurez-vous de passer les deux arguments ici
             } else {
-                header('Location: index.php?action=listeEleves');
-                exit;
+                $eleveController->afficherEleveParId($id);
             }
-        } else {
-            header("Location: index.php?action=login");
-            exit();
-        }
-        break;
+            break;
+
+        
+        case 'archiveEleve':
+            // Route pour archiver un élève
+            if (isset($_GET['id'])) {
+                $eleveController->archiveEleve();
+                
+            } else {
+                echo "ID d'élève manquant.";
+            }
+            break;
 
     case 'supprimerEleve':
         if ($authController->isAuthenticated()) {

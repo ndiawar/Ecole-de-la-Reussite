@@ -34,7 +34,7 @@ ob_start();  // Démarre la capture du contenu
             </div>
             <div class="row">
                 <div class="col-6 mb-3">
-                    <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+                    <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($personnelInfo['email'] ?? '') ?>" >
                 </div>
                 <div class="col-6 mb-3">

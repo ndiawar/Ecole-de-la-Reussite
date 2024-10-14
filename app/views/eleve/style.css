@@ -43,6 +43,7 @@ body {
    left: 1450px;
 }
 
+
 .search-container {
     display: flex;
     justify-content: space-between;
@@ -317,7 +318,7 @@ button {
 }
 
 .input-error {
-    border: 1px solid red;
+    border-color: red; /* Change border color to red */
 }
 #buttonAJ {
     background-color: #004D40;
