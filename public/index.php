@@ -7,9 +7,12 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
+require '../app/controllers/PaiementEleveController.php'; // Inclure le contrôleur Personnel
 require '../app/controllers/EleveController.php'; // Inclure le contrôleur Eleve
 require_once '../app/models/Personnel.php'; // Inclure le modèle Personnel
 require_once '../app/models/EleveModel.php'; // Inclure le modèle Eleve
+require_once '../app/models/PaiementElevesModel.php'; // Inclure le modèle Eleve
+
 
 $authController = new AuthController(new Personnel());
 
@@ -17,9 +20,11 @@ $authController = new AuthController(new Personnel());
 // Instancier les modèles
 $personnelModel = new Personnel();
 $eleveModel = new EleveModel();
+$paiementModel = new PaiementEleveModel();
 
 // Instancier les contrôleurs
 $personnelController = new PersonnelController();
+$paiementElevesController = new PaiementEleveController();
 $eleveController = new EleveController();
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
@@ -244,6 +249,97 @@ switch ($action) {
             exit();
         }
         break;
+
+    
+    
+    
+        //Routes Pour action paiements Eleves 
+
+        case 'listeElevesp':
+            if ($authController->isAuthenticated()) {
+                $paiementElevesController->afficherTousLesElevesp();
+            } else {
+                header("Location: index.php?action=login");
+                exit();
+            }
+            break;
+
+
+    case 'listePaiementsEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $page = $_GET['page'] ?? 1; // Récupérer le numéro de page
+            $limit = 10; // Nombre d'éléments par page
+            $searchTerm = $_GET['search'] ?? ''; // Récupérer le terme de recherche
+            $paiementElevesController->index($page, $limit, $searchTerm);
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+    case 'ajouterPaiementEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $paiementElevesController->ajouter(); // Gérer l'ajout d'un paiement
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+    case 'modifierPaiementEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if ($id) {
+                $paiementElevesController->modifier($id); // Gérer la modification d'un paiement
+            } else {
+                header('Location: index.php?action=listePaiements');
+                exit;
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+    case 'archiverPaiementEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $paiementElevesController->archiver($id); // Archiver un paiement
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+    case 'listeArchivesEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $paiementElevesController->archives(); // Afficher les paiements archivés
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+    case 'desarchiverPaiementEleves':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $paiementElevesController->unarchive($id); // Désarchiver un paiement
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
 
     default:
         header("Location: index.php?action=login");
