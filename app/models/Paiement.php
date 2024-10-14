@@ -26,15 +26,7 @@ class Paiement {
         $this->pdo = $db->getPDO();
     }
 
-    // Créer un reçu
-    public function creerRecu($id_inscription, $montant_paye, $moyen_paiement) {
-        $date_recu = date('Y-m-d');
-        $sql = "INSERT INTO recu (date_recu, montant_paye, moyen_paiement, id_inscription) VALUES (?, ?, ?, ?)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$date_recu, $montant_paye, $moyen_paiement, $id_inscription]);
-
-        return $this->pdo->lastInsertId();
-    }
+     
 
     // Récupérer les reçus d'un élève
     public function getRecusParEleve($id_eleve) {
@@ -118,13 +110,54 @@ class Paiement {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Récupère tous les élèves de la base de données
-    public function getAll() {
-        $sql = "SELECT e.*, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom
-                FROM eleve e
-                LEFT JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur";
+    
+    // Récupère le nombre total d'éléves
+    public function getTotal() {
+        $sql = "SELECT COUNT(*) FROM eleve";
         $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchColumn(); // Retourne le nombre total d'élèves
+    }
+
+
+    // Récupère tous les élèves de la base de données
+    // public function getAll($currentPage, $itemsPerPage) {
+    //     $offset = ($currentPage - 1) * $itemsPerPage; // Calculer l'offset
+    
+    //     $sql = "SELECT e.*, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom
+    //             FROM eleve e
+    //             LEFT JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
+    //             LIMIT :offset, :itemsPerPage";
+    
+    //     $stmt = $this->pdo->prepare($sql);
+    //     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    //     $stmt->bindValue(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
+    //     $stmt->execute();
+    
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourne les élèves pour la page actuelle
+    // }
+    
+    
+    public function getAll($currentPage, $itemsPerPage) {
+        $offset = ($currentPage - 1) * $itemsPerPage; // Calculer l'offset
+
+        $sql = "SELECT e.*, 
+                       t.nom AS tuteur_nom, 
+                       t.prenom AS tuteur_prenom,
+                       CASE 
+                           WHEN i.id_eleve IS NOT NULL THEN 'Actif'
+                           ELSE 'Inactif'
+                       END AS statut_inscription
+                FROM eleve e
+                LEFT JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
+                LEFT JOIN inscription i ON e.id_eleve = i.id_eleve
+                LIMIT :offset, :itemsPerPage";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourne les élèves avec statut d'inscription
     }
 
     // Recupérer l'ensemble des paiements
@@ -171,18 +204,142 @@ class Paiement {
         return 20; 
     }
 
-    public function getEleveById($id_eleve) {
-        $sql = "SELECT * FROM eleve WHERE id_eleve = ?";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id_eleve]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
 
-    public function getTuteurById($id_tuteur) {
-        $sql = "SELECT * FROM tuteur WHERE id_tuteur = ?";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id_tuteur]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    // Méthode pour traiter la création d'un paiement
+    
+
+    // Méthode pour afficher les informations d'un élève
+    public function showEleveInfo($id_eleve) {
+        // Récupérez les informations de l'élève via le modèle
+        $eleveInfo = $this->paymentModel->getEleveInfo($id_eleve);
+        
+        // Incluez la vue pour afficher les informations de l'élève
+        // include 'views/eleve_info.php';
     }
+    
+    public function createPayment($data) {
+        try {
+            // Récupérer id_inscription en fonction de id_eleve
+            $sql_get_inscription = "SELECT id_inscription FROM inscription WHERE id_eleve = :id_eleve";
+            $stmt_get_inscription = $this->pdo->prepare($sql_get_inscription);
+            $stmt_get_inscription->execute([':id_eleve' => $data['id_eleve']]);
+            $id_inscription = $stmt_get_inscription->fetchColumn();
+    
+            if (!$id_inscription) {
+                throw new Exception('Inscription non trouvée pour cet élève.');
+            }
+
+    
+            // Gestion du mois de paiement pour type "mensualité"
+            $mois = null; 
+            echo  $data;
+
+            
+            if ($data['type_paiement'] === 'mensualite' && !empty($data['mois'])) {
+                $mois = $data['mois']; // S'assurer que le mois est bien récupéré
+            }
+    
+            // Conversion du montant
+            $montant = floatval($data['montant']); 
+    
+            // Requête d'insertion avec id_personnel facultatif et ajout du champ 'mois'
+            $sql = "INSERT INTO paiement ( id_eleve, type_paiement, montant, moyen_paiement, date_paiement,id_personnel, id_inscription)
+                    VALUES ( :id_eleve, :type_paiement, :montant, :moyen_paiement, :date_paiement, :id_personnel, :id_inscription)";
+    
+            $stmt = $this->pdo->prepare($sql);
+    
+            // Paramètres pour l'insertion
+            $params = [
+                ':id_eleve' => $data['id_eleve'],
+                ':type_paiement' => "['type_paiement']",
+                ':montant' => "tetess", 
+                ':moyen_paiement' => "res",
+                ':date_paiement' => $data['date_paiement'],
+                ':id_personnel' => $data['id_personnel'],
+                ':id_inscription' => $id_inscription,   
+                //':mois' => "Octobre" // Vérifiez si le mois est bien assigné
+            ];
+    
+            // Débogage : afficher les paramètres
+            print_r($params); 
+    
+            // Exécuter la requête
+            if (!$stmt->execute($params)) {
+                // Afficher les erreurs si l'exécution échoue
+                print_r($stmt->errorInfo()); // Afficher les erreurs
+                return false; 
+            }
+    
+            $id_paiement = $this->pdo->lastInsertId();
+    
+            // Récupérer les informations supplémentaires via jointure
+            $sql_join = "
+                SELECT p.id_paiement, p.type_paiement, p.montant, p.moyen_paiement, p.date_paiement, p.mois,
+                       e.nom AS nom_eleve, e.prenom AS prenom_eleve, e.matricule, e.email, e.telephone
+                FROM paiement p
+                JOIN eleve e ON p.id_eleve = e.id_eleve
+                WHERE p.id_paiement = :id_paiement";
+    
+            $stmt_join = $this->pdo->prepare($sql_join);
+            $stmt_join->execute([':id_paiement' => $id_paiement]);
+    
+            return $stmt_join->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Afficher l'erreur
+            echo 'Erreur : ' . $e->getMessage();
+            return false; 
+        }
+    }
+    
+ // Fonction pour récupérer les mois payés d'un élève
+ public function getMensualitesByEleve($idEleve) {
+    // Requête pour récupérer les mois payés
+    $query = $this->db->prepare("SELECT mois FROM paiement WHERE id_eleve = :idEleve");
+    $query->bindParam(':idEleve', $idEleve, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+// Fonction pour récupérer les mois d'octobre à juillet
+public function getTousLesMois() {
+    return [
+        'Octobre', 
+        'Novembre', 
+        'Décembre', 
+        'Janvier', 
+        'Février', 
+        'Mars', 
+        'Avril', 
+        'Mai', 
+        'Juin', 
+        'Juillet'
+    ];
+}
+    
+    
+    
+    
+    
+//     public function getElevesAvecPaiements() {
+//         $sql = "SELECT e.id_eleve, e.nom, e.prenom, e.matricule, e.telephone,
+//                     i.annee_scolaire, 
+//                     COUNT(CASE WHEN p.type_paiement = 'inscription' THEN 1 END) AS inscription_paye,
+//                     GROUP_CONCAT(DISTINCT MONTH(p.date_paiement) ORDER BY MONTH(p.date_paiement)) AS mois_paiement,
+//                     COUNT(CASE WHEN p.type_paiement = 'mensualite' THEN 1 END) AS mensualite_paye
+//                 FROM eleve e
+//                 LEFT JOIN inscription i ON e.id_eleve = i.id_eleve
+//                 LEFT JOIN paiement p ON e.id_eleve = p.id_eleve
+//                 GROUP BY e.id_eleve, i.annee_scolaire";
+
+//     $stmt = $this->db->prepare($sql);
+//     $stmt->execute();
+//     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+// }
+
+
+
+
 
 }

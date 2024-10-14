@@ -37,6 +37,8 @@ ob_start();  // Démarre la capture du contenu
     </div>
 </div>
 
+<a href="index.php?action=liste_archives" class="btn btn-secondary">Voir les Archivés</a>
+
 <!-- Modal Large -->
 <div class="modal fade" id="ajoutPersonnelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

@@ -107,6 +107,34 @@ class PersonnelController {
     }
 
 
+    public function listArchivedPersonnel() {
+        try {
+            // Récupérer la liste des personnels archivés depuis le modèle
+            $archivedPersonnel = $this->personnelModel->getArchivedPersonnel();
+
+            // Si la liste est vide, on peut ajouter un message
+            if (empty($archivedPersonnel)) {
+                $_SESSION['no_archived_message'] = "Aucun personnel archivé pour le moment.";
+            } else {
+
+                return $archivedPersonnel;
+            }
+
+            // Stocker la liste dans une variable de session ou directement passer à la vue
+            //$_SESSION['archived_personnel'] = $archivedPersonnel;
+
+        } catch (Exception $e) {
+            // Gérer les erreurs et ajouter un message d'erreur dans la session
+            $_SESSION['archive_error_message'] = "Erreur lors de la récupération des personnels archivés : " . $e->getMessage();
+        } /*finally {
+            // Rediriger vers la vue de la liste des personnels archivés
+            header('Location: index.php?action=listArchivedPersonnel');
+            exit();
+        }*/
+    }
+
+
+
     // Restaurer un personnel archivé
     public function restore($id) {
         try {

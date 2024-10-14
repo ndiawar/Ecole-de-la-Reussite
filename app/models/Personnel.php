@@ -123,6 +123,15 @@ class Personnel {
         $stmt->execute();
     }
     
+    // Récupérer la liste des personnels archivés
+    public function getArchivedPersonnel() {
+        $query = "SELECT * FROM personnel WHERE statut_compte = 'Inactif'";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        // Retourne tous les personnels archivés
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 
     // Restaurer un personnel archivé
     public function restore($id) {

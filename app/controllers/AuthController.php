@@ -42,7 +42,7 @@ class AuthController {
             // Ajouter un message de succès à la session
             $_SESSION['success_message'] = "Bienvenue, vous êtes connecté !";
             // Redirection vers le tableau de bord
-            header("Location: /Ecole-de-la-Reussite/public/index.php?action=Dashboard");
+            header("Location: /Ecole-de-la-Reussite/public/index.php?action=dashboard");
             exit();
         } else {
             // Le mot de passe est incorrect

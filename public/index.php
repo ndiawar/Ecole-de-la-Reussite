@@ -7,8 +7,9 @@ error_reporting(E_ALL);
 require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
-<<<<<<< HEAD
-require '../app/controllers/PaiementController.php'; // Inclure le contrôleur Paiement
+require '../app/controllers/PaiementsController.php'; // Inclure le contrôleur Paiement
+require '../app/controllers/EleveController.php'; // Inclure le contrôleur Eleve
+
 require_once '../app/models/Personnel.php'; 
 require_once '../app/models/Paiement.php';
 
@@ -16,23 +17,10 @@ require_once '../app/models/Paiement.php';
 $db = (new Database())->getPDO(); // Connexion à la base de données
 $personnelModel = new Personnel($db); 
 $paiementModel = new Paiement($db);
+$eleveController = new EleveController();
 // $recuController = new RecuController($db);
 $personnelController = new PersonnelController($personnelModel);
-$paiementController = new PaiementController($paiementModel);
-=======
-require '../app/controllers/PaiementController.php'; // Inclure le contrôleur Pour le Paiement
-require_once '../app/models/Personnel.php'; // 
-
-
-// Instancier le modèle Personel
-$personnelModel = new Personnel(); // Assurez-vous que l'instanciation de Personnel est correcte
-// Instancier le contrôleur Personnel
-$personnelController = new PersonnelController();
-
-$paiementController = new PaiementController();
-
-// Instancier le contrôleur AuthController avec le modèle Personnel
->>>>>>> a12bf1e52c01f8c3216fec3b8f8396dee793708b
+$paiementsController = new PaiementsController($paiementModel);
 $authController = new AuthController($personnelModel);
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
@@ -44,10 +32,6 @@ $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
 
 // Gestion du routage
 switch ($action) {
-<<<<<<< HEAD
-=======
-
->>>>>>> a12bf1e52c01f8c3216fec3b8f8396dee793708b
     case 'login':
         // Connexion d'un personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,30 +43,6 @@ switch ($action) {
         }
         break;
 
-<<<<<<< HEAD
-=======
-        case 'initiatePayment':
-        case 'payment':
-            // Appel de la méthode du contrôleur pour initier un paiement
-            $paiementController->initiatePayment();
-            break;
-    
-        case 'success':
-            // Logique en cas de succès de la transaction
-            require_once '../app/views/success.php';
-            break;
-    
-        case 'cancel':
-            // Logique en cas d'annulation de la transaction
-            require_once '../app/views/cancel.php';
-            break;
-    
-        case 'error':
-            // Logique en cas d'erreur de la transaction
-            require_once '../app/views/error.php';
-            break;
-
->>>>>>> a12bf1e52c01f8c3216fec3b8f8396dee793708b
     case 'register':
         // Inscription d'un nouveau personnel
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -95,21 +55,15 @@ switch ($action) {
             $role = $_POST['role'];
             $id_salaire = $_POST['id_salaire'];
             $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
-<<<<<<< HEAD
 
             echo $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
-=======
-    
-            // Appeler la méthode register en incluant derniere_connexion
-            echo $authController->register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role, $id_salaire, $derniere_connexion);
->>>>>>> a12bf1e52c01f8c3216fec3b8f8396dee793708b
         } else {
             require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
         }
         break;
 
     case 'dashboard':
-        require '../app/views/dashboard.php'; // Inclure la vue du tableau de bord
+        require '../app/views/Dashboard.php'; // Inclure la vue du tableau de bord
         break;
 
     case 'logout':
@@ -117,7 +71,6 @@ switch ($action) {
         $authController->logout();
         break;
 
-<<<<<<< HEAD
     case 'listPersonnel':
         $personnelController->index(); // Liste des personnels
         break;
@@ -142,6 +95,12 @@ switch ($action) {
             $personnelController->restore($id); // Restaurer un personnel
         }
         break;
+    
+    case 'liste_archives':
+            // Récupérer les personnels archivés
+            $personnelsArchives = $personnelController->listArchivedPersonnel(); // Assurez-vous que cette méthode existe et fonctionne
+            include '..//app/views/personnel/listPersonnelArchived.php';
+            break;
 
     case 'recu':
         // Afficher le reçu avec les informations de l'élève
@@ -160,26 +119,20 @@ switch ($action) {
         require '../app/views/eleve/recu.php'; 
         break;
 
-    case 'paiement':
-        // Gérer les paiements
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_employe = $_POST['id_employe'];
-            $montant = $_POST['montant'];
-            $mode_paiement = $_POST['mode_paiement'];
+     
+        case 'formulairePaiement':
+            // Inclure le fichier de formulaire de paiement
+            require '../app/views/eleve/formulaire_paiement.php';
+            break;
 
-            echo $paiementController->enregistrerPaiement($id_employe, $montant, $mode_paiement);
-        } else {
-            require '../app/views/paiement/form.php'; // Afficher le formulaire de paiement
-        }
-        break;
 
     case 'listPaiements':
-        $paiementController->index(); // Lister les paiements
+        $paiementsController->index(); // Lister les paiements
         break;
 
-    case 'listEleves':
-        $paiementController->listEléves(); // Lister les paiements
-        break;
+        case 'listEleves':
+            $paiementsController->listElèves(); // Lister les élèves avec pagination
+            break;
 
 
     case 'editPaiement':
@@ -187,37 +140,102 @@ switch ($action) {
         if ($id) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nouveau_nombre_heures = $_POST['nombre_heures'];
-                $paiementController->mettreAJourBulletin($id, $nouveau_nombre_heures);
+                $paiementsController->mettreAJourBulletin($id, $nouveau_nombre_heures);
             } else {
-                $paiementController->mettreAJourPaiement($id_recu, $nouveau_montant, $nouveau_moyen); // Modifier un paiement
+                $paiementsController->mettreAJourPaiement($id_recu, $nouveau_montant, $nouveau_moyen); // Modifier un paiement
             }
         }
         break;
-=======
-        case 'listPersonnel':
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Debugging: Ajoutez un message pour vérifier que cette ligne est atteinte
-                error_log("Accès à la liste des employés");
-                $personnelController->index(); // Liste des personnels
-            }
-            break;
-            
-
-        case 'editPersonnel':
-            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-            $personnelController->edit($id);
-            break;
-        
-        
-        
->>>>>>> a12bf1e52c01f8c3216fec3b8f8396dee793708b
 
     case 'annulerPaiement':
         $id = $_GET['id'] ?? null;
         if ($id) {
-            $paiementController->annulerPaiement($id_recu); // Annuler un paiement
+            $paiementsController->annulerPaiement($id_recu); // Annuler un paiement
         }
         break;
+        case 'modifierEleve':
+            $id = $_GET['id'] ?? 0; // Récupérer l'ID de l'élève à modifier
+            $eleveController->edit($id); // Modifier un élève par ID
+            break;
+    
+        case 'detailsEleve':
+            $id = $_GET['id'] ?? 0; // Récupérer l'ID de l'élève à afficher
+            $eleveController->show($id); // Afficher les détails d'un élève par ID
+            break;
+    
+        case 'archiverEleve':
+            $id = $_GET['id'] ?? 0; // Récupérer l'ID de l'élève à archiver
+            $eleveController->archive($id); // Archiver un élève par ID
+            break;
+    
+        case 'listeElevesArchivés':
+            $eleveController->listArchivedEleves(); // Afficher tous les élèves archivés
+            break;
+    
+        case 'restaurerEleve':
+            $id = $_GET['id'] ?? 0; // Récupérer l'ID de l'élève à restaurer
+            $eleveController->restore($id); // Restaurer un élève archivé par ID
+            break;
+    
+
+        // case $requestMethod === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_payment':
+        //         // Appelle la méthode createPayment pour créer un nouveau paiement
+        //         $paymentController->createPayment();
+        //         break;
+        
+        //     // Vérifie si la méthode de requête est GET et si un ID d'élève est fourni
+        // case $requestMethod === 'GET' && isset($_GET['id_eleve']):
+        //         // Appelle la méthode showEleveInfo pour afficher les informations d'un élève spécifique
+        //         $paymentController->showEleveInfo($_GET['id_eleve']);
+        //         break;
+        
+
+        // case 'listElevesp':
+        //     $eleveController = new EleveController($db);
+        //     $eleveController->listElevesp();
+        //     break;
+
+
+
+
+        case 'create_payment':
+            // Appelle la méthode payer pour créer un nouveau paiement et générer un reçu
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+                $result = $paiementsController->payer(); // Appelle la méthode payer()
+                
+                // Vérifiez le résultat pour gérer les erreurs
+                if ($result === false) {
+                    $error = "Une erreur s'est produite lors de la création du paiement. Veuillez réessayer.";
+                    include '../app/views/eleve/formulaire_paiement.php'; // Inclut le formulaire avec un message d'erreur
+                } else {
+                    header('Location: /Ecole-de-la-Reussite/public/index.php?action=listEleves'); // Redirection vers la page de succès
+                    exit();
+                }
+            } else {
+                include '../app/views/eleve/formulaire_paiement.php'; // Afficher le formulaire de paiement si la méthode n'est pas POST
+            }
+            break;
+
+
+
+            case 'getMensualites':
+                // Appeler la méthode pour récupérer les mensualités
+                $paiementController->getMensualites();
+                break;
+            
+        
+        case 'showEleveInfo':
+            // Route pour afficher les informations d'un élève (GET avec ID de l'élève)
+            if ($requestMethod === 'GET' && isset($_GET['id_eleve'])) {
+                $result = $paiementsController->showEleveInfo($_GET['id_eleve']); // Appelle la méthode showEleveInfo
+                if ($result === false) {
+                    // Gérer le cas où l'élève n'est pas trouvé
+                    $error = "Élève non trouvé.";
+                    // Afficher une page d'erreur ou rediriger
+                }
+            }
+            break;
 
     default:
         header("Location: index.php?action=login");
