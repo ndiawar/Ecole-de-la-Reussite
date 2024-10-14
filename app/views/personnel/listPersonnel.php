@@ -49,9 +49,23 @@ ob_start();  // Démarre la capture du contenu
             </div>
             <div class="modal-body">
                 <!-- Formulaire d'ajout -->
-                <form action="index.php?action=register" method="POST">  
-                    <div id="error-message" style="color: red; display: none;"></div>                  
+                <form action="index.php?action=register" method="POST">
+                <div id="error-message" style="color: red; display: none;"></div>                  
                     <!-- Afficher un message d'erreur s'il y en a -->
+                    <?php if (isset($_SESSION['success_message'])): ?>
+                        <div class="alert alert-success">
+                            <?= htmlspecialchars($_SESSION['success_message']) ?>
+                            <?php unset($_SESSION['success_message']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error_message'])): ?>
+                        <div class="alert alert-danger">
+                            <?= htmlspecialchars($_SESSION['error_message']) ?>
+                            <?php unset($_SESSION['error_message']); ?>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if (!empty($errorMessage)) : ?>
                         <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage) ?></div>
                     <?php endif; ?>
@@ -99,17 +113,6 @@ ob_start();  // Démarre la capture du contenu
                                         <i class="fa fa-eye" id="togglePassword" style="cursor: pointer;"></i>
                                     </span>
                                 </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="confirm-password" class="form-label">Confirmez le mot de passe <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirmez le mot de passe" required>
-                                    <span class="input-group-text">
-                                        <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
-                                    </span>
-                                </div>
-                                <small id="password-error" style="color: red; display: none;">Les mots de passe ne correspondent pas.</small>
                             </div>
 
                         </div>

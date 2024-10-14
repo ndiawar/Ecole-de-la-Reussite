@@ -57,16 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
 
-
-        // Validation de la confirmation du mot de passe
-        if (confirmPassword.value.trim() === '') {
-            showError(confirmPassword, "Veuillez confirmer votre mot de passe.");
-            isValid = false;
-        } else if (password.value !== confirmPassword.value) {
-            showError(confirmPassword, "Les mots de passe ne correspondent pas.");
-            isValid = false;
-        }
-
         // Validation du sexe (non vide)
         if (sexe.value.trim() === '') {
             showError(sexe, "Le sexe est obligatoire.");

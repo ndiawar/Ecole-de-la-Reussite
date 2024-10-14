@@ -54,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
 
             <form action="index.php?action=login" method="POST">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <div class="input-container">
                     <label for="matricule" class="form-label">Email ou Matricule</label>
                     <input type="text" id="matricule" name="matricule" class="form-control" required>

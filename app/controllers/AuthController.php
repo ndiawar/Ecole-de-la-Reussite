@@ -7,13 +7,53 @@ class AuthController {
     private $personnelModel;
 
     public function __construct(Personnel $personnelModel) {
-        $this->personnelModel = $personnelModel; // Initialiser le modèle Personnel
+        $this->personnelModel = $personnelModel;
+        $this->startSecureSession(); // Démarre la session sécurisée
+        $this->generateCsrfToken(); // Génère le jeton CSRF
     }
 
-    public function login($identifiant, $mot_passe) {
-        // Démarrer la session
-        session_start();
+    private function generateCsrfToken() {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+    }
     
+    private function startSecureSession() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start([
+                'cookie_lifetime' => 0, // Durée de vie du cookie jusqu'à la fermeture du navigateur
+                'cookie_httponly' => true,
+                'cookie_secure' => false, // Mettez à true en production avec HTTPS
+                'use_strict_mode' => true
+            ]);
+        }
+
+        // Vérifier l'inactivité
+        $timeoutDuration = 15 * 60; // 15 minutes en secondes
+        if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+            // La session a expiré
+            session_unset(); // Libérer les variables de session
+            session_destroy(); // Détruire la session
+            header('Location: index.php?action=login'); // Rediriger vers la page de connexion
+            exit;
+        }
+
+        // Mettre à jour le timestamp de la dernière activité
+        $_SESSION['LAST_ACTIVITY'] = time();
+    }
+    public function login($identifiant, $mot_passe) {
+    
+        // Vérifier le jeton CSRF
+        if (empty($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            die("Erreur CSRF : jeton invalide.");
+        }
+
+        // Vérifier si les champs sont vides
+        if (empty($identifiant) || empty($mot_passe)) {
+            $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
+            header("Location: /Ecole-de-la-Reussite/public/index.php?action=login");
+            exit();
+        }
         // Vérifier si les champs sont vides
         if (empty($identifiant) || empty($mot_passe)) {
             // Stocker le message d'erreur dans la session
@@ -54,11 +94,11 @@ class AuthController {
     }
 
     // Inscription d'un nouveau personnel
-    public function register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role,  $id_salaire, $derniere_connexion) {
+    public function register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
         // Démarrer la session
         session_start();
         // Validation des champs
-        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($confirmPassword) || empty($sexe) || empty($role) || empty($id_salaire)) {
+        if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($password) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
             // Stocker le message d'erreur dans la session
             $_SESSION['error_message'] = "Veuillez remplir tous les champs.";
             // Rediriger vers register.php
@@ -89,15 +129,9 @@ class AuthController {
             header("Location: /Ecole-de-la-Reussite/public/index.php?action=register");
             exit();
         }
-        // Vérification que les mots de passe correspondent
-        if ($password !== $confirmPassword) {
-            $_SESSION['error_message'] = "Les mots de passe ne correspondent pas.";
-            header("Location: /Ecole-de-la-Reussite/public/index.php?action=register");
-            exit();
-        }
     
         // Générer un matricule unique
-        $matricule = strtoupper(substr($prenom, 0, 2) . substr($nom, 0, 2) .substr(uniqid(), -4)); // Ex. : "JDOS1234"
+        $matricule = strtoupper(substr($prenom, 0, 2) . substr($nom, 0, 2) . uniqid()); // Ex. : "JODO613b86ef0d9e"
     
         // Vérification si le personnel existe déjà
         if ($this->personnelModel->findByMatricule($matricule)) {
@@ -110,7 +144,7 @@ class AuthController {
     
         // Créer un nouvel personnel
         try {
-            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $id_salaire, $derniere_connexion);
+            $this->personnelModel->create($nom, $prenom, $email, $telephone, $matricule, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
              // Ajouter un message de succès à la session
             $_SESSION['success_message'] = "Personnel, ajouté avec succés !";
              header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPersonnel"); // Rediriger vers la page de connexion
@@ -123,20 +157,17 @@ class AuthController {
             exit();
         }
     }
-   
-
-
-    // Déconnexion du personnel
+    
+    // Déconnexion du personnel 
     public function logout() {
-        session_start();
-        session_destroy(); // Détruire la session
+        // Déconnexion sécurisée
+        session_unset(); // Supprime toutes les variables de session
+        session_destroy(); // Détruit la session
         header("Location: /Ecole-de-la-Reussite/public/index.php?action=login");
-        exit(); // Terminer le script
+        exit();
     }
-
     // Vérifier si le personnel est authentifié
     public function isAuthenticated() {
-        session_start();
-        return isset($_SESSION['personnel_id']); // Retourner true si le personnel est authentifié
+        return isset($_SESSION['personnel_id']);
     }
 }

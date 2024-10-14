@@ -2,49 +2,58 @@
     background-color: #004D40;
     padding-top: 20px;
     position: fixed;
-    width: 300px;
+    width: 250px;
     top: 0;
     left: 0;
     min-height: 100vh;
-    text-align: center;
 }
+
+.sidebar .nav-item {
+    width: 100%; /* Prendre toute la largeur */
+    list-style: none;
+}
+
 .sidebar .nav-link {
     color: #ffffff;
-    padding: 10px 15px; /* 10px en haut et en bas, 15px à gauche et à droite */
+    padding: 10px 15px;
+    display: block; /* Assurez-vous que le lien prend toute la largeur */
+    width: 100%; /* Ajoutez ceci pour forcer le lien à occuper tout l’espace disponible */
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* Enlève le soulignement */
+    color: white; /* Texte en blanc */
+    background-color: transparent; /* Fond transparent par défaut */
 
 }
 
-#icon_menu{
+#icon_menu {
     color: #fff;
     font-size: 18px;
 }
+
 .sidebar .nav-link:hover,
 .sidebar .nav-link.active {
     background-color: #20B2AA;
     color: #ffffff;
-    
 }
 
-a{
-    padding: 10px 55px; /* 10px en haut et en bas, 15px à gauche et à droite */
-
+.sidebar .nav-link:focus, 
+.sidebar .nav-link:visited {
+    color: white; /* Assure que le lien reste blanc après avoir été cliqué */
 }
 
-
-/* Style du header avec déconnexion et notifications */
+/* Header styling */
 .header {
     margin-left: 250px;
     padding: 15px 20px;
     background-color: #e8e8e9;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
     position: fixed;
     width: calc(100% - 250px);
     top: 0;
 }
 
-/* Style du bouton de déconnexion */
+/* Bouton de déconnexion */
 .header .btn-danger {
     background-color: #004D40;
     border-color: #004D40;
@@ -54,19 +63,9 @@ a{
     margin-left: 10px;
 }
 
-/* Contenu principal avec marge pour la sidebar */
+/* Contenu principal */
 .content {
     margin-left: 250px;
     margin-top: 60px;
     padding: 20px;
 }
-
-        /* Style du dropdown menu */
-        .dropdown-menu {
-            background-color: #20B2AA; /* Couleur Light Sea Green */
-        }
-
-        .dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
-            background-color: #20B2AA;
-            color: white;
-        }

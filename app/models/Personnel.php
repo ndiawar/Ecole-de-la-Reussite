@@ -25,9 +25,9 @@ class Personnel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
  // Ajouter un nouvel personnel
- public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $id_salaire, $derniere_connexion, $statut_compte = 'actif') {
+ public function create($nom, $prenom, $email, $telephone, $matricule, $mot_passe, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion) {
     // Vérification des champs obligatoires
-    if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($id_salaire)) {
+    if (empty($nom) || empty($prenom) || empty($email) || empty($telephone) || empty($matricule) || empty($mot_passe) || empty($sexe) || empty($role) || empty($statut_compte) || empty($id_salaire)) {
         throw new Exception("Tous les champs sont obligatoires.");
     }
 
@@ -53,11 +53,13 @@ class Personnel {
         ':mot_passe' => $hashedPassword,
         ':sexe' => $sexe,
         ':role' => $role,
-        ':statut_compte' => $statut_compte, // Utilisation de la valeur par défaut
+        ':statut_compte' => $statut_compte,
         ':id_salaire' => $id_salaire,
-        ':derniere_connexion' => $derniere_connexion
+        ':derniere_connexion' => $derniere_connexion // Ajout de derniere_connexion
     ]);
 }
+
+
 
     // Récupérer un personnel par son ID
     public static function find($id) {

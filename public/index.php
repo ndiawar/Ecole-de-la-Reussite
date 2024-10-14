@@ -11,17 +11,30 @@ require '../app/controllers/EleveController.php'; // Inclure le contrôleur Elev
 require_once '../app/models/Personnel.php'; // Inclure le modèle Personnel
 require_once '../app/models/EleveModel.php'; // Inclure le modèle Eleve
 
+$authController = new AuthController(new Personnel());
+
+
 // Instancier les modèles
 $personnelModel = new Personnel();
 $eleveModel = new EleveModel();
 
 // Instancier les contrôleurs
 $personnelController = new PersonnelController();
-$authController = new AuthController($personnelModel);
 $eleveController = new EleveController();
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
+
+// Gestion des messages de session
+if (isset($_SESSION['error_message'])) {
+    $errorMessage = $_SESSION['error_message'];
+    unset($_SESSION['error_message']);
+}
+
+if (isset($_SESSION['success_message'])) {
+    $successMessage = $_SESSION['success_message'];
+    unset($_SESSION['success_message']);
+}
 
 // Gestion du routage
 switch ($action) {
@@ -30,77 +43,101 @@ switch ($action) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $matricule = $_POST['matricule'];
             $password = $_POST['password'];
-            echo $authController->login($matricule, $password);
+            $authController->login($matricule, $password);
         } else {
             require '../app/views/auth/login.php'; // Afficher le formulaire de connexion
         }
         break;
 
-    case 'register':
-        // Inscription d'un nouveau personnel
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = $_POST['nom'];
-            $prenom = $_POST['prenom'];
-            $email = $_POST['email'];
-            $telephone = $_POST['telephone'];
-            $password = $_POST['password'];
-            $confirmPassword = $_POST['confirm_password']; // Assurez-vous d'inclure ce champ
-            $sexe = $_POST['sexe'];
-            $role = $_POST['role'];
-            $id_salaire = $_POST['id_salaire'];
+        case 'register':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $nom = $_POST['nom'];
+                $prenom = $_POST['prenom'];
+                $email = $_POST['email'];
+                $telephone = $_POST['telephone'];
+                $password = $_POST['password'];
+                $sexe = $_POST['sexe'];
+                $role = $_POST['role'];
+                $id_salaire = $_POST['id_salaire'];
+                $statut_compte = 'actif'; // ou un autre statut selon votre logique
+                $derniere_connexion = date('Y-m-d H:i:s'); // ou null
+        
+                // Appeler la méthode register
+                $authController->register($nom, $prenom, $email, $telephone, $password, $sexe, $role, $statut_compte, $id_salaire, $derniere_connexion);
+                
+                // Optionnel : Redirection ou message de succès
+                $_SESSION['success_message'] = "Personnel ajouté avec succès !";
+                header('Location: index.php?action=listPersonnel');
+                exit;
+            }
+            require '../app/views/personnel/listPersonnel.php';
+            break;
+        
+        
 
-            // Initialiser derniere_connexion à NULL ou à la date actuelle
-            $derniere_connexion = null; // ou date('Y-m-d H:i:s') pour la date actuelle
-
-            // Appeler la méthode register en incluant derniere_connexion
-            echo $authController->register($nom, $prenom, $email, $telephone, $password, $confirmPassword, $sexe, $role, $id_salaire, $derniere_connexion);
+    case 'Dashboard':
+        if ($authController->isAuthenticated()) {
+            require '../app/views/Dashboard.php'; // Inclure la vue du tableau de bord
         } else {
-            require '../app/views/auth/register.php'; // Afficher le formulaire d'inscription
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
-    case 'Dashboard':
-        require '../app/views/Dashboard.php'; // Inclure la vue du tableau de bord
-        break;
-
     case 'logout':
-        // Déconnexion du personnel
         $authController->logout();
         break;
 
     case 'listPersonnel':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            error_log("Accès à la liste des employés");
+        if ($authController->isAuthenticated()) {
             $personnelController->index(); // Liste des personnels
+        } else {
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
     case 'editPersonnel':
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        if ($id) {
-            $personnelController->edit($id);
+        if ($authController->isAuthenticated()) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if ($id) {
+                $personnelController->edit($id);
+            } else {
+                header('Location: index.php?action=listPersonnel');
+                exit;
+            }
         } else {
-            // Gérer l'erreur d'ID invalide
-            header('Location: index.php?action=listPersonnel');
-            exit;
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
     case 'archivePersonnel':
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            $personnelController->archive($id); // Archiver un personnel
+        if ($authController->isAuthenticated()) {
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $personnelController->archive($id); // Archiver un personnel
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
     case 'restorePersonnel':
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            $personnelController->restore($id); // Restaurer un personnel
+        if ($authController->isAuthenticated()) {
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $personnelController->restore($id); // Restaurer un personnel
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
-        case 'ajouterEleve':
+    case 'ajouterEleve':
+        if ($authController->isAuthenticated()) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data = [
                     'eleve_nom' => $_POST['eleve_nom'],
@@ -121,41 +158,49 @@ switch ($action) {
                 $result = $eleveModel->ajouterEleve($data);
                 
                 if ($result['success']) {
-                    // Rediriger ou afficher un message de succès
                     header("Location: /Ecole-de-la-Reussite/public/index.php?action=Dashboard");
                     exit;
                 } else {
-                    // Gérer les erreurs
                     $errors = $result['errors'];
-                    $classes = $eleveModel->getClasses(); // Fetch classes again to display in the form
-                    require '../app/views/eleve/ajoutEleve.php'; // Pass errors to the view
+                    $classes = $eleveModel->getClasses();
+                    require '../app/views/eleve/ajoutEleve.php'; // Passer les erreurs à la vue
                 }
             } else {
-                $classes = $eleveModel->getClasses(); // Ensure classes are fetched when showing the form
-                require '../app/views/eleve/ajoutEleve.php'; // Ensure this path is correct
+                $classes = $eleveModel->getClasses();
+                require '../app/views/eleve/ajoutEleve.php'; // Assurez-vous que ce chemin est correct
             }
-            break;
-        
-        case 'listeEleves':
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                error_log("Accès à la liste des élèves"); // Ajoute un log ici
-                $eleveController->afficherTousLesEleves();
-            }
-            break;
-            
-
-    case 'detailsEleve':
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        if ($id) {
-            $eleveController->afficherEleveParId($id); // Afficher les détails d'un élève
         } else {
-            // Gérer l'erreur d'ID invalide
-            header('Location: index.php?action=listeEleves');
-            exit;
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
-        case 'modifierEleve':
+    case 'listeEleves':
+        if ($authController->isAuthenticated()) {
+            $eleveController->afficherTousLesEleves();
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+    case 'detailsEleve':
+        if ($authController->isAuthenticated()) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if ($id) {
+                $eleveController->afficherEleveParId($id); // Afficher les détails d'un élève
+            } else {
+                header('Location: index.php?action=listeEleves');
+                exit;
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+    case 'modifierEleve':
+        if ($authController->isAuthenticated()) {
             $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
             if ($id) {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -172,25 +217,31 @@ switch ($action) {
                         'tuteur_telephone' => $_POST['tuteur_telephone'],
                         'tuteur_adresse' => $_POST['tuteur_adresse'],
                         'tuteur_email' => $_POST['tuteur_email'],
-                        'classe_id' => $_POST['classe_id'] // Ajouter si nécessaire
+                        'classe_id' => $_POST['classe_id']
                     ];
                     $eleveController->modifierEleve($id, $data); // Modifier l'élève
                 } else {
-                    // Afficher le formulaire de modification
                     $eleveController->afficherEleveParId($id);
                 }
             } else {
-                // Gérer l'erreur d'ID invalide
                 header('Location: index.php?action=listeEleves');
                 exit;
             }
-            break;
-        
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
 
     case 'supprimerEleve':
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            $eleveController->supprimerEleve($id); // Supprimer l'élève
+        if ($authController->isAuthenticated()) {
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $eleveController->supprimerEleve($id); // Supprimer l'élève
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
         }
         break;
 
