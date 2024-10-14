@@ -48,7 +48,7 @@ class EleveController
                 'eleve_prenom' => $_POST['eleve_prenom'] ?? '',
                 'eleve_adresse' => $_POST['eleve_adresse'] ?? '',
                 'eleve_email' => $_POST['eleve_email'] ?? '',
-                'eleve_telephone' => $_POST['eleve_telephone'] ?? '',
+                'eleve_sexe' => $_POST['eleve_sexe'] ?? '',
                 'eleve_date_naissance' => $_POST['eleve_date_naissance'] ?? '',
                 'eleve_niveau' => $_POST['eleve_niveau'] ?? '',
                 'classe_id' => $_POST['classe_id'] ?? ''
@@ -100,7 +100,7 @@ class EleveController
         $eleve = $this->eleveModel->afficherEleveParId($id);
         if ($eleve) {
             // Inclure la vue qui affichera les détails de l'élève
-            require '../app/views/eleve/listEleve.php';
+            require '../app/views/eleve/editEleve.php';
         } else {
             // Afficher une vue d'erreur ou rediriger
             header('Location: index.php?action=listEleve');
@@ -109,17 +109,46 @@ class EleveController
     }
     public function modifierEleve($id, $data)
     {
-        $result = $this->eleveModel->modifierEleve($id, $data);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'modifierEleve') {
+            // Vérifier si l'ID est valide
+            if (!$id || !is_numeric($id)) {
+                echo "ID invalide";
+                exit;
+            }
     
-        if ($result['success']) {
-            // Rediriger vers la liste des élèves ou afficher une vue de succès
-            header('Location: index.php?action=listeEleves');            exit;
+            // Vérifiez que les données de formulaire sont présentes
+            if (empty($data)) {
+                echo "Données de formulaire manquantes";
+                exit;
+            }
+    
+            // Appeler la méthode du modèle pour modifier l'élève
+            $result = $this->eleveModel->modifierEleve($id, $data);
+    
+            if ($result['success']) {
+                // Rediriger vers la liste des élèves en cas de succès
+                header('Location: index.php?action=listeEleves');
+                exit;
+            } else {
+                // En cas d'erreur, les afficher pour le débogage
+                if (isset($result['errors']) && !empty($result['errors'])) {
+                    echo "Erreur lors de la mise à jour : " . implode(', ', $result['errors']);
+                } else {
+                    echo "Une erreur inconnue est survenue lors de la mise à jour.";
+                }
+                exit;
+            }
         } else {
-            // Rediriger vers la page de modification avec les erreurs
-            header('Location: index.php?action=editEleve.php?id=' . $id . '&errors=' . urlencode(implode(', ', $result['errors'])));
+            echo "Méthode non autorisée ou action incorrecte";
             exit;
         }
     }
+    
+    
+    
+    
+    
+
     
 
     public function supprimerEleve($id)
@@ -136,4 +165,47 @@ class EleveController
             exit;
         }
     }
+
+
+
+      public function archiveEleve()
+      {
+      if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        if ($this->eleveModel->archiverEleve($id)) {
+            $_SESSION['archive_success_message'] = "L'élève a été archivé avec succès.";
+        } else {
+            $_SESSION['archive_error_message'] = "Une erreur est survenue lors de l'archivage.";
+        }
+        header('Location: index.php?action=listeEleves');
+    }
 }
+ // Afficher les élèves archivés
+ public function archiveEleves() {
+    $eleves_archives = $this->model->getArchivedStudents();
+    
+    // Vérifier si une session de succès est définie
+    if (isset($_SESSION['desarchive_success_message'])) {
+        // Ne rien faire ici, la variable est déjà dans la session
+    }
+
+    // Charger la vue et passer les données
+    include_once 'views/eleve/archiveEleve.php';
+}
+
+     // Désarchiver un élève
+     public function desarchiveEleve($id) {
+    if ($this->model->unarchiveStudent($id)) {
+        $_SESSION['desarchive_success_message'] = "L'élève a été désarchivé avec succès.";
+    } else {
+        $_SESSION['desarchive_success_message'] = "Échec du désarchivage de l'élève.";
+    }
+
+    // Redirigez vers la liste des élèves archivés
+    header('Location: index.php?action=archiveEleve');
+    exit();
+}
+}
+
+
+

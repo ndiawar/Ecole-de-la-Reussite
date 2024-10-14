@@ -66,7 +66,9 @@ body {
     font-size: 16px;
     cursor: pointer;
     margin-right: 250px; /* Espacement à droite pour le bouton Ajouter */
+    
 }
+
 
 
 /* Table */
@@ -309,7 +311,7 @@ button {
     transition: background-color 0.3s; /* Transition pour la couleur du bouton */
 }
 
- 
+
 .error-message {
     color: red;
     font-size: 0.9em;

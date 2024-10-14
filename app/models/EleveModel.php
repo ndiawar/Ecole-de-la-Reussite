@@ -35,11 +35,11 @@ public function ajouterEleve($data) {
         $idTuteur = $this->pdo->lastInsertId();
 
         // Générer un matricule auto
-        $matricule = $this->genererMatricule(); // Appelle une fonction pour générer le matricule
+        $matricule = $this->genererMatricule($eleve_nom, $eleve_prenom); // Appelle une fonction pour générer le matricule
 
         // Ajouter l'élève
-        $sqlEleve = "INSERT INTO eleve (nom, prenom, matricule, adresse, email, telephone, date_naissance, Classe_id_classe, Tuteur_id_tuteur) 
-                    VALUES (:nom, :prenom, :matricule, :adresse, :email, :telephone, :date_naissance, :classe_id, :tuteur_id)";
+        $sqlEleve = "INSERT INTO eleve (nom, prenom, matricule, adresse, email, sexe, date_naissance, Classe_id_classe, Tuteur_id_tuteur) 
+                    VALUES (:nom, :prenom, :matricule, :adresse, :email, :sexe, :date_naissance, :classe_id, :tuteur_id)";
         $stmtEleve = $this->pdo->prepare($sqlEleve);
         $stmtEleve->execute([
             ':nom' => $data['eleve_nom'],
@@ -47,7 +47,7 @@ public function ajouterEleve($data) {
             ':matricule' => $matricule,
             ':adresse' => $data['eleve_adresse'],
             ':email' => $data['eleve_email'],
-            ':telephone' => $data['eleve_telephone'],
+            ':sexe' => $data['eleve_sexe'],
             ':date_naissance' => $data['eleve_date_naissance'],
             ':classe_id' => $data['classe_id'],
             ':tuteur_id' => $idTuteur
@@ -62,12 +62,22 @@ public function ajouterEleve($data) {
 }
 
 // Exemple de fonction pour générer le matricule
-private function genererMatricule() {
-    // Logique pour générer un matricule unique
-    $prefix = 'ELE'; // Préfixe pour l'élève
-    $suffixed = uniqid($prefix); // Ajoute un identifiant unique
-    return $suffixed;
+private function genererMatricule($nom, $prenom) {
+    // Obtenir l'année actuelle
+    $anneeEntree = date('Y'); // Année actuelle (ex. 2024)
+    
+    // Générer un identifiant unique à trois chiffres
+    $identifiantUnique = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT); // Remplir avec des zéros si moins de 3 chiffres
+    
+    // Obtenir les initiales (première lettre du prénom et du nom en majuscules)
+    $initiales = strtoupper(substr($prenom, 0, 1)) . strtoupper(substr($nom, 0, 1));
+    
+    // Construire le matricule
+    $matricule = $anneeEntree . '' . $identifiantUnique . '' . $initiales;
+    
+    return $matricule;
 }
+
 
     
     public function getClasses() {
@@ -129,22 +139,24 @@ private function genererMatricule() {
     }
     // Autres méthodes CRUD à implémenter (éditer, supprimer, afficher les élèves)...
 
-    public function getElevesWithPagination($start, $limit)
-    {
-        $sql = "SELECT e.id_eleve, e.nom AS eleve_nom, e.prenom AS eleve_prenom, e.matricule, 
-                       e.adresse AS eleve_adresse, e.email AS eleve_email, e.telephone AS eleve_telephone, 
-                       e.date_naissance, c.nom_classe, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom 
-                FROM eleve e
-                JOIN classe c ON e.Classe_id_classe = c.id_classe
-                JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
-                LIMIT :start, :limit";
-        
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   public function getElevesWithPagination($start, $limit)
+{
+    $sql = "SELECT e.id_eleve, e.nom AS eleve_nom, e.prenom AS eleve_prenom, e.matricule, 
+                   e.adresse AS eleve_adresse, e.email AS eleve_email, e.sexe AS eleve_sexe, 
+                   e.date_naissance, c.nom_classe, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom, t.email AS tuteur_email, t.telephone AS tuteur_telephone 
+            FROM eleve e
+            JOIN classe c ON e.Classe_id_classe = c.id_classe
+            JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
+            WHERE e.archive = 0
+            LIMIT :start, :limit";
+    
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
     
     public function countEleves()
     {
@@ -157,66 +169,88 @@ private function genererMatricule() {
     public function afficherEleveParId($id)
     {
         $sql = "SELECT e.id_eleve, e.nom AS eleve_nom, e.prenom AS eleve_prenom, e.matricule, e.adresse AS eleve_adresse, 
-                    e.email AS eleve_email, e.telephone AS eleve_telephone, e.date_naissance,
-                    c.nom_classe, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom, t.telephone AS tuteur_telephone
-                FROM eleve e
-                JOIN classe c ON e.Classe_id_classe = c.id_classe
-                JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
-                WHERE e.id_eleve = :id";
-        $stmt = $this->pdo->prepare($sql);
+        e.email AS eleve_email, e.sexe AS eleve_sexe, e.date_naissance,
+        c.nom_classe, t.nom AS tuteur_nom, t.prenom AS tuteur_prenom, t.telephone AS tuteur_telephone, t.adresse AS tuteur_adresse, t.email AS tuteur_email
+        FROM eleve e
+        JOIN classe c ON e.Classe_id_classe = c.id_classe
+        JOIN tuteur t ON e.Tuteur_id_tuteur = t.id_tuteur
+         WHERE e.id_eleve = :id";
+ 
+         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
     public function modifierEleve($id, $data)
     {
+        // Valider les données de l'élève et du tuteur
         $errors = $this->validerDonnees($data);
         if (!empty($errors)) {
             return ['success' => false, 'errors' => $errors];
         }
     
+        // Vérifier si 'id_classe' est défini dans le tableau $data
+        if (empty($data['id_classe'])) {
+            return ['success' => false, 'errors' => ['La classe doit être sélectionnée']];
+        }
+    
         // Démarrer une transaction
         $this->pdo->beginTransaction();
+    
         try {
-            // Mettre à jour les informations du tuteur
-            $sqlTuteur = "UPDATE tuteur SET nom = :nom, prenom = :prenom, telephone = :telephone, adresse = :adresse, email = :email 
-                        WHERE id_tuteur = (SELECT Tuteur_id_tuteur FROM eleve WHERE id_eleve = :id)";
-            $stmtTuteur = $this->pdo->prepare($sqlTuteur);
-            $stmtTuteur->execute([
-                ':nom' => $data['tuteur_nom'],
-                ':prenom' => $data['tuteur_prenom'],
-                ':telephone' => $data['tuteur_telephone'],
-                ':adresse' => $data['tuteur_adresse'],
-                ':email' => $data['tuteur_email'],
-                ':id' => $id
+            // Mise à jour des données de l'élève
+            $stmt = $this->pdo->prepare("
+                UPDATE eleve 
+                SET nom = :eleve_nom, 
+                    prenom = :eleve_prenom, 
+                    email = :eleve_email, 
+                    sexe = :eleve_sexe, 
+                    adresse = :eleve_adresse, 
+                    date_naissance = :eleve_date_naissance, 
+                    Classe_id_classe = :classe_id 
+                WHERE id_eleve = :id_eleve
+            ");
+            $stmt->execute([
+                ':eleve_nom' => $data['eleve_nom'],
+                ':eleve_prenom' => $data['eleve_prenom'],
+                ':eleve_email' => $data['eleve_email'],
+                ':eleve_sexe' => $data['eleve_sexe'],
+                ':eleve_adresse' => $data['eleve_adresse'],
+                ':eleve_date_naissance' => $data['eleve_date_naissance'],
+                ':classe_id' => $data['id_classe'],  // Vérifié que 'id_classe' n'est pas null
+                ':id_eleve' => $id
             ]);
     
-            // Mettre à jour les informations de l'élève
-            $sqlEleve = "UPDATE eleve SET nom = :nom, prenom = :prenom, adresse = :adresse, 
-                        email = :email, telephone = :telephone, date_naissance = :date_naissance, Classe_id_classe = :classe_id 
-                        WHERE id_eleve = :id";
-            $stmtEleve = $this->pdo->prepare($sqlEleve);
-            $stmtEleve->execute([
-                ':nom' => $data['eleve_nom'],
-                ':prenom' => $data['eleve_prenom'],
-                ':adresse' => $data['eleve_adresse'],
-                ':email' => $data['eleve_email'],
-                ':telephone' => $data['eleve_telephone'],
-                ':date_naissance' => $data['eleve_date_naissance'],
-                ':classe_id' => $data['classe_id'], // Assurez-vous que cela correspond à votre logique
-                ':id' => $id
+            // Mise à jour des données du tuteur
+            $stmt = $this->pdo->prepare("
+                UPDATE tuteur 
+                SET nom = :tuteur_nom, 
+                    prenom = :tuteur_prenom, 
+                    telephone = :tuteur_telephone, 
+                    email = :tuteur_email, 
+                    adresse = :tuteur_adresse 
+                WHERE id_tuteur = :tuteur_id
+            ");
+            $stmt->execute([
+                ':tuteur_nom' => $data['tuteur_nom'],
+                ':tuteur_prenom' => $data['tuteur_prenom'],
+                ':tuteur_telephone' => $data['tuteur_telephone'],
+                ':tuteur_email' => $data['tuteur_email'],
+                ':tuteur_adresse' => $data['tuteur_adresse'],
+                ':tuteur_id' => $data['Tuteur_id_tuteur']
             ]);
     
-            // Confirmer la transaction
+            // Valider la transaction
             $this->pdo->commit();
             return ['success' => true];
     
         } catch (Exception $e) {
-            // Annuler la transaction en cas d'erreur
+            // En cas d'erreur, annuler la transaction et afficher un message détaillé
             $this->pdo->rollBack();
-            return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
+            return ['success' => false, 'errors' => ['Erreur lors de la mise à jour : ' . $e->getMessage()]];
         }
     }
+    
+
     
     public function supprimerEleve($id)
     {
@@ -250,5 +284,29 @@ private function genererMatricule() {
             return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
         }
     }
+     public function archiverEleve($id)
+    {
+        $sql = "UPDATE eleve SET archive = 1 WHERE id_eleve = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id' => $id]);
+    }
+    
 
+ 
+     // Récupérer les élèves archivés
+     public function getArchivedStudents() {
+        $query = "SELECT * FROM eleve WHERE archive = 1"; // 1 pour les élèves archivés
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+     // Désarchiver un élève
+     public function unarchiveStudent($id) {
+        $query = "UPDATE eleve SET archive = 0 WHERE id_eleve = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+    
 }
