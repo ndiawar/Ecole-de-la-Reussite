@@ -144,7 +144,7 @@ switch ($action) {
                     'eleve_prenom' => $_POST['eleve_prenom'],
                     'eleve_adresse' => $_POST['eleve_adresse'],
                     'eleve_email' => $_POST['eleve_email'],
-                    'eleve_telephone' => $_POST['eleve_telephone'],
+                    'eleve_sexe' => $_POST['eleve_sexe'],
                     'eleve_date_naissance' => $_POST['eleve_date_naissance'],
                     'classe_id' => $_POST['classe_id'],
                     'tuteur_nom' => $_POST['tuteur_nom'],
@@ -205,18 +205,17 @@ switch ($action) {
             if ($id) {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $data = [
-                        'eleve_nom' => $_POST['nom'],
-                        'eleve_prenom' => $_POST['prenom'],
-                        'eleve_email' => $_POST['email'],
-                        'eleve_telephone' => $_POST['telephone'],
-                        'eleve_adresse' => $_POST['adresse'],
-                        'eleve_date_naissance' => $_POST['date_naissance'],
-                        'eleve_niveau' => $_POST['niveau'],
+                        'eleve_nom' => $_POST['eleve_nom'],
+                        'eleve_prenom' => $_POST['eleve_prenom'],
+                        'eleve_email' => $_POST['eleve_email'],
+                        'eleve_sexe' => $_POST['eleve_sexe'],
+                        'eleve_adresse' => $_POST['eleve_adresse'],
+                        'eleve_date_naissance' => $_POST['eleve_date_naissance'],
                         'tuteur_nom' => $_POST['tuteur_nom'],
                         'tuteur_prenom' => $_POST['tuteur_prenom'],
                         'tuteur_telephone' => $_POST['tuteur_telephone'],
-                        'tuteur_adresse' => $_POST['tuteur_adresse'],
                         'tuteur_email' => $_POST['tuteur_email'],
+                        'tuteur_adresse' => $_POST['tuteur_adresse'],
                         'classe_id' => $_POST['classe_id']
                     ];
                     $eleveController->modifierEleve($id, $data); // Modifier l'élève
@@ -245,6 +244,24 @@ switch ($action) {
         }
         break;
 
+        case 'archiveEleve':
+            // Route pour archiver un élève
+            if (isset($_GET['id'])) {
+                $eleveController->archiveEleve();
+                
+            } else {
+                echo "ID d'élève manquant.";
+            }
+            break;
+        // case 'desarchiveEleve':
+        //     // Route pour désarchiver un élève
+        //     if (isset($_GET['id'])) {
+        //         $eleveController->desarchiverEleve();
+        //     } else {
+        //         echo "ID d'élève manquant.";
+        //     }
+        //     break;
+            
     default:
         header("Location: index.php?action=login");
         break;

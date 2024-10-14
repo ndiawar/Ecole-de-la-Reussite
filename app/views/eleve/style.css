@@ -60,13 +60,16 @@ body {
 .btn-add {
     padding: 10px 50px;
     background-color: #004d40; /* Couleur de fond du bouton Ajouter */
+    text-decoration: none;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     margin-right: 250px; /* Espacement à droite pour le bouton Ajouter */
+    
 }
+
 
 
 /* Table */
@@ -309,7 +312,7 @@ button {
     transition: background-color 0.3s; /* Transition pour la couleur du bouton */
 }
 
- 
+
 .error-message {
     color: red;
     font-size: 0.9em;

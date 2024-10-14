@@ -25,15 +25,15 @@ ob_start();  // Démarre la capture du contenu
 <div class="container-fluid p-5 m-auto">
     <div class="row my-4">
         <div class="col-md-12 d-flex justify-content-between align-items-center">
-            <div class="col-md-6 d-flex justify-content-between align-items-center">
-                <a href="http://localhost/Ecole-de-la-Reussite/public/index.php?action=ajouterEleve" class="btn btn-primary">Ajouter</a>
+            <div class="col-md-6 d-flex justify-content-start pb-5">
+                <a href="http://localhost/Ecole-de-la-Reussite/public/index.php?action=ajouterEleve" class="btn-add">Ajouter</a>
             </div>
-            <div class="col-md-6 d-flex justify-content-between align-items-center">
-                <div class="input-group search-container w-50">
-                    <span class="input-group-text bg-transparent border-0">
+            <div class="col-md-6 d-flex justify-content-end">
+                <div class="input-group search-container w-100">
+                    <span class="input-group-text pb-4">
                         <i class="fas fa-search"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Rechercher un personnel..." aria-label="Rechercher un personnel">
+                    <input type="text" class="form-control" placeholder="Rechercher un élève..." aria-label="Rechercher un personnel">
                 </div>
             </div>
         </div>
@@ -44,9 +44,9 @@ ob_start();  // Démarre la capture du contenu
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
+                       <th>Matricule</th>
                         <th>Prénom</th>
                         <th>Nom</th>
-                        <th>Matricule</th>
                         <th>Classe</th>
                         <th>Tuteur</th>
                         <th>Actions</th>
@@ -55,13 +55,59 @@ ob_start();  // Démarre la capture du contenu
                 <tbody>
                     <?php foreach ($eleves as $e): ?>
                         <tr>
+                            <td><?= htmlspecialchars($e['matricule']) ?></td>
                             <td><?= htmlspecialchars($e['eleve_prenom']) ?></td>
                             <td><?= htmlspecialchars($e['eleve_nom']) ?></td>
-                            <td><?= htmlspecialchars($e['matricule']) ?></td>
                             <td><?= htmlspecialchars($e['nom_classe']) ?></td>
                             <td><?= htmlspecialchars($e['tuteur_prenom'] . ' ' . $e['tuteur_nom']) ?></td>
                             <td>
-                                <!-- Bouton pour afficher la modal -->
+
+
+                                <!-- Bouton pour archiver -->
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#archiveModal<?= $e['id_eleve'] ?>">
+    <i class="fas fa-archive" title="Archiver"></i>
+</button>
+
+<!-- Modal de confirmation d'archivage -->
+<div class="modal fade" id="archiveModal<?= $e['id_eleve'] ?>" tabindex="-1" aria-labelledby="archiveModalLabel<?= $e['id_eleve'] ?>" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+               
+              
+            <div class="modal-body">
+                Voulez-vous vraiment archiver <?= htmlspecialchars($e['eleve_prenom']) ?> <?= htmlspecialchars($e['eleve_nom']) ?> ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <a href="index.php?action=archiveEleve&id=<?= $e['id_eleve'] ?>" class="btn btn-primary">Archiver</a>
+            </div>
+          </div>
+        </div>
+       </div>
+                        <!-- Toast pour le message d'archivage réussi -->
+                        <?php if (isset($_SESSION['archive_success_message'])): ?>
+    <div class="toast show" id="archiveToast" style="position: absolute; top: 20px; right: 20px;" data-bs-autohide="true">
+        <div class="toast-header">
+            <strong class="me-auto">Succès</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <?= htmlspecialchars($_SESSION['archive_success_message']); ?>
+        </div>
+    </div>
+    <?php unset($_SESSION['archive_success_message']); // Supprime le message après affichage ?>
+<?php endif; ?>
+
+                            
+ <!-- Bouton pour modifier -->
+ <a href="index.php?action=modifierEleve&id=<?= htmlspecialchars($e['id_eleve']) ?>" class="btn" title="Modifier">
+    <i class="fas fa-edit"></i>
+</a>
+
+
+
+                            <!-- Bouton pour afficher la modal -->
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#showModal<?= $e['id_eleve'] ?>">
                                     <i class="fas fa-eye" title="Afficher"></i>
                                 </button>
@@ -69,21 +115,33 @@ ob_start();  // Démarre la capture du contenu
                                 <!-- Modal pour afficher les détails de l'élève -->
                                 <div class="modal fade" id="showModal<?= $e['id_eleve'] ?>" tabindex="-1" aria-labelledby="showModalLabel<?= $e['id_eleve'] ?>" aria-hidden="true">
                                     <div class="modal-dialog">
+                                        
                                         <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" >Informations de l'éléve</h5>
+                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
                                             <div class="modal-body">
+                                                
                                                 <div class="card" style="width: 100%; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                                                     <div class="card-body text-center">
+                                                     
                                                         <h5 class="card-title"><?= htmlspecialchars($e['eleve_prenom']) ?> <?= htmlspecialchars($e['eleve_nom']) ?></h5>
                                                         <p class="card-text text-muted">Matricule: <?= htmlspecialchars($e['matricule']) ?></p>
-                                                        <p class="card-text text-muted">Classe: <?= htmlspecialchars($e['nom_classe']) ?></p>
-                                                        <p class="card-text text-muted">Téléphone: <?= htmlspecialchars($e['eleve_telephone']) ?></p>
+                                                        <p class="card-text text-muted">Date de Naissance: <?= htmlspecialchars($e['date_naissance']) ?></p>
+                                                        <p class="card-text text-muted">Adresse: <?= htmlspecialchars($e['eleve_adresse']) ?></p>
                                                         <p class="card-text text-muted">Email: <?= htmlspecialchars($e['eleve_email']) ?></p>
+                                                        <p class="card-text text-muted">Classe: <?= htmlspecialchars($e['nom_classe']) ?></p>
+                                                        <p class="card-text text-muted">Sexe: <?= htmlspecialchars($e['eleve_sexe']) ?></p>
+                                                        <p class="card-text text-muted">Tuteur: <?= htmlspecialchars($e['tuteur_prenom']). ' '.($e['tuteur_nom']) ?></p>
+                                                       
+                                                        
                                                         <div class="d-flex justify-content-center">
-                                                            <a href="tel:<?= htmlspecialchars($e['eleve_telephone']) ?>" class="btn btn-outline-success me-2">
-                                                                <i class="fas fa-phone"></i> <?= htmlspecialchars($e['eleve_telephone']) ?>
+                                                            <a href="tel:<?= htmlspecialchars($e['tuteur_telephone']) ?>" class="btn btn-outline-success me-2">
+                                                                <i class="fas fa-phone"></i> <?= htmlspecialchars($e['tuteur_telephone']) ?>
                                                             </a>
-                                                            <a href="mailto:<?= htmlspecialchars($e['eleve_email']) ?>" class="btn btn-outline-success">
-                                                                <i class="fas fa-envelope"></i> <?= htmlspecialchars($e['eleve_email']) ?>
+                                                            <a href="mailto:<?= htmlspecialchars($e['tuteur_email']) ?>" class="btn btn-outline-success">
+                                                                <i class="fas fa-envelope"></i> <?= htmlspecialchars($e['tuteur_email']) ?>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -135,7 +193,7 @@ ob_start();  // Démarre la capture du contenu
         </div>
     </div>
 </div>
-
+<script scr="src=/Ecole-de-la-Reussite/app/views/eleve/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault(); // Empêche la soumission par défaut
         clearErrors(); // Efface les erreurs précédentes
 
-        let isValid = true;
+        let isValid = true; 
 
         // Récupérer et nettoyer les valeurs des champs
         const tuteurNom = sanitizeInput(document.getElementById("tuteur_nom").value.trim());
@@ -97,3 +97,12 @@ document.addEventListener("DOMContentLoaded", function() {
         return str.replace(/\b\w/g, char => char.toUpperCase());
     }
 });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show()); // Affiche tous les toasts sur la page
+    });
+

@@ -35,17 +35,17 @@ ob_start();  // Démarre la capture du contenu
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="tuteur_nom" class="form-label">Nom <span class="text-danger">*</span></label>
+                    <label for="tuteur_nom" class="form-label">Nom </label>
                     <input type="text" class="form-control" id="tuteur_nom" name="tuteur_nom" placeholder="Entrez le nom du tuteur" >
                 </div>
                 <div class="mb-3">
-                    <label for="tuteur_prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
+                    <label for="tuteur_prenom" class="form-label">Prénom </label>
                     <input type="text" class="form-control" id="tuteur_prenom" name="tuteur_prenom" placeholder="Entrez le prénom du tuteur" >
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="tuteur_telephone" class="form-label">Téléphone <span class="text-danger">*</span></label>
+                    <label for="tuteur_telephone" class="form-label">Téléphone </label>
                     <input type="text" class="form-control" id="tuteur_telephone" name="tuteur_telephone" placeholder="Entrez le numéro de téléphone" >
                 </div>
                 <div class="mb-3">
@@ -55,7 +55,7 @@ ob_start();  // Démarre la capture du contenu
             </div>
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="tuteur_adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
+                    <label for="tuteur_adresse" class="form-label">Adresse </label>
                     <input type="text" class="form-control" id="tuteur_adresse" name="tuteur_adresse" placeholder="Entrez l'adresse du tuteur" >
                 </div>
             </div>
@@ -65,26 +65,30 @@ ob_start();  // Démarre la capture du contenu
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="eleve_nom" class="form-label">Nom <span class="text-danger">*</span></label>
+                    <label for="eleve_nom" class="form-label">Nom </label>
                     <input type="text" class="form-control" id="eleve_nom" name="eleve_nom" placeholder="Entrez le nom de l'élève" >
                 </div>
                 <div class="mb-3">
-                    <label for="eleve_prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
+                    <label for="eleve_prenom" class="form-label">Prénom </label>
                     <input type="text" class="form-control" id="eleve_prenom" name="eleve_prenom" placeholder="Entrez le prénom de l'élève" >
                 </div>
                 <div class="mb-3">
-                    <label for="eleve_date_naissance" class="form-label">Date de naissance <span class="text-danger">*</span></label>
+                    <label for="eleve_date_naissance" class="form-label">Date de naissance </label>
                     <input type="date" class="form-control" id="eleve_date_naissance" name="eleve_date_naissance" >
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="eleve_adresse" class="form-label">Adresse <span class="text-danger">*</span></label>
+                    <label for="eleve_adresse" class="form-label">Adresse </label>
                     <input type="text" class="form-control" id="eleve_adresse" name="eleve_adresse" placeholder="Entrez l'adresse de l'élève" >
                 </div>
                 <div class="mb-3">
-                    <label for="eleve_telephone" class="form-label">Téléphone</label>
-                    <input type="text" class="form-control" id="eleve_telephone" name="eleve_telephone" placeholder="Entrez le numéro de téléphone de l'élève">
+                   <label for="eleve_sexe" class="form-label">Sexe </label>
+                    <select class="form-select" id="eleve_sexe" name="eleve_sexe" >
+                        <option value="" disabled selected>-- Sélectionnez  --</option>
+                        <option value="1">Masculin</option>
+                        <option value="2">Feminin</option>
+                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="eleve_email" class="form-label">Email</label>
@@ -93,7 +97,7 @@ ob_start();  // Démarre la capture du contenu
             </div>
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="classe_id" class="form-label">Classe <span class="text-danger">*</span></label>
+                    <label for="classe_id" class="form-label">Classe </label>
                     <select class="form-select" id="classe_id" name="classe_id" >
                         <option value="" disabled selected>-- Sélectionnez une Classe --</option>
                         <option value="1">A-Elem (CI)</option>
