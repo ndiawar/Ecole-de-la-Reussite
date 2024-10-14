@@ -118,7 +118,24 @@ switch ($action) {
         break;
 
     
-   
+        case 'archivePaiement':  // Archiver un paiement
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $paiementController->archive($id);
+            }
+            break;
+    
+        case 'restorePaiement':  // Restaurer un paiement archivé
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $paiementController->restore($id);
+            }
+            break;
+    
+        case 'listePaiementsArchives':  // Liste des paiements archivés
+            $paiementsArchives = $paiementController->listArchivedPaiements();
+            require '../app/views/paiement/listPaiementArchi.php';
+            break;
     
     default:
        // header("Location: index.php?action=login");

@@ -318,5 +318,8 @@ ob_start();  // Démarre la capture du contenu
 <script src="/Ecole-de-la-Reussite/app/views/personnel/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
-</html>
-   
+</html> 
+<?php
+$content = ob_get_clean();  // Récupère le contenu capturé
+require __DIR__ . '/../layout.php'; // Inclure le fichier de mise en page
+?>

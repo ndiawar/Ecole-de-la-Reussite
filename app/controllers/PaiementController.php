@@ -80,7 +80,7 @@ class paiementController {
         $paiements = $this->paiementModel->getAllPaiements(); // Récupérer tous les paiements
         require '../app/views/personnel/listPaiements.php'; // Inclure la vue pour afficher les paiements
     }
-
+/*
     // Affiche la liste des élèves
     public function listEléves() {
         $paiements = $this->paiementModel->getAll(); // Récupérer tous les éléves
@@ -96,5 +96,75 @@ class paiementController {
     // Valider le montant
     private function validerMontant($montant) {
         return is_numeric($montant) && $montant > 0;
+    }*/
+
+    
+
+
+   public function archivepersonnel($id) {
+        try {
+            // Récupérer le nom du personnel à partir de l'ID
+            $nom_personnel = $this->personnelModel->getNomPersonnel($id); // Assurez-vous que cette méthode existe dans votre modèle
+
+            // Archiver le personnel en changeant son statut
+            $this->personnelModel->archive($id);
+
+            // Message de succès dans la session
+            $_SESSION['archive_success_message'] = "Personnel archivé avec succès.l'archivage de: ";
+
+        } catch (Exception $e) {
+            // Gérer les erreurs et ajouter un message d'erreur dans la session
+            $_SESSION['archive_error_message'] = "Erreur lors de l'archivage de : " . $e->getMessage();
+        } /*finally {
+            // Rediriger vers la liste du personnel après l'archivage
+            header('Location: index.php?action= listePaiementsArchives');
+            exit();
+        }*/
     }
+
+
+    public function listArchivedPaiement() {
+        try {
+            // Récupérer la liste des personnels archivés depuis le modèle
+            $archivedPersonnel = $this->personnelModel->getArchivedPersonnel();
+    
+            // Si la liste est vide, on peut ajouter un message
+            if (empty($archivedPersonnel)) {
+                $_SESSION['no_archived_message'] = "Aucun personnel archivé pour le moment.";
+            } else {
+                
+                return $archivedPersonnel;
+            }
+    
+            // Stocker la liste dans une variable de session ou directement passer à la vue
+            //$_SESSION['archived_personnel'] = $archivedPersonnel;
+    
+        } catch (Exception $e) {
+            // Gérer les erreurs et ajouter un message d'erreur dans la session
+            $_SESSION['archive_error_message'] = "Erreur lors de la récupération des personnels archivés : " . $e->getMessage();
+        } /*finally {
+            // Rediriger vers la vue de la liste des personnels archivés
+            header('Location: index.php?action= listePaiementsArchives');
+            exit();
+        }*/
+    }
+    
+
+
+    // Restaurer un personnel archivé
+    public function restore($id) {
+        try {
+            $this->personnelModel->restore($id);
+            $_SESSION['success_message'] = "Personnel restauré avec succès.";
+            header('Location: index.php?action=listPersonnel');
+            exit();
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "Erreur lors de la restauration: " . $e->getMessage();
+            header('Location: index.php?action=listPaiements');
+            exit();
+        }
+    }
+
+    
 }
+

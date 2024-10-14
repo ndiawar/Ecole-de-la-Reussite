@@ -157,6 +157,7 @@ class Paiement {
                 per.email AS personnel_email,
                 per.matricule AS personnel_matricule,
                 per.telephone AS personnel_telephone
+
             FROM paiement p
             LEFT JOIN recu r ON p.id_recu = r.id_recu
             LEFT JOIN inscription i ON p.id_inscription = i.id_inscription
@@ -177,9 +178,9 @@ class Paiement {
     }
 
 
-    public function getEleveById($id_eleve) {
-        $this->db->query("SELECT * FROM eleve WHERE id_eleve = :id_eleve");
-        $this->db->bind(':id_eleve', $id_eleve);
+    public function getNomPersonnel($id_paiement) {
+        $this->db->query("SELECT * FROM paiement WHERE id_personnel = :id_personnel");
+        $this->db->bind(':id_personnel', $id_personnel);
         return $this->db->single();
     }
     
@@ -189,5 +190,32 @@ class Paiement {
         $this->db->bind(':id_tuteur', $id_tuteur);
         return $this->db->single();
     }
+
+
+     // Récupérer tous les paiements
+     public function getAllPaiement() {
+        $query = "SELECT * FROM paiement WHERE archive = 0";
+        return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Archiver un paiement
+    public function archive($id) {
+        $query = "UPDATE paiement SET archive = 1 WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+ 
+
+    // Restaurer un paiement archivé
+    public function restore($id) {
+        $query = "UPDATE paiement SET archive = 0 WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+   
     
 }
