@@ -8,14 +8,13 @@ class Personnel {
         $db = new Database();
         $this->pdo = $db->getPDO();
     }
-
-
     public function getActifPersonnels() {
-        $query = "SELECT * FROM personnel WHERE statut_compte = 'Actif'";
+        $query = "SELECT id_personnel, nom, prenom FROM personnel WHERE statut_compte = 'Actif'";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     
    // Récupérer tous les personnels actifs
     public static function all() {

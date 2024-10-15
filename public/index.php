@@ -8,19 +8,22 @@ require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
 require '../app/controllers/EleveController.php'; // Inclure le contrôleur Eleve
+require '../app/controllers/PaiementSalarialController.php'; // Inclure le contrôleur Paiement
 require_once '../app/models/Personnel.php'; // Inclure le modèle Personnel
 require_once '../app/models/EleveModel.php'; // Inclure le modèle Eleve
+require_once '../app/models/PaiementSalarialModel.php'; // Inclure le modèle Paiement
 
 $authController = new AuthController(new Personnel());
-
 
 // Instancier les modèles
 $personnelModel = new Personnel();
 $eleveModel = new EleveModel();
+$paiementSalarialModel = new PaiementSalarialModel();
 
 // Instancier les contrôleurs
 $personnelController = new PersonnelController();
 $eleveController = new EleveController();
+$paiementSalarialController = new PaiementSalarialController();
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
@@ -261,7 +264,73 @@ switch ($action) {
         //         echo "ID d'élève manquant.";
         //     }
         //     break;
-            
+
+ // Routes pour Paiement Salarial
+    case 'listPaiements':
+        if ($authController->isAuthenticated()) {
+            $page = $_GET['page'] ?? 1;
+            $paiementSalarialController->afficherListePaiements($page);
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+
+    case 'ajouterPaiement':
+        if ($authController->isAuthenticated()) {
+            $paiementSalarialController->ajouterPaiement();
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+    case 'afficherPaiementParId':
+        if ($authController->isAuthenticated()) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if ($id) {
+                $paiementSalarialController->afficherPaiementParId($id);
+            } else {
+                header('Location: index.php?action=listPaiements');
+                exit;
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+    case 'modifierPaiement':
+        if ($authController->isAuthenticated()) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if ($id) {
+                $paiementSalarialController->modifierPaiement($id);
+            } else {
+                header('Location: index.php?action=listPaiements');
+                exit;
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
+    case 'archiverPaiement':
+        if ($authController->isAuthenticated()) {
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                $paiementSalarialController->archiverPaiement($id);
+            } else {
+                header('Location: index.php?action=listPaiements');
+                exit;
+            }
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+
     default:
         header("Location: index.php?action=login");
         break;

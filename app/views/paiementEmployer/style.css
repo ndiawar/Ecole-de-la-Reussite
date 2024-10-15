@@ -1,0 +1,354 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.img-fluid {
+    width: 100%; /* Ajuste l'image pour qu'elle prenne toute la largeur disponible */
+    max-width: 150px; /* Limite la largeur maximale pour éviter qu'elle ne devienne trop grande */
+    height: auto; /* Garde les proportions de l'image */
+    margin: 20px 0; /* Ajoute un espace au-dessus et en dessous du logo */
+    display: block; /* S'assure que l'image est affichée en tant que bloc */
+    object-fit: contain; /* Assure que le logo garde ses proportions sans être étiré */
+}
+
+.input-group-text {
+    background-color: transparent;
+    border: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.btn-deconnexion {
+    padding: 10px 15px;
+    background-color: #004d40; /* Couleur de fond du bouton */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+   position: relative;
+   left: 1450px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.search-container input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 70%; /* Augmenter la largeur du champ de recherche */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-add {
+    padding: 10px 50px;
+    background-color: #004d40; /* Couleur de fond du bouton Ajouter */
+    text-decoration: none;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 250px; /* Espacement à droite pour le bouton Ajouter */
+    
+}
+
+
+
+/* Table */
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-bottom: 60px; /* Espace en bas de la table */
+}
+
+.table th, .table td {
+    width: 15%; /* Ajustez la largeur selon vos besoins */
+}
+
+.table-responsive {
+    margin-bottom: 60px; /* Espace entre le tableau et la pagination */
+}
+
+/* Pagination */
+.pagination-wrapper {
+    margin-top: 20px; /* Espace entre le tableau et la pagination */
+    position: relative; /* S'assure que la pagination est relative à son conteneur */
+}
+
+/* Container for pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0; /* Optionnel : espace autour de la pagination */
+    z-index: 1000; /* S'assure que la pagination reste au-dessus des autres éléments */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    /* padding: 0;
+    margin: 0; */
+    position: fixed;
+    bottom: 0;
+}
+
+.pagination li {
+    margin: 0 5px; /* Espace fixe entre les éléments de pagination */
+}
+
+.pagination li a {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #00796b;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination li a.active {
+    background-color: #008080;
+    color: white;
+}
+
+.pagination li a:hover {
+    background-color: #00796b;
+    color: white;
+}
+
+.pagination li a:not(.active) {
+    background-color: #f0f0f0;
+}
+
+.pagination li a.disabled {
+    color: #ccc;
+    pointer-events: none;
+    background-color: transparent;
+}
+
+.fas {
+    color: #004d40;
+}
+
+.modal-content {
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    padding-left: 235px; /* Laisse de l'espace pour l'icône */
+    border: none; /* Supprime les bordures */
+    background-color: #f0f0f0; /* Grey 200 */
+    border-radius: 5px; /* Donne des bords arrondis */
+    height: 50px; /* Hauteur de l'input */
+    outline: none; /* Supprime le contour lors du focus */
+    transition: background-color 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #999; /* Couleur du texte placeholder */
+    left: 15px;
+    padding-left: 40px;
+}
+
+.input-group .input-icon {
+    position: absolute;
+    left: 5px;
+    color: #999; /* Couleur de l'icône */
+}
+
+.input-group input:focus {
+    background-color: #e0e0e0; /* Changement de couleur lors du focus */
+}
+
+.fa-search {
+    color: #999; /* Couleur de l'icône */
+    left: 5px;
+}
+
+form {
+
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold; /* Met le texte des labels en gras */
+}
+
+.required {
+    color: red; /* Change la couleur des étoiles en rouge */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    margin-bottom: 15px; /* Espace entre les champs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007bff; /* Change la couleur de la bordure au focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une ombre */
+}
+
+button {
+    background-color: #008080;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005f5f; /* Couleur du bouton au hover */
+}
+
+.ajout {
+    background-color: #004D40;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #f0f0f0;
+}
+
+.ajout:hover {
+    background-color: #008080;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #f0f0f0;
+}
+
+
+
+.modal-lg {
+    max-width: 90%; /* Augmente la largeur du modal */
+}
+
+form {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold; /* Met le texte des labels en gras */
+}
+
+.required {
+    color: red; /* Change la couleur des étoiles en rouge */
+}
+
+/* Styles pour les inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    margin-bottom: 15px; /* Espace entre les champs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007bff; /* Change la couleur de la bordure au focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une ombre */
+}
+
+button {
+    background-color: #008080; /* Couleur du bouton */
+    color: white; /* Couleur du texte du bouton */
+    border-radius: 5px; /* Pas de bordure */
+    padding: 10px 15px; /* Espace interne */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Changer le curseur en pointeur */
+    transition: background-color 0.3s; /* Transition pour la couleur du bouton */
+}
+
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.input-error {
+    border: 1px solid red;
+}
+#buttonAJ {
+    background-color: #004D40;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#buttonAJ:hover {
+    background-color: #008080;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Agrandit la carte au survol */
+}
+
+.avatar {
+    position: relative; /* Nécessaire pour positionner le badge */
+}
+.is-invalid {
+    border-color: #dc3545; /* Rouge Bootstrap */
+}

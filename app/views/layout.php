@@ -88,12 +88,20 @@ $currentAction = $_GET['action'] ?? 'Dashboard';
                         </li>
                     <?php endif; ?>
 
-                    <!-- Liens visibles pour le Comptable -->
+                    <!-- Liens visibles pour le Comptable listPaiements -->
                     <?php if ($_SESSION['role'] === 'Comptable'): ?>
                         <li class="nav-item">
-                            <a href="#" class="nav-link w-100 align-middle">
-                                <i class="fas fa-chart-line text-white"></i> <span class="ms-2">Rapport Financière</span>
+                            <a href="#submenuInscription" data-bs-toggle="collapse" class="nav-link w-100 align-middle">
+                                <i class="fas fa-users text-white"></i> <span class="ms-2">Gestion Financières</span>
                             </a>
+                            <ul class="collapse nav flex-column ms-2" id="submenuInscription" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="?action=listPaiements" class="nav-link px-0 <?php echo $currentAction === 'listPaiements' ? 'active' : ''; ?>">Paiements Employées</a>
+                                </li>
+                                <li>
+                                    <a href="?action=listPersonnel" class="nav-link px-0 <?php echo $currentAction === 'listPersonnel' ? 'active' : ''; ?>">Élèves </a>
+                                </li>
+                            </ul>
                         </li>
                     <?php endif; ?>
 
