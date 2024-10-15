@@ -352,3 +352,38 @@ button {
 .is-invalid {
     border-color: #dc3545; /* Rouge Bootstrap */
 }
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    border-bottom: 2px solid #28a745;
+    color: white;
+    background-color: #004D40;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child {
+    background-color: #f8f9fa;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
