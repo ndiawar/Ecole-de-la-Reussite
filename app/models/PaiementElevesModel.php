@@ -10,80 +10,166 @@ class PaiementEleveModel {
     }
 
     // Ajouter un paiement
+    // public function ajouterPaiement($data) {
+    //     // Valider les données
+    //     $errors = $this->validerDonnees($data);
+    //     if (!empty($errors)) {
+    //         return ['success' => false, 'errors' => $errors];
+    //     }
+
+    //     $this->pdo->beginTransaction();
+    //     try {
+    //         // Ajouter le paiement
+    //         $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
+    //                 VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
+    //         $stmt = $this->pdo->prepare($sql);
+    //         $stmt->execute([
+    //             ':montant' => $data['montant'],
+    //             ':date_paiement' => $data['date_paiement'],
+    //             ':moyen_paiement' => $data['moyen_paiement'],
+    //             ':id_eleve' => $data['id_eleve'],
+    //             ':type_paiement' => $data['type_paiement'],
+    //             ':mois' => $data['mois']
+
+    //         ]);
+
+    //         $this->pdo->commit();
+    //         return ['success' => true];
+    //     } catch (Exception $e) {
+    //         $this->pdo->rollBack();
+    //         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
+    //     }
+    // }
+
+    // public function ajouterPaiement($data) {
+    //     // Valider les données
+    //     $errors = $this->validerDonnees($data);
+    //     if (!empty($errors)) {
+    //         return ['success' => false, 'errors' => $errors];
+    //     }
+    
+    //     // Démarrer une transaction
+    //     $this->pdo->beginTransaction();
+    //     try {
+    //         // Préparer l'insertion du paiement
+    //         $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
+    //                 VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
+    //         $stmt = $this->pdo->prepare($sql);
+            
+    //         // Exécuter la requête avec des valeurs sécurisées
+    //         $stmt->execute([
+    //             ':montant' => $data['montant'],
+    //             ':date_paiement' => $data['date_paiement'],
+    //             ':moyen_paiement' => $data['moyen_paiement'],
+    //             ':id_eleve' => $data['id_eleve'],  // Assurez-vous que 'id_eleve' est bien dans $data
+    //             ':type_paiement' => $data['type_paiement'],
+    //             ':mois' => isset($data['mois']) ? $data['mois'] : null // Mois est optionnel pour certains paiements
+    //         ]);
+    
+    //         // Valider la transaction
+    //         $this->pdo->commit();
+    //         return ['success' => true];
+    //     } catch (Exception $e) {
+    //         // Annuler la transaction en cas d'erreur
+    //         $this->pdo->rollBack();
+    //         error_log("Erreur d'insertion dans la base de données : " . $e->getMessage());
+    //         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
+    //     }
+    // }
+    
     public function ajouterPaiement($data) {
         // Valider les données
-        $errors = $this->validerDonnees($data);
+        $errors = $this->validerDonnees($data); // Validation générale des données
+    
+        // Si des erreurs existent, les retourner
         if (!empty($errors)) {
             return ['success' => false, 'errors' => $errors];
         }
-
+    
+        // Démarrer une transaction
         $this->pdo->beginTransaction();
         try {
-            // Ajouter le paiement
+            // Préparer l'insertion dans la table paiement
             $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
                     VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
+    
             $stmt = $this->pdo->prepare($sql);
+    
+            // Définir la valeur du mois seulement si le type de paiement est "mensualité"
+            $mois = ($data['type_paiement'] === 'mensualite') ? $data['mois_paiement'] : null;
+    
+            // Exécuter la requête avec des valeurs sécurisées
             $stmt->execute([
                 ':montant' => $data['montant'],
                 ':date_paiement' => $data['date_paiement'],
                 ':moyen_paiement' => $data['moyen_paiement'],
                 ':id_eleve' => $data['id_eleve'],
                 ':type_paiement' => $data['type_paiement'],
-                ':mois' => $data['mois']
-
+                ':mois' => $mois // Insérer null si ce n'est pas une mensualité
             ]);
-
+    
+            // Valider la transaction
             $this->pdo->commit();
             return ['success' => true];
         } catch (Exception $e) {
+            // Annuler la transaction en cas d'erreur
             $this->pdo->rollBack();
+            error_log("Erreur d'insertion dans la base de données : " . $e->getMessage());
             return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
         }
     }
 
-    // Valider les données du paiement
-    private function validerDonnees($data) {
-        $errors = [];
-        
-        // Validation du montant
-        if (!isset($data['montant']) || !is_numeric($data['montant']) || $data['montant'] <= 0) {
-            $errors[] = "Le montant doit être un nombre positif.";
-        }
-        
-        // Validation de la date
-        if (!isset($data['date_paiement']) || empty($data['date_paiement'])) {
-            $errors[] = "La date de paiement est obligatoire.";
-        } else {
-            $date = DateTime::createFromFormat('Y-m-d', $data['date_paiement']);
-            if (!$date || $date->format('Y-m-d') !== $data['date_paiement']) {
-                $errors[] = "La date de paiement doit être au format YYYY-MM-DD.";
-            }
-        }
+    // Méthode pour valider les données du formulaire de paiement
+private function validerDonnees($data) {
+    $errors = [];
 
-        // Validation du moyen de paiement
-        if (!isset($data['moyen_paiement']) || empty($data['moyen_paiement'])) {
-            $errors[] = "Le moyen de paiement est obligatoire.";
+    // Validation de l'ID élève
+    if (empty($data['id_eleve']) || !is_numeric($data['id_eleve'])) {
+        $errors[] = "L'ID de l'élève est requis et doit être valide.";
+    } else {
+        // Vérifier si l'élève existe dans la base de données
+        $sql = "SELECT COUNT(*) FROM eleve WHERE id_eleve = :id_eleve";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_eleve' => $data['id_eleve']]);
+        if ($stmt->fetchColumn() == 0) {
+            $errors[] = "L'élève sélectionné n'existe pas.";
         }
-
-        // Validation de l'ID de l'élève
-        if (!isset($data['id_eleve']) || empty($data['id_eleve'])) {
-            $errors[] = "L'ID de l'élève est obligatoire.";
-        } else {
-            $sql = "SELECT COUNT(*) FROM eleve WHERE id_eleve = :id_eleve";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_eleve' => $data['id_eleve']]);
-            if ($stmt->fetchColumn() == 0) {
-                $errors[] = "L'élève sélectionné n'existe pas.";
-            }
-        }
-
-        // Validation du type de paiement
-        if (!isset($data['type_paiement']) || !in_array($data['type_paiement'], ['inscription', 'salaire', 'mensualite'])) {
-            $errors[] = "Le type de paiement doit être 'inscription', 'salaire' ou 'mensualité'.";
-        }
-
-        return $errors;
     }
+
+    // Validation du montant
+    if (empty($data['montant']) || !is_numeric($data['montant'])) {
+        $errors[] = "Le montant est requis et doit être un nombre.";
+    }
+
+    // Validation de la date de paiement
+    if (empty($data['date_paiement'])) {
+        $errors[] = "La date de paiement est requise.";
+    }
+
+    // Validation du moyen de paiement
+    if (empty($data['moyen_paiement'])) {
+        $errors[] = "Le moyen de paiement est requis.";
+    }
+
+    // Validation du type de paiement
+    if (empty($data['type_paiement'])) {
+        $errors[] = "Le type de paiement est requis.";
+    }
+
+    // Validation du mois si le type de paiement est "mensualité"
+    if ($data['type_paiement'] == 'mensualite') {
+        if (empty($data['mois_paiement'])) {
+            $errors[] = "Le mois est requis pour les mensualités.";
+        }
+    }
+
+    return $errors;
+}
+
+    
+        
+    
+
 
     // Afficher les paiements avec pagination et recherche
     public function getPaiements($start, $limit, $searchTerm = '') {

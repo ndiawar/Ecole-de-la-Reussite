@@ -47,23 +47,87 @@ class PaiementEleveController {
     }
 
     // Ajouter un paiement
+    // public function ajouter() {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $data = $_POST; // Récupérer les données du formulaire
+    //         $result = $this->paiementModel->ajouterPaiement($data);
+    //         if ($result['success']) {
+    //             // Redirection ou message de succès
+    //             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listeElevesp'); // Rediriger vers la liste des éléves
+    //             exit();
+    //         } else {
+    //             // Gérer les erreurs
+    //             $errors = $result['errors'];
+    //         }
+    //     }
+
+    //     // Inclure la vue pour le formulaire d'ajout
+    //     require '../app/views/paiementEleves/AjouterPaieEleve.php'; // Assurez-vous que ce fichier existe
+    // }
+
+    // public function ajouter() {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $data = $_POST; // Récupérer les données du formulaire
+    
+    //         // Vérifier que l'ID de l'élève est présent dans les données POST
+    //         if (!isset($data['id_eleve']) || empty($data['id_eleve'])) {
+    //             echo 'Erreur : L\'ID de l\'élève est manquant. Assurez-vous que le champ caché "id_eleve" est bien rempli.';
+    //             return;
+    //         }
+    
+    //         // Appeler le modèle pour ajouter le paiement
+    //         $result = $this->paiementModel->ajouterPaiement($data);
+    //         if ($result['success']) {
+    //             // Rediriger vers la liste des élèves en cas de succès
+    //             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listePaiementsEleves');
+    //             exit();
+    //         } else {
+    //             // Gérer les erreurs et les afficher pour le débogage
+    //             $errors = $result['errors'];
+    //             echo '<pre>'; print_r($errors); echo '</pre>'; // Afficher les erreurs pour débogage
+    //         }
+    //     }
+    
+    //     // Inclure la vue pour le formulaire d'ajout si le formulaire n'a pas été soumis
+    //     require '../app/views/paiementEleves/listPaieEleves.php';
+    // }
+    
     public function ajouter() {
+        // Vérifier si la requête est une méthode POST (formulaire soumis)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = $_POST; // Récupérer les données du formulaire
+            // Récupérer les données du formulaire
+            $data = $_POST;
+        
+            // Debug: afficher les données reçues (utiliser uniquement pour le débogage)
+            // echo '<pre>'; print_r($data); echo '</pre>';
+    
+            // Vérifier que l'ID de l'élève est présent et valide
+            if (!isset($data['id_eleve']) || empty($data['id_eleve'])) {
+                echo 'Erreur : L\'ID de l\'élève est manquant.';
+                return; // Stopper le traitement si l'ID est manquant
+            }
+    
+            // Appeler le modèle pour ajouter le paiement
             $result = $this->paiementModel->ajouterPaiement($data);
+    
+            // Vérifier si l'ajout du paiement a réussi
             if ($result['success']) {
-                // Redirection ou message de succès
-                header('Location: index.php?action=listePaiementsEleves'); // Rediriger vers la liste des paiements
-                exit();
+                // Redirection en cas de succès vers la liste des paiements des élèves
+                header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listeElevesp');
+                exit(); // Assurez-vous que le script s'arrête après la redirection
             } else {
-                // Gérer les erreurs
-                $errors = $result['errors'];
+                // Si des erreurs sont retournées, les afficher pour le débogage
+                echo '<pre>'; print_r($result['errors']); echo '</pre>';
             }
         }
-
-        // Inclure la vue pour le formulaire d'ajout
-        require '../app/views/paiementEleves/AjouterPaieEleve.php'; // Assurez-vous que ce fichier existe
+    
+        // Inclure la vue si le formulaire n'a pas encore été soumis ou en cas d'erreur
+        require '../app/views/paiementEleves/listPaieEleves.php';
     }
+    
+    
+    
+    
 
     // // Modifier un paiement
     // public function modifier($id) {

@@ -265,28 +265,31 @@ switch ($action) {
             break;
 
 
-    case 'listePaiementsEleves':
-        if ($authController->isAuthenticated()) {
-            $paiementElevesController = new PaiementEleveController();
-            $page = $_GET['page'] ?? 1; // Récupérer le numéro de page
-            $limit = 10; // Nombre d'éléments par page
-            $searchTerm = $_GET['search'] ?? ''; // Récupérer le terme de recherche
-            $paiementElevesController->index($page, $limit, $searchTerm);
-        } else {
-            header("Location: index.php?action=login");
-            exit();
-        }
-        break;
-    
-    case 'ajouterPaiementEleves':
-        if ($authController->isAuthenticated()) {
-            $paiementElevesController = new PaiementEleveController();
-            $paiementElevesController->ajouter(); // Gérer l'ajout d'un paiement
-        } else {
-            header("Location: index.php?action=login");
-            exit();
-        }
-        break;
+case 'listePaiementsEleves':
+    if ($authController->isAuthenticated()) {
+        $paiementElevesController = new PaiementEleveController();
+        $page = $_GET['page'] ?? 1; // Récupérer le numéro de page
+        $limit = 10; // Nombre d'éléments par page
+        $searchTerm = $_GET['search'] ?? ''; // Récupérer le terme de recherche
+        $paiementElevesController->index($page, $limit, $searchTerm);
+    } else {
+        header("Location: index.php?action=login");
+        exit();
+    }
+    break;
+
+case 'ajouterPaiement':
+    if ($authController->isAuthenticated()) {
+        // Instancier le contrôleur des paiements et gérer l'ajout du paiement
+        $paiementElevesController = new PaiementEleveController();
+        $paiementElevesController->ajouter(); // Gérer l'ajout d'un paiement
+    } else {
+        // Redirection vers la page de connexion si l'utilisateur n'est pas authentifié
+        header("Location: index.php?action=login");
+        exit();
+    }
+    break;
+            
     
     case 'modifierPaiementEleves':
         if ($authController->isAuthenticated()) {
