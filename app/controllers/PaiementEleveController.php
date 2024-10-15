@@ -14,8 +14,7 @@ class PaiementEleveController {
 
 
 
-    public function afficherTousLesElevesp()
-    {
+    public function afficherTousLesElevesp() {
         // Nombre d'élèves par page
         $limit = 9; 
         // Page actuelle
@@ -25,6 +24,11 @@ class PaiementEleveController {
     
         // Récupérer les élèves avec pagination
         $eleves = $this->eleveModel->getElevesWithPagination($start, $limit);
+    
+        // Pour chaque élève, récupérer le statut du compte
+        foreach ($eleves as &$eleve) {
+            $eleve['statut_compte'] = $this->eleveModel->getStatutCompte($eleve['id_eleve']);
+        }
         
         // Compter le nombre total d'élèves
         $totalEleves = $this->eleveModel->countEleves(); 
@@ -33,6 +37,7 @@ class PaiementEleveController {
         // Charger la vue avec les données paginées
         require '../app/views/paiementEleves/listPaieEleves.php';
     }
+    
 
 
     // Afficher la liste des paiements
@@ -125,6 +130,10 @@ class PaiementEleveController {
         require '../app/views/paiementEleves/listPaieEleves.php';
     }
     
+    // Méthode dans le contrôleur pour gérer la liste des élèves et leurs statuts
+    
+      
+
     
     
     

@@ -166,6 +166,16 @@ private function validerDonnees($data) {
     return $errors;
 }
 
+
+   // Récupérer le statut du compte pour un élève donné
+public function getStatutCompte($id_eleve) {
+    $sql = "SELECT statut_compte FROM eleve WHERE id_eleve = :id_eleve";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id_eleve' => $id_eleve]);
+    return $stmt->fetchColumn(); // Retourne 'Actif' ou 'Inactif'
+}
+
+
     
         
     

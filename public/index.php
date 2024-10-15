@@ -54,7 +54,7 @@ switch ($action) {
         }
         break;
 
-        case 'register':
+    case 'register':
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nom = $_POST['nom'];
                 $prenom = $_POST['prenom'];
@@ -257,7 +257,8 @@ switch ($action) {
 
         case 'listeElevesp':
             if ($authController->isAuthenticated()) {
-                $paiementElevesController->afficherTousLesElevesp();
+                $eleveController = new EleveController();
+                $eleveController->afficherTousLesElevesp(); // Appel à la méthode avec pagination
             } else {
                 header("Location: index.php?action=login");
                 exit();

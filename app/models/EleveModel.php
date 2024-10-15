@@ -165,6 +165,12 @@ private function genererMatricule($nom, $prenom) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+public function getStatutCompte($id_eleve) {
+    $sql = "SELECT statut_compte FROM eleve WHERE id_eleve = :id_eleve";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id_eleve' => $id_eleve]);
+    return $stmt->fetchColumn(); // Retourne 'Actif' ou 'Inactif'
+}
     
     public function countEleves()
     {

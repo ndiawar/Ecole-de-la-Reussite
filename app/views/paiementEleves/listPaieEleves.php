@@ -54,18 +54,30 @@ ob_start();  // Démarre la capture du contenu
                             <td><?= htmlspecialchars($e['nom_classe']) ?></td>
                             <td><?= htmlspecialchars($e['tuteur_prenom'] . ' ' . $e['tuteur_nom']) ?></td>
                             <td>
+
+                        
                             <!-- Bouton pour ouvrir le formulaire de paiement dans un modal -->
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#paymentModal" data-id="<?= $e['id_eleve'] ?>">
-                                <i class="fas fa-plus"></i> Ajouter Paiement
+                                <i class="fas fa-plus"></i> Ajouter
                             </button>
-
-
-
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mensualiteModal" data-id="<?= $e['id_eleve'] ?>">
+        
+                           
+                           <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mensualiteModal" data-id="<?= $e['id_eleve'] ?>">
                                     Mensualité
-                                </button>
-                                <button type="button" class="btn btn-success">Inscrit</button>
+                            </button>
                             </td>
+
+
+                            <!-- Bouton "Inscrit" actif ou inactif en fonction du statut -->
+                            <td>
+                                        <?php if ($e['statut_compte'] == 'Actif'): ?>
+                                            <button type="button" class="btn btn-success">Inscrit</button>
+                                        <?php else: ?>
+                                            <button type="button" class="btn btn-secondary" disabled>Inscrit</button>
+                                        <?php endif; ?>
+                            </td>
+                                     
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

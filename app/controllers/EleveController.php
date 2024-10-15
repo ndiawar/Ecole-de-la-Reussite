@@ -73,9 +73,31 @@ class EleveController
         }
     }
     
+    public function afficherTousLesElevesp() {
+        // Nombre d'élèves par page
+        $limit = 9;
+        // Page actuelle
+        $page = $_GET['page'] ?? 1;
+        // Calcul du début
+        $start = ($page - 1) * $limit;
 
+        // Récupérer les élèves avec pagination
+        $eleves = $this->eleveModel->getElevesWithPagination($start, $limit);
 
-    public function afficherTousLesEleves()
+        // Pour chaque élève, récupérer le statut du compte
+        foreach ($eleves as &$eleve) {
+            $eleve['statut_compte'] = $this->eleveModel->getStatutCompte($eleve['id_eleve']);
+        }
+
+        // Compter le nombre total d'élèves
+        $totalEleves = $this->eleveModel->countEleves();
+        $totalPages = ceil($totalEleves / $limit);
+
+        // Charger la vue avec les données paginées
+        require '../app/views/paiementEleves/listPaieEleves.php';
+    }
+
+    public function afficherTousLesEleves() 
     {
         // Nombre d'élèves par page
         $limit = 9; 
