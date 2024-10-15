@@ -8,6 +8,7 @@ require '../config/config.php'; // Fichier de configuration
 require '../app/controllers/AuthController.php'; // Inclure le contrôleur Auth
 require '../app/controllers/PersonnelController.php'; // Inclure le contrôleur Personnel
 require '../app/controllers/EleveController.php'; // Inclure le contrôleur Eleve
+
 require_once '../app/models/Personnel.php'; // Inclure le modèle Personnel
 require_once '../app/models/EleveModel.php'; // Inclure le modèle Eleve
 
@@ -18,9 +19,11 @@ $authController = new AuthController(new Personnel());
 $personnelModel = new Personnel();
 $eleveModel = new EleveModel();
 
+
 // Instancier les contrôleurs
 $personnelController = new PersonnelController();
 $eleveController = new EleveController();
+
 
 // Vérifier l'action passée dans l'URL (ex : ?action=login)
 $action = $_GET['action'] ?? 'login'; // Si aucune action, par défaut 'login'
@@ -262,6 +265,7 @@ switch ($action) {
         //     }
         //     break;
             
+     
     default:
         header("Location: index.php?action=login");
         break;
