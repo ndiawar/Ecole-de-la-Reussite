@@ -51,52 +51,7 @@ class PaiementEleveController {
         require '../app/views/paiementEleves/listPaieEleves.php'; // Assurez-vous que ce fichier existe
     }
 
-    // Ajouter un paiement
-    // public function ajouter() {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $data = $_POST; // Récupérer les données du formulaire
-    //         $result = $this->paiementModel->ajouterPaiement($data);
-    //         if ($result['success']) {
-    //             // Redirection ou message de succès
-    //             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listeElevesp'); // Rediriger vers la liste des éléves
-    //             exit();
-    //         } else {
-    //             // Gérer les erreurs
-    //             $errors = $result['errors'];
-    //         }
-    //     }
-
-    //     // Inclure la vue pour le formulaire d'ajout
-    //     require '../app/views/paiementEleves/AjouterPaieEleve.php'; // Assurez-vous que ce fichier existe
-    // }
-
-    // public function ajouter() {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $data = $_POST; // Récupérer les données du formulaire
-    
-    //         // Vérifier que l'ID de l'élève est présent dans les données POST
-    //         if (!isset($data['id_eleve']) || empty($data['id_eleve'])) {
-    //             echo 'Erreur : L\'ID de l\'élève est manquant. Assurez-vous que le champ caché "id_eleve" est bien rempli.';
-    //             return;
-    //         }
-    
-    //         // Appeler le modèle pour ajouter le paiement
-    //         $result = $this->paiementModel->ajouterPaiement($data);
-    //         if ($result['success']) {
-    //             // Rediriger vers la liste des élèves en cas de succès
-    //             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listePaiementsEleves');
-    //             exit();
-    //         } else {
-    //             // Gérer les erreurs et les afficher pour le débogage
-    //             $errors = $result['errors'];
-    //             echo '<pre>'; print_r($errors); echo '</pre>'; // Afficher les erreurs pour débogage
-    //         }
-    //     }
-    
-    //     // Inclure la vue pour le formulaire d'ajout si le formulaire n'a pas été soumis
-    //     require '../app/views/paiementEleves/listPaieEleves.php';
-    // }
-    
+     
     public function ajouter() {
         // Vérifier si la requête est une méthode POST (formulaire soumis)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -132,34 +87,36 @@ class PaiementEleveController {
     
     // Méthode dans le contrôleur pour gérer la liste des élèves et leurs statuts
     
-      
+ 
+// Méthode pour récupérer les mois payés et non payés
+public function getMensualites() {
+    if (isset($_POST['id_eleve'])) {
+        $id_eleve = $_POST['id_eleve'];
+
+        // Récupérer les mois payés de l'élève
+        $moisPayes = $this->paiementModel->getMoisPayes($id_eleve);
+
+        // Liste complète des mois de l'année scolaire
+        $moisComplet = ['Octobre', 'Novembre', 'Décembre', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet'];
+
+        // Préparer le tableau avec les mois et leur statut
+        $mensualites = [];
+        foreach ($moisComplet as $mois) {
+            $mensualites[] = [
+                'mois' => $mois,
+                'statut' => in_array($mois, $moisPayes) ? 'payé' : 'non payé'
+            ];
+        }
+
+        // Retourner les mensualités au format JSON
+        echo json_encode($mensualites);
+    }
+}
 
     
     
     
-
-    // // Modifier un paiement
-    // public function modifier($id) {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $data = $_POST; // Récupérer les données du formulaire
-    //         $data['id_paiement'] = $id; // Ajouter l'ID du paiement
-    //         $result = $this->paiementModel->modifierPaiement($data);
-    //         if ($result['success']) {
-    //             // Redirection ou message de succès
-    //             header('Location: index.php?action=listePaiementsEleves'); // Rediriger vers la liste des paiements
-    //             exit();
-    //         } else {
-    //             // Gérer les erreurs
-    //             $errors = $result['errors'];
-    //         }
-    //     } else {
-    //         // Récupérer les détails du paiement pour le pré-remplir dans le formulaire
-    //         $paiement = $this->paiementModel->getPaiements($id); // Vous devrez ajuster cela
-    //     }
-
-    //     // Inclure la vue pour le formulaire de modification
-    //     require '../app/views/paiementEleves/modifierPaieEleve.php'; // Assurez-vous que ce fichier existe
-    // }
+ 
 
     // Archiver un paiement
     public function archiver($id) {

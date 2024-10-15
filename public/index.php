@@ -279,6 +279,17 @@ case 'listePaiementsEleves':
     }
     break;
 
+case 'getMensualites':
+        if ($authController->isAuthenticated()) {
+            $paiementElevesController = new PaiementEleveController();
+            $paiementElevesController->getMensualites();
+        } else {
+            header("Location: index.php?action=login");
+            exit();
+        }
+        break;
+    
+
 case 'ajouterPaiement':
     if ($authController->isAuthenticated()) {
         // Instancier le contrôleur des paiements et gérer l'ajout du paiement
@@ -292,7 +303,7 @@ case 'ajouterPaiement':
     break;
             
     
-    case 'modifierPaiementEleves':
+case 'modifierPaiementEleves':
         if ($authController->isAuthenticated()) {
             $paiementElevesController = new PaiementEleveController();
             $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -308,7 +319,7 @@ case 'ajouterPaiement':
         }
         break;
     
-    case 'archiverPaiementEleves':
+case 'archiverPaiementEleves':
         if ($authController->isAuthenticated()) {
             $paiementElevesController = new PaiementEleveController();
             $id = $_GET['id'] ?? null;
@@ -321,7 +332,7 @@ case 'ajouterPaiement':
         }
         break;
     
-    case 'listeArchivesEleves':
+case 'listeArchivesEleves':
         if ($authController->isAuthenticated()) {
             $paiementElevesController = new PaiementEleveController();
             $paiementElevesController->archives(); // Afficher les paiements archivés
@@ -331,7 +342,7 @@ case 'ajouterPaiement':
         }
         break;
     
-    case 'desarchiverPaiementEleves':
+case 'desarchiverPaiementEleves':
         if ($authController->isAuthenticated()) {
             $paiementElevesController = new PaiementEleveController();
             $id = $_GET['id'] ?? null;
@@ -345,7 +356,7 @@ case 'ajouterPaiement':
         break;
     
 
-    default:
+default:
         header("Location: index.php?action=login");
         break;
 }

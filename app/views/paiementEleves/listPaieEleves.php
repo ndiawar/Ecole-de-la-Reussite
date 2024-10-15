@@ -55,19 +55,10 @@ ob_start();  // Démarre la capture du contenu
                             <td><?= htmlspecialchars($e['tuteur_prenom'] . ' ' . $e['tuteur_nom']) ?></td>
                             <td>
 
-                        
                             <!-- Bouton pour ouvrir le formulaire de paiement dans un modal -->
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#paymentModal" data-id="<?= $e['id_eleve'] ?>">
                                 <i class="fas fa-plus"></i> Ajouter
-                            </button>
-        
-                           
-                           <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mensualiteModal" data-id="<?= $e['id_eleve'] ?>">
-                                    Mensualité
-                            </button>
-                            </td>
-
+                            </button>    
 
                             <!-- Bouton "Inscrit" actif ou inactif en fonction du statut -->
                             <td>
@@ -77,6 +68,13 @@ ob_start();  // Démarre la capture du contenu
                                             <button type="button" class="btn btn-secondary" disabled>Inscrit</button>
                                         <?php endif; ?>
                             </td>
+
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mensualiteModal" data-id="<?= $e['id_eleve'] ?>">
+                                    Mensualité
+                                </button>
+                            </td>
+
                                      
                         </tr>
                     <?php endforeach; ?>
@@ -165,34 +163,75 @@ ob_start();  // Démarre la capture du contenu
 </div>
 
 
-        <!-- Modal pour afficher les mensualités -->
-        <div class="modal fade" id="mensualiteModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Détails de la Mensualité</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Mois</th>
-                                    <th>Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody id="mensualiteTableBody">
-                                <!-- Détails des mensualités ajoutés par JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    </div>
-                </div>
+      <!-- Modal pour afficher les mensualités -->
+<div class="modal fade" id="mensualiteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de la Mensualité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mois</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mensualiteTableBody">
+                        <!-- Les détails des mensualités seront ajoutés ici par JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
+    </div>
+</div>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensualiteModal = document.getElementById('mensualiteModal');
+        mensualiteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var idEleve = button.getAttribute('data-id');
+
+            // Faire la requête AJAX pour récupérer les mensualités
+            fetch('index.php?action=getMensualites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'id_eleve=' + idEleve
+            })
+            .then(response => response.json())
+            .then(data => {
+                var mensualiteTableBody = document.getElementById('mensualiteTableBody');
+                mensualiteTableBody.innerHTML = '';
+
+                // Ajouter les lignes des mensualités avec la coloration
+                data.forEach(function(item) {
+                    var colorClass = item.statut === 'payé' ? 'table-success' : 'table-danger';
+                    var row = `<tr class="${colorClass}">
+                                <td>${item.mois}</td>
+                                <td>${item.statut === 'payé' ? '<span class="text-success">Payé</span>' : '<span class="text-danger">Non payé</span>'}</td>
+                               </tr>`;
+                    mensualiteTableBody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    });
+</script>
+
+
+        
+        
+        
+        
         <script>
         // Fonction pour activer/désactiver le champ "mois_paiement" selon le type de paiement
             function toggleMoisPaiement() {
@@ -218,8 +257,6 @@ ob_start();  // Démarre la capture du contenu
                     idEleveField.value = idEleve; // Remplir le champ caché avec l'ID de l'élève
                 });
             });
-
-
 
 
         // Code pour charger les mensualités dans le modal Mensualité
@@ -258,7 +295,7 @@ ob_start();  // Démarre la capture du contenu
                 .catch(error => console.error('Erreur:', error));
             });
         });
-        </script>
+    </script>
 
         <!-- Pagination -->
         <nav aria-label="Pagination">
@@ -281,18 +318,7 @@ ob_start();  // Démarre la capture du contenu
     <?php endif; ?>
 </div>
 
-<!-- Toast pour afficher le message de succès -->
-<div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="successToast" class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
-        <div class="toast-header">
-            <strong class="me-auto">Succès</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Élève ajouté avec succès !
-        </div>
-    </div>
-</div>
+ 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

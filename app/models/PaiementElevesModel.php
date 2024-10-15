@@ -9,74 +9,7 @@ class PaiementEleveModel {
         $this->pdo = $db->getPDO();
     }
 
-    // Ajouter un paiement
-    // public function ajouterPaiement($data) {
-    //     // Valider les données
-    //     $errors = $this->validerDonnees($data);
-    //     if (!empty($errors)) {
-    //         return ['success' => false, 'errors' => $errors];
-    //     }
-
-    //     $this->pdo->beginTransaction();
-    //     try {
-    //         // Ajouter le paiement
-    //         $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
-    //                 VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
-    //         $stmt = $this->pdo->prepare($sql);
-    //         $stmt->execute([
-    //             ':montant' => $data['montant'],
-    //             ':date_paiement' => $data['date_paiement'],
-    //             ':moyen_paiement' => $data['moyen_paiement'],
-    //             ':id_eleve' => $data['id_eleve'],
-    //             ':type_paiement' => $data['type_paiement'],
-    //             ':mois' => $data['mois']
-
-    //         ]);
-
-    //         $this->pdo->commit();
-    //         return ['success' => true];
-    //     } catch (Exception $e) {
-    //         $this->pdo->rollBack();
-    //         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
-    //     }
-    // }
-
-    // public function ajouterPaiement($data) {
-    //     // Valider les données
-    //     $errors = $this->validerDonnees($data);
-    //     if (!empty($errors)) {
-    //         return ['success' => false, 'errors' => $errors];
-    //     }
-    
-    //     // Démarrer une transaction
-    //     $this->pdo->beginTransaction();
-    //     try {
-    //         // Préparer l'insertion du paiement
-    //         $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
-    //                 VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
-    //         $stmt = $this->pdo->prepare($sql);
-            
-    //         // Exécuter la requête avec des valeurs sécurisées
-    //         $stmt->execute([
-    //             ':montant' => $data['montant'],
-    //             ':date_paiement' => $data['date_paiement'],
-    //             ':moyen_paiement' => $data['moyen_paiement'],
-    //             ':id_eleve' => $data['id_eleve'],  // Assurez-vous que 'id_eleve' est bien dans $data
-    //             ':type_paiement' => $data['type_paiement'],
-    //             ':mois' => isset($data['mois']) ? $data['mois'] : null // Mois est optionnel pour certains paiements
-    //         ]);
-    
-    //         // Valider la transaction
-    //         $this->pdo->commit();
-    //         return ['success' => true];
-    //     } catch (Exception $e) {
-    //         // Annuler la transaction en cas d'erreur
-    //         $this->pdo->rollBack();
-    //         error_log("Erreur d'insertion dans la base de données : " . $e->getMessage());
-    //         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
-    //     }
-    // }
-    
+     
     public function ajouterPaiement($data) {
         // Valider les données
         $errors = $this->validerDonnees($data); // Validation générale des données
@@ -167,7 +100,7 @@ private function validerDonnees($data) {
 }
 
 
-   // Récupérer le statut du compte pour un élève donné
+// Récupérer le statut du compte pour un élève donné
 public function getStatutCompte($id_eleve) {
     $sql = "SELECT statut_compte FROM eleve WHERE id_eleve = :id_eleve";
     $stmt = $this->pdo->prepare($sql);
@@ -176,9 +109,25 @@ public function getStatutCompte($id_eleve) {
 }
 
 
-    
+ // Méthode pour récupérer les mois payés pour un élève spécifique
+ public function getMoisPayes($id_eleve) {
+    $sql = "SELECT mois FROM paiement WHERE id_eleve = :id_eleve AND type_paiement = 'mensualite'";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id_eleve' => $id_eleve]);
+
+    // Retourner les mois sous forme d'un tableau
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
         
-    
+   
+
+
+
+
+
+
+
+
 
 
     // Afficher les paiements avec pagination et recherche
