@@ -1,8 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    margin: 0; /* Assurez-vous que le margin est à 0 pour ne pas avoir d'espace par défaut */
+    padding: 20px; /* Ajoutez un peu de padding pour éviter que le contenu touche les bords */
+    
 }
 
 .img-fluid {
@@ -23,7 +23,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .header h1 {
@@ -47,13 +47,13 @@ body {
 .search-container {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .search-container input[type="text"] {
     padding: 10px;
     font-size: 16px;
-    width: 70%; /* Augmenter la largeur du champ de recherche */
+    width: 90%; /* Augmenter la largeur du champ de recherche */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -67,6 +67,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     margin-right: 250px; /* Espacement à droite pour le bouton Ajouter */
+    
 }
 
 
@@ -74,6 +75,7 @@ body {
 table {
     width: 80%;
     border-collapse: collapse;
+    margin-top: 20px; /* Ajoutez de l'espace au-dessus de la table */
     margin-bottom: 60px; /* Espace en bas de la table */
 }
 
@@ -82,7 +84,7 @@ table {
 }
 
 .table-responsive {
-    margin-bottom: 60px; /* Espace entre le tableau et la pagination */
+    margin-bottom: 30px; /* Espace entre le tableau et la pagination */
 }
 
 /* Pagination */
@@ -188,6 +190,7 @@ table {
 .fa-search {
     color: #999; /* Couleur de l'icône */
     left: 5px;
+    ;
 }
 
 form {
@@ -329,7 +332,7 @@ button {
 }
 
 #buttonAJ:hover {
-    background-color: #008080;
+    background-color: #004d40;
     color: #fff;
     border-radius: 5px;
     font-size: 18px;
@@ -350,3 +353,37 @@ button {
 .is-invalid {
     border-color: #dc3545; /* Rouge Bootstrap */
 }
+
+
+.position-relative {
+    position: relative;
+}
+
+.fa-search {
+    position: absolute;
+    left: 10px; /* Ajustez selon le padding souhaité */
+    top: 30%;
+    transform: translateY(20%);
+    color: #888; /* Couleur de l'icône */
+    pointer-events: none; /* Pour éviter que l'icône ne capture les clics */
+    margin-right: 100px;
+}
+
+
+.table-responsive {
+    max-height: 600px; /* Ajustez la hauteur selon vos besoins */
+   
+}
+
+
+
+
+.green-hr {
+    border: 1px solid #004d40; /* Ligne avec la couleur spécifiée */
+}
+.btn-add:hover {
+    background-color: #004d40; /* Couleur de fond au survol */
+    color: white; /* Couleur du texte au survol */
+    box-shadow: none; /* Enlever l'ombre si nécessaire */
+}
+

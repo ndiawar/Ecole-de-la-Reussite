@@ -1,4 +1,5 @@
 
+
 <?php
 require_once '../config/config.php';
 
@@ -95,8 +96,8 @@ private function genererMatricule($nom, $prenom) {
         }
     }
     
-    // Fonction de validation des données
-    public function validerDonnees($data) {
+     // Fonction de validation des données
+     public function validerDonnees($data) {
         $errors = [];
         
         // Validation du tuteur
@@ -143,10 +144,9 @@ private function genererMatricule($nom, $prenom) {
                 $errors[] = "La classe sélectionnée n'existe pas.";
             }
         }
-    
+       
         return $errors;
     }
-    
    public function getElevesWithPagination($start, $limit)
 {
     $sql = "SELECT e.id_eleve, e.nom AS eleve_nom, e.prenom AS eleve_prenom, e.matricule, 

@@ -158,7 +158,7 @@ switch ($action) {
                 $result = $eleveModel->ajouterEleve($data);
                 
                 if ($result['success']) {
-                    header("Location: /Ecole-de-la-Reussite/public/index.php?action=listeEleve");
+                    header("Location: /Ecole-de-la-Reussite/public/index.php?action=listeEleves");
                     exit;
                 } else {
                     $errors = $result['errors'];

@@ -1,6 +1,8 @@
 
 <?php
 ob_start();  // Démarre la capture du contenu
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,13 +17,15 @@ ob_start();  // Démarre la capture du contenu
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Ton fichier CSS personnalisé -->
     <link rel="stylesheet" href="/Ecole-de-la-Reussite/app/views/eleve/style.css">
+   
 </head>
+
 <body>
 
-<div class="container my-5">
+<div class="container my-5 w-75 h-75 ">
     <h2 class="text-center mb-4">Inscription d'un Élève</h2>
-    <form action="/Ecole-de-la-Reussite/public/index.php?action=ajouterEleve" method="POST">
-        <div id="error-message" style="color: red;"></div>
+    <form  class="form-container" action="/Ecole-de-la-Reussite/public/index.php?action=ajouterEleve" method="POST">
+        <div id="error-message" style="color: red;">Tous les champs marqués d'un * sont obligatoires.</div>
         
         <!-- Afficher les erreurs générées côté serveur -->
         <?php if (!empty($errors)): ?>
@@ -94,6 +98,7 @@ ob_start();  // Démarre la capture du contenu
                 <div class="mb-3">
                     <label for="eleve_email" class="form-label">Email <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" id="eleve_email" name="eleve_email" placeholder="Entrez l'email de l'élève">
+                    
                 </div>
             </div>
             <div class="col-md-12">
@@ -128,11 +133,15 @@ ob_start();  // Démarre la capture du contenu
 
 </div>
 
+
+
+
+<script src="/Ecole-de-la-Reussite/app/views/eleve/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 <!-- fichier JS personnalisé -->
-<script src="/Ecole-de-la-Reussite/app/views/eleve/script.js"></script>
+
 </body>
 </html>
 <?php

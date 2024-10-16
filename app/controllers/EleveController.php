@@ -78,9 +78,10 @@ class EleveController
     public function afficherTousLesEleves()
     {
         // Nombre d'élèves par page
-        $limit = 9; 
-        // Page actuelle
-        $page = $_GET['page'] ?? 1; 
+        $limit = 7; 
+        // Page actuelle (vérification pour éviter les pages invalides)
+        $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1); 
+        
         // Calcul du début
         $start = ($page - 1) * $limit; 
     
@@ -90,10 +91,18 @@ class EleveController
         // Compter le nombre total d'élèves
         $totalEleves = $this->eleveModel->countEleves(); 
         $totalPages = ceil($totalEleves / $limit);
+        
+        // Vérifier si la page actuelle dépasse le nombre total de pages
+        if ($page > $totalPages && $totalPages > 0) {
+            header("Location: ?action=listeEleves&page=" . $totalPages);
+            exit;
+        }
     
         // Charger la vue avec les données paginées
         require '../app/views/eleve/listEleve.php';
     }
+    
+    
     
 
     public function afficherEleveParId($id)
