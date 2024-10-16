@@ -69,77 +69,148 @@ ob_start();  // Démarre la capture du contenu
     </div>
 
     <?php if (!empty($paiements)): ?>
-    <div class="table-responsive mb-4">
-        <table class="table table-striped table-bordered">
-            <thead>
+<div class="table-responsive mb-4">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Rôle</th>
+                <th>Type</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($paiements as $p): ?>
                 <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Rôle</th>
-                    <th>Type</th>
-                    <th>Montant</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($paiements as $p): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($p['nom']) ?></td>
-                        <td><?= htmlspecialchars($p['prenom']) ?></td>
-                        <td><?= htmlspecialchars($p['role']) ?></td>
-                        <td><?= htmlspecialchars($p['type_salaire']) ?></td>
-                        <td><?= htmlspecialchars($p['montant']) ?> Fcfa</td>
+                    <td><?= htmlspecialchars($p['nom']) ?></td>
+                    <td><?= htmlspecialchars($p['prenom']) ?></td>
+                    <td><?= htmlspecialchars($p['role']) ?></td>
+                    <td><?= htmlspecialchars($p['type_salaire']) ?></td>
+                    <td><?= htmlspecialchars($p['montant']) ?> Fcfa</td>
                     <td><?= htmlspecialchars($p['date_paiement']) ?></td>
-                        <td>
-                            <a href="index.php?action=modifierPaiement&id=<?= htmlspecialchars($p['id_personnel']) ?>" class="btn" title="Modifier">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $p['id_personnel'] ?>">
-                                <i class="fas fa-trash" title="Supprimer"></i>
-                            </button>
-                            <div class="modal fade" id="deleteModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            Voulez-vous vraiment supprimer ce paiement ?
+                    <td>
+                        <!-- Bouton pour afficher les détails du bulletin de salaire -->
+                        <button type="button" class="btn w-100" data-bs-toggle="modal" data-bs-target="#detailsModal<?= $p['id_personnel'] ?>">
+                            <i class="fas fa-file w-100" title="Détails du bulletin de salaire"></i>
+                        </button>
+                        <!-- Modal pour afficher les détails -->
+                        <div class="modal fade" id="detailsModal<?= $p['id_personnel'] ?>" tabindex="-1" aria-labelledby="detailsModalLabel<?= $p['id_personnel'] ?>" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="detailsModalLabel<?= $p['id_personnel'] ?>"></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container my-5 p-4 bg-white shadow-sm">
+                                            <header class="h-25 headerBilan d-flex justify-content-between align-items-center  border-bottom">
+                                                <h1 class="fs-4 p=ml-5 mb-3">Bulletin de salaire | École de la Réussite</h1>
+                                                <img src="./images/logo.png" alt="Logo Ecole de la Réussite" class="w-25">
+                                            </header>
+
+                                            <div class="row my-4">
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="p-3 bg-light border rounded">
+                                                        <h5 class="text-success">Ecole de la Réussite</h5>
+                                                        <p>Adresse : Sacrée cœur<br>Contact : 77 777 77 77</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="p-3 bg-light border rounded">
+                                                        <h5 class="text-success">Employé</h5>
+                                                        <p>Nom: <?= htmlspecialchars($p['nom']) ?><br>Prénom: <?= htmlspecialchars($p['prenom']) ?><br>Fonction: <?= htmlspecialchars($p['role']) ?></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="p-3 bg-light border rounded">
+                                                        <h5 class="text-success">Reçu de paiement</h5>
+                                                        <p>Numéro Reçu: 00001<br>Date de paiement : <?= htmlspecialchars($p['date_paiement']) ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <p>Le bulletin de salaire de l'École de la Réussite est un document détaillé fourni aux employés, récapitulant les éléments de leur rémunération pour la période de paie spécifiée.</p>
+
+                                            <table class="table mt-4">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Mensualité</th>
+                                                        <th scope="col">Montant</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Type de Salaire</td>
+                                                        <td><?= htmlspecialchars($p['type_salaire']) ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nombre d’heures</td>
+                                                        <td><?= htmlspecialchars($p['nombre_heures'] ?? '00000.00') ?> FCFA</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tarif Horaires</td>
+                                                        <td><?= htmlspecialchars($p['tarif_horaire']) ?></td> 
+                                                    </tr>
+                                                    <tr class="fw-bold">
+                                                        <td>Mensualité</td>
+                                                        <td><?= htmlspecialchars($p['mois']) ?></td>
+                                                    </tr>
+                                                    <tr class="text-danger">
+                                                        <td>Moyenne de Paiement</td>
+                                                        <td><?= htmlspecialchars($p['moyen_paiement']) ?></td>                                                     
+                                                    </tr>
+                                                    <tr class="fw-bold">
+                                                        <td>SALAIRE NET</td>
+                                                        <td><?= htmlspecialchars($p['montant']) ?> FCFA</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="d-flex justify-content-between align-items-center mt-5">
+                                            <a href="index.php?action=telecharger_bulletin&id=<?= htmlspecialchars($p['id_personnel']) ?>" class="btn btn-success">Télécharger</a>
+                                            <img src="/Ecole-de-la-Reussite/app/views/paiementEmployer/images/signature.png" alt="Signature" style="height: 100px;">
+                                            </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                            <a href="index.php?action=supprimerPaiement&id=<?= $p['id_personnel'] ?>" class="btn btn-danger">Supprimer</a>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-    <!-- Pagination -->
-    <div class="pagination-container">
-        <nav aria-label="Pagination" class="d-flex justify-content-center">
-            <ul class="pagination">
-                <li class="page-item <?= ($page == 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?action=listPaiements&page=<?= max(1, $page - 1) ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>">Précédent</a>
+<!-- Pagination -->
+<div class="pagination-container">
+    <nav aria-label="Pagination" class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item <?= ($page == 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?action=listPaiements&page=<?= max(1, $page - 1) ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>">Précédent</a>
+            </li>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                    <a class="page-link" href="?action=listPaiements&page=<?= $i ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>"><?= $i ?></a>
                 </li>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?action=listPaiements&page=<?= $i ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>"><?= $i ?></a>
-                    </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($page == $totalPages) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?action=listPaiements&page=<?= min($totalPages, $page + 1) ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>">Suivant</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+            <?php endfor; ?>
+            <li class="page-item <?= ($page == $totalPages) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?action=listPaiements&page=<?= min($totalPages, $page + 1) ?>&search=<?= urlencode($search) ?>&mois=<?= urlencode($_GET['mois'] ?? '') ?>">Suivant</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-    <?php else: ?>
-        <p>Aucun paiement trouvé.</p>
-    <?php endif; ?>
+<?php else: ?>
+    <p>Aucun paiement trouvé.</p>
+<?php endif; ?>
+
 
     <!-- Toast pour afficher le message de succès -->
     <div class="toast-container position-fixed top-0 end-0 p-3">

@@ -108,12 +108,23 @@ ob_start();  // Démarre la capture du contenu
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="password" placeholder="Entrez le mot de passe" name="password" required>
+                                    <input type="password" class="form-control justify-content-between" id="password" placeholder="Entrez le mot de passe" name="password" required>
                                     <span class="input-group-text">
                                         <i class="fa fa-eye" id="togglePassword" style="cursor: pointer;"></i>
                                     </span>
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="confirm-password" class="form-label">Confirmer le mot de passe <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control justify-content-between" id="confirm-password" placeholder="Confirmez le mot de passe" name="confirm-password" required>
+                                    <span class="input-group-text">
+                                        <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+                                    </span>
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
@@ -142,7 +153,7 @@ ob_start();  // Démarre la capture du contenu
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="id_salaire" class="form-label">ID Salaire <span class="text-danger">*</span></label>
+                                <label for="id_salaire" class="form-label">Salaire <span class="text-danger">*</span></label>
                                 <select class="form-select" id="id_salaire" name="id_salaire" required>
                                     <option value="" disabled selected>-- Sélectionnez un Salaire --</option>
                                     <option value="1">Salaire fixe employé</option>

@@ -9,7 +9,7 @@ class PaiementSalarialModel {
         $this->pdo = $db->getPDO(); // Récupération de l'objet PDO
     }
 
-    // Ajouter un paiement salarial
+// Ajouter un paiement salarial
 // public function ajouterPaiement($data) {
 //     // Valider les données
 //     $errors = $this->validerDonnees($data); // Appel de la méthode de validation
@@ -31,12 +31,13 @@ class PaiementSalarialModel {
 //             ':id_personnel' => $data['id_personnel'],
 //             ':type_salaire' => $data['type_salaire'],
 //             ':montant' => $data['montant'],
-//             ':tarif_horaire' => $tarif_horaire,
-//             ':date_paiement' => $data['date_paiement'],
-//             ':moyen_paiement' => $data['moyen_paiement'],
-//             ':nombre_heures' => $nombre_heures,
-//             ':mois' => $data['mois']
-//         ]);
+//             'tarif_horaire' => isset($_POST['tarif_horaire']) && $_POST['tarif_horaire'] !== '' ? $_POST['tarif_horaire'] : null,
+//             'date_paiement' => $_POST['date_paiement'],
+//             'moyen_paiement' => $_POST['moyen_paiement'],
+//             'nombre_heures' => isset($_POST['nombre_heures']) && $_POST['nombre_heures'] !== '' ? $_POST['nombre_heures'] : null,
+//             'mois' => $_POST['mois'],
+//             ]);
+//     // Ajouter un paiement salarial
 
 //         $this->pdo->commit(); // Valider la transaction
 //         return ['success' => true]; // Retourner le succès
@@ -46,19 +47,18 @@ class PaiementSalarialModel {
 //         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage() . ' ' . $e->getCode()]];
 //     }
 // }
-// Ajouter un paiement salarial
 public function ajouterPaiement($data) {
     // Valider les données
-    $errors = $this->validerDonnees($data); // Appel de la méthode de validation
+    $errors = $this->validerDonnees($data);
     if (!empty($errors)) {
-        return ['success' => false, 'errors' => $errors]; // Retourne les erreurs si validation échoue
+        return ['success' => false, 'errors' => $errors];
     }
 
-    $this->pdo->beginTransaction(); // Démarrer une transaction
+    $this->pdo->beginTransaction();
     try {
         // Déterminer les valeurs à insérer
-        $tarif_horaire = ($data['type_salaire'] === 'Fixe') ? null : $data['tarif_horaire'];
-        $nombre_heures = ($data['type_salaire'] === 'Fixe') ? null : $data['nombre_heures'];
+        $tarif_horaire = ($data['type_salaire'] === 'Fixe') ? null : (is_numeric($data['tarif_horaire']) ? $data['tarif_horaire'] : null);
+        $nombre_heures = ($data['type_salaire'] === 'Fixe') ? null : (is_numeric($data['nombre_heures']) ? $data['nombre_heures'] : null);
 
         // Ajouter le paiement
         $sql = "INSERT INTO paiement_salarial (id_personnel, type_salaire, montant, tarif_horaire, date_paiement, moyen_paiement, nombre_heures, mois, archive) 
@@ -68,15 +68,15 @@ public function ajouterPaiement($data) {
             ':id_personnel' => $data['id_personnel'],
             ':type_salaire' => $data['type_salaire'],
             ':montant' => $data['montant'],
-            'tarif_horaire' => isset($_POST['tarif_horaire']) && $_POST['tarif_horaire'] !== '' ? $_POST['tarif_horaire'] : null,
-            'date_paiement' => $_POST['date_paiement'],
-            'moyen_paiement' => $_POST['moyen_paiement'],
-            'nombre_heures' => isset($_POST['nombre_heures']) && $_POST['nombre_heures'] !== '' ? $_POST['nombre_heures'] : null,
-            'mois' => $_POST['mois'],
-            ]);
+            ':tarif_horaire' => $tarif_horaire,
+            ':date_paiement' => $data['date_paiement'],
+            ':moyen_paiement' => $data['moyen_paiement'],
+            ':nombre_heures' => $nombre_heures,
+            ':mois' => $data['mois'],
+        ]);
 
-        $this->pdo->commit(); // Valider la transaction
-        return ['success' => true]; // Retourner le succès
+        $this->pdo->commit();
+        return ['success' => true];
 
     } catch (Exception $e) {
         $this->pdo->rollBack();
@@ -84,80 +84,8 @@ public function ajouterPaiement($data) {
     }
 }
 
-    // Récupérer tous les paiements
-    // public function getPaiements($offset = 0, $limit = 10, $search = '') {
-    //     $sql = "SELECT * FROM paiement_salarial WHERE 1"; // Requête pour récupérer tous les paiements
-    
-    //     if ($search) {
-    //         $sql .= " AND (type_salaire LIKE :search OR id_personnel LIKE :search)"; // Ajout d'une condition de recherche
-    //     }
-    
-    //     $sql .= " LIMIT :offset, :limit"; // Limiter les résultats pour la pagination
-    //     $stmt = $this->pdo->prepare($sql);
-    
-    //     if ($search) {
-    //         $searchParam = '%' . $search . '%'; // Préparer le paramètre de recherche
-    //         $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
-    //     }
-    
-    //     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT); // Liaison du paramètre offset
-    //     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT); // Liaison du paramètre limit
-    //     $stmt->execute(); // Exécuter la requête
-    
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourner tous les paiements sous forme de tableau associatif
-    // }
 
-    // Récupérer tous les paiements
-// public function getPaiements($offset = 0, $limit = 10, $search = '') {
-//     $sql = "SELECT ps.*, p.nom, p.prenom, p.role FROM paiement_salarial ps 
-//             JOIN personnel p ON ps.id_personnel = p.id_personnel WHERE 1"; // Requête avec jointure
-
-//     if ($search) {
-//         $sql .= " AND (ps.type_salaire LIKE :search OR ps.id_personnel LIKE :search)"; // Condition de recherche
-//     }
-
-//     $sql .= " LIMIT :offset, :limit"; // Limiter les résultats pour la pagination
-//     $stmt = $this->pdo->prepare($sql);
-
-//     if ($search) {
-//         $searchParam = '%' . $search . '%'; // Préparer le paramètre de recherche
-//         $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
-//     }
-
-//     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT); // Liaison du paramètre offset
-//     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT); // Liaison du paramètre limit
-//     $stmt->execute(); // Exécuter la requête
-
-//     return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourner tous les paiements avec les infos du personnel
-// }
-
-    
-//     // Compter le nombre de paiements
-//     public function countPaiements($search = '') {
-//         $sql = "SELECT COUNT(*) FROM paiement_salarial WHERE 1"; // Requête pour compter les paiements
-    
-//         if ($search) {
-//             $sql .= " AND (type_salaire LIKE :search OR id_personnel LIKE :search)"; // Condition de recherche
-//         }
-    
-//         $stmt = $this->pdo->prepare($sql);
-    
-//         if ($search) {
-//             $searchParam = '%' . $search . '%'; // Préparer le paramètre de recherche
-//             $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
-//         }
-    
-//         $stmt->execute(); // Exécuter la requête
-//         return $stmt->fetchColumn(); // Retourner le nombre de paiements
-//     }
-    
-//     // Récupérer un paiement par ID
-//     public function getPaiementById($id) {
-//         $sql = "SELECT * FROM paiement_salarial WHERE id_paiement = :id"; // Requête pour récupérer un paiement par ID
-//         $stmt = $this->pdo->prepare($sql);
-//         $stmt->execute([':id' => $id]); // Exécuter la requête avec l'ID
-//         return $stmt->fetch(PDO::FETCH_ASSOC); // Retourner les informations du paiement
-//     }
+ 
 
 public function getPaiements($offset = 0, $limit = 10, $search = '', $mois = '') {
     $sql = "SELECT ps.*, p.nom, p.prenom, p.role FROM paiement_salarial ps 

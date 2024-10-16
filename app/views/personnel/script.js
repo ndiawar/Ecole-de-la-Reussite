@@ -1,4 +1,3 @@
-// Fonction de validation du formulaire d'inscription
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion des icônes pour afficher/masquer les mots de passe
     const togglePassword = document.getElementById('togglePassword');
@@ -9,11 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (togglePassword) {
         togglePassword.addEventListener('click', function () {
-            // Toggle the type attribute
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
-            
-            // Toggle the eye icon
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
@@ -21,11 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (toggleConfirmPassword) {
         toggleConfirmPassword.addEventListener('click', function () {
-            // Toggle the type attribute
             const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
             confirmPassword.setAttribute('type', type);
-            
-            // Toggle the eye icon
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
@@ -37,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email');
         const telephone = document.getElementById('telephone');
         const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
         const sexe = document.getElementById('sexe');
         const role = document.getElementById('role');
         const id_salaire = document.getElementById('id_salaire');
@@ -57,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
 
-        // Validation de l'email (non vide et format valide)
+        // Validation de l'email
         if (email.value.trim() === '') {
             showError(email, "L'email est obligatoire.");
             isValid = false;
@@ -66,18 +60,16 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
 
-        // Validation du téléphone (non vide et format valide)
+        // Validation du téléphone
         if (telephone.value.trim() === '') {
             showError(telephone, "Le numéro de téléphone est obligatoire.");
             isValid = false;
         } else {
             const phoneValue = telephone.value.trim();
-            // Vérifier si le téléphone contient exactement 9 chiffres
             if (!/^[0-9]{9}$/.test(phoneValue)) {
                 showError(telephone, "Le numéro de téléphone doit contenir 9 chiffres.");
                 isValid = false;
             } else {
-                // Vérifier si le téléphone est dans la plage spécifiée
                 const phoneNumber = parseInt(phoneValue, 10);
                 if (phoneNumber < 750000000 || phoneNumber > 789999999) {
                     showError(telephone, "Le numéro de téléphone doit être dans la plage 750000000 à 789999999.");
@@ -86,34 +78,37 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Validation du mot de passe (non vide et longueur minimale)
+        // Validation du mot de passe
         if (password.value.trim() === '') {
             showError(password, "Le mot de passe est obligatoire.");
             isValid = false;
         } else if (password.value.length < 8) {
             showError(password, "Le mot de passe doit contenir au moins 8 caractères.");
             isValid = false;
+        } else if (password.value !== confirmPassword.value) {
+            showError(confirmPassword, "Les mots de passe ne correspondent pas.");
+            isValid = false;
         }
 
-        // Validation du sexe (non vide)
+        // Validation du sexe
         if (sexe.value.trim() === '') {
             showError(sexe, "Le sexe est obligatoire.");
             isValid = false;
         }
 
-        // Validation du rôle (non vide)
+        // Validation du rôle
         if (role.value.trim() === '') {
             showError(role, "Le rôle est obligatoire.");
             isValid = false;
         }
 
-        // Validation de l'identifiant de salaire (non vide)
+        // Validation de l'identifiant de salaire
         if (id_salaire.value.trim() === '') {
             showError(id_salaire, "L'identifiant de salaire est obligatoire.");
             isValid = false;
         }
 
-        // Validation de la dernière connexion (non vide)
+        // Validation de la dernière connexion
         if (derniere_connexion.value.trim() === '') {
             showError(derniere_connexion, "La date de prise de poste est obligatoire.");
             isValid = false;

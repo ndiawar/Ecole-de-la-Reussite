@@ -356,7 +356,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-header {
+.headerBilan {
     border-bottom: 2px solid #28a745;
     color: white;
     background-color: #004D40;

@@ -71,7 +71,7 @@ $personnels = $stmt->fetchAll();
                 </div>
                 <div class="mb-3">
                     <label for="matiere" class="form-label">Matière</label>
-                    <select class="form-select" id="matiere" name="matiere" required>
+                    <select class="form-select" id="matiere" name="matiere" >
                         <option value="" disabled selected>-- Sélectionnez une matière --</option>
                         <option value="7000">Mathématiques</option>
                         <option value="7500">Physique</option>
@@ -85,7 +85,7 @@ $personnels = $stmt->fetchAll();
 
                 <div class="mb-3">
                     <label for="tarif_horaire" class="form-label">Tarif Horaire</label>
-                    <input type="number" class="form-control" id="tarif_horaire" name="tarif_horaire" placeholder="Entrez le tarif horaire" step="0.01" required>
+                    <input type="number" class="form-control" id="tarif_horaire" name="tarif_horaire" placeholder="Entrez le tarif horaire" step="0.01" >
                 </div>
 
             </div>
@@ -97,7 +97,7 @@ $personnels = $stmt->fetchAll();
                     <input type="date" class="form-control" id="date_paiement" name="date_paiement" 
                         value="<?= date('Y-m-d') ?>" 
                         min="<?= date('Y-m-01') ?>" 
-                        max="<?= date('Y-m-t') ?>" required>
+                        max="<?= date('Y-m-t') ?>" >
                 </div>
                 <div class="mb-3">
                     <label for="moyen_paiement" class="form-label">Moyen de Paiement</label>

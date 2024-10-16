@@ -14,16 +14,7 @@ $currentAction = $_GET['action'] ?? 'Dashboard';
     <!-- Lien FontAwesome pour les icônes -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../public/css/styleDash.css">
-    <style>
-        @media (max-width: 767.98px) {
-            .sidebar {
-                display: none;
-            }
-            .sidebar.show {
-                display: block;
-            }
-        }
-    </style>
+
 </head>
 <body>
     <!-- Affichage des messages de session -->
@@ -151,15 +142,15 @@ $currentAction = $_GET['action'] ?? 'Dashboard';
 
         <!-- Contenu principal -->
         <div class="col py-3">
-            <!-- Header -->
-            <header class="d-flex justify-content-end align-items-center">
+            <!-- div -->
+            <div class="d-flex justify-content-end align-items-center">
                 <button class="btn btn-light me-2">
                     <i class="fas fa-bell"></i>
                 </button>
                 <a href="/Ecole-de-la-Reussite/public/index.php?action=logout" class="btn btn-danger" style="background-color: #004D40; border-color: #004D40;">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
-            </header>
+            </div>
 
             <!-- Section de contenu -->
             <div class="content">

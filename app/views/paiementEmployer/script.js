@@ -22,12 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (this.value === 'Fixe') {
             montantInput.value = '200000'; // Définir le montant fixe
             matiereSelect.disabled = true; // Désactiver la matière
-            tarifHoraireInput.disabled = true; // Désactiver le tarif horaire
+            tarifHoraireInput.disabled = false; // Désactiver le tarif horaire
             nombreHeuresInput.disabled = true; // Désactiver le nombre d'heures
 
-            // Réinitialiser tarif horaire et nombre d'heures à 0
-            tarifHoraireInput.value = '0';
-            nombreHeuresInput.value = '0';
+            // Réinitialiser tarif horaire et nombre d'heures
+            nombreHeuresInput.value = ''; 
         }
     });
 
@@ -60,10 +59,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const datePaiement = document.getElementById("date_paiement").value;
         const moyenPaiement = document.getElementById("moyen_paiement").value;
         const nombreHeures = document.getElementById("nombre_heures").value.trim();
+        const tarifHoraire = document.getElementById("tarif_horaire").value.trim();
         const mois = sanitizeInput(document.getElementById("mois").value.trim());
 
         // Validation des champs obligatoires
-        if (!idPersonnel || !typeSalaire || !montant || !datePaiement || !moyenPaiement || !mois) {
+        if (!idPersonnel || !montant || !datePaiement || !moyenPaiement || !mois) {
             showError(document.getElementById("id_personnel"), "Tous les champs marqués d'un * sont obligatoires.");
             isValid = false;
         }
@@ -74,10 +74,19 @@ document.addEventListener("DOMContentLoaded", function() {
             isValid = false;
         }
 
-
-        if (nombreHeures && (!/^\d+$/.test(nombreHeures) || parseInt(nombreHeures, 10) < 0)) {
-            showError(document.getElementById("nombre_heures"), "Le nombre d'heures doit être un nombre positif.");
-            isValid = false;
+        // Validation du nombre d'heures uniquement si type salaire est Horaire
+        if (typeSalaire === 'Horaire') {
+            // Validation du tarif horaire
+            if (!tarifHoraire || isNaN(tarifHoraire) || parseFloat(tarifHoraire) <= 0) {
+                showError(document.getElementById("tarif_horaire"), "Le tarif horaire doit être un nombre positif.");
+                isValid = false;
+            }
+            
+            // Validation du nombre d'heures
+            if (!nombreHeures || !/^\d+$/.test(nombreHeures) || parseInt(nombreHeures, 10) < 0) {
+                showError(document.getElementById("nombre_heures"), "Le nombre d'heures doit être un nombre positif.");
+                isValid = false;
+            }
         }
 
         // Validation des noms et prénoms
@@ -93,18 +102,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function showError(inputElement, message) {
-        // Affiche le message d'erreur
         const errorMessage = document.getElementById("error-message");
         errorMessage.innerHTML += `<div>${message}</div>`;
-        // Ajoute la classe d'erreur
         inputElement.classList.add("input-error");
     }
 
     function clearErrors() {
-        // Retire les messages d'erreur
         const errorMessage = document.getElementById("error-message");
         errorMessage.innerHTML = '';
-        // Retire la classe d'erreur de tous les champs
         const inputs = document.querySelectorAll("input, select");
         inputs.forEach(input => {
             input.classList.remove("input-error");
@@ -120,6 +125,6 @@ document.addEventListener("DOMContentLoaded", function() {
         var toastList = toastElList.map(function (toastEl) {
             return new bootstrap.Toast(toastEl);
         });
-        toastList.forEach(toast => toast.show()); // Affiche tous les toasts sur la page
+        toastList.forEach(toast => toast.show());
     });
 });

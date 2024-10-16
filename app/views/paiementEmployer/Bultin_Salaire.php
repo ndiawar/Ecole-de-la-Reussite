@@ -9,11 +9,9 @@
 </head>
 <body class="bg-light">
     <div class="container my-5 p-4 bg-white shadow-sm">
-        <header style="border-bottom: 2px solid #28a745;
-    color: white;
-    background-color: #004D40; padding:20px;" class="d-flex justify-content-between align-items-center pb-3 border-bottom">
+        <header class=" h-25 headerBilan d-flex justify-content-between align-items-center pb-3 border-bottom">
             <h1 class="fs-4">Bulletin de salaire | École de la Réussite</h1>
-            <img src="./images/logo.png" alt="Logo Ecole de la Réussite" style="height: 80px; width:80px;">
+            <img src="./images/logo.png" alt="Logo Ecole de la Réussite" class="w-25">
         </header>
 
         <div class="row my-4">

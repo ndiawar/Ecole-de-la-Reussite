@@ -82,18 +82,49 @@ private function sanitizeInput($data) {
 }
 
 // Ajoute un nouveau paiement
+// public function ajouterPaiement() {
+//     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Vérifie si la requête est de type POST
+//         // Sanitize input data
+//         $data = $this->sanitizeInput([
+//             'id_personnel' => $_POST['id_personnel'] ?? '',
+//             'type_salaire' => $_POST['type_salaire'] ?? '',
+//             'montant' => $_POST['montant'] ?? '',
+//             'tarif_horaire' => isset($_POST['tarif_horaire']) && $_POST['tarif_horaire'] !== '' ? $_POST['tarif_horaire'] : null,
+//             'date_paiement' => $_POST['date_paiement'] ?? '',
+//             'moyen_paiement' => $_POST['moyen_paiement'] ?? '',
+//             'nombre_heures' => isset($_POST['nombre_heures']) && $_POST['nombre_heures'] !== '' ? $_POST['nombre_heures'] : null,
+//             // Convertir le mois en date
+//             'mois' => !empty($_POST['mois']) ? date('Y-m-d', strtotime('01-' . $_POST['mois'])) : null,
+//         ]);
+
+//         // Tente d'ajouter le paiement via le modèle
+//         $result = $this->paiementSalarialModel->ajouterPaiement($data);
+
+//         if ($result['success']) {
+//             // Redirige vers la liste des paiements en cas de succès
+//             header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPaiements");
+//             exit; // Arrête l'exécution
+//         } else {
+//             // Gère les erreurs s'il y en a
+//             $this->handleErrors($result['errors'], 'paiementEmployer/paiement_ajout.php');
+//         }
+//     } else {
+//         // Inclut la vue pour afficher le formulaire d'ajout de paiement
+//         require '../app/views/paiementEmployer/paiement_ajout.php';
+//     }
+// }
+
 public function ajouterPaiement() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Vérifie si la requête est de type POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Sanitize input data
         $data = $this->sanitizeInput([
             'id_personnel' => $_POST['id_personnel'] ?? '',
             'type_salaire' => $_POST['type_salaire'] ?? '',
             'montant' => $_POST['montant'] ?? '',
-            'tarif_horaire' => isset($_POST['tarif_horaire']) && $_POST['tarif_horaire'] !== '' ? $_POST['tarif_horaire'] : null,
+            'tarif_horaire' => isset($_POST['tarif_horaire']) && is_numeric($_POST['tarif_horaire']) ? $_POST['tarif_horaire'] : null,
             'date_paiement' => $_POST['date_paiement'] ?? '',
             'moyen_paiement' => $_POST['moyen_paiement'] ?? '',
-            'nombre_heures' => isset($_POST['nombre_heures']) && $_POST['nombre_heures'] !== '' ? $_POST['nombre_heures'] : null,
-            // Convertir le mois en date
+            'nombre_heures' => isset($_POST['nombre_heures']) && is_numeric($_POST['nombre_heures']) ? $_POST['nombre_heures'] : null,
             'mois' => !empty($_POST['mois']) ? date('Y-m-d', strtotime('01-' . $_POST['mois'])) : null,
         ]);
 
@@ -101,18 +132,16 @@ public function ajouterPaiement() {
         $result = $this->paiementSalarialModel->ajouterPaiement($data);
 
         if ($result['success']) {
-            // Redirige vers la liste des paiements en cas de succès
             header("Location: /Ecole-de-la-Reussite/public/index.php?action=listPaiements");
-            exit; // Arrête l'exécution
+            exit;
         } else {
-            // Gère les erreurs s'il y en a
             $this->handleErrors($result['errors'], 'paiementEmployer/paiement_ajout.php');
         }
     } else {
-        // Inclut la vue pour afficher le formulaire d'ajout de paiement
         require '../app/views/paiementEmployer/paiement_ajout.php';
     }
 }
+
 
     // Affiche les détails d'un paiement par son ID
     public function afficherPaiementParId($id)
