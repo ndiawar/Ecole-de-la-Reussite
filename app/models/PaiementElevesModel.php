@@ -99,6 +99,107 @@ private function validerDonnees($data) {
     return $errors;
 }
 
+// public function ajouterPaiement($data) {
+//     // Valider les données
+//     $errors = $this->validerDonnees($data);
+
+//     if (!empty($errors)) {
+//         return ['success' => false, 'errors' => $errors];
+//     }
+
+//     // Vérifier si c'est un paiement de type "inscription"
+//     if ($data['type_paiement'] === 'inscription') {
+//         // Vérifier le statut de l'élève dans la table 'eleve'
+//         $sqlCheckStatut = "SELECT statut_compte FROM eleve WHERE id_eleve = :id_eleve";
+//         $stmtCheck = $this->pdo->prepare($sqlCheckStatut);
+//         $stmtCheck->execute([':id_eleve' => $data['id_eleve']]);
+//         $statutCompte = $stmtCheck->fetchColumn();
+
+//         // Si le statut du compte est "Actif", ne pas inscrire l'élève, mais afficher un message
+//         if ($statutCompte === 'Actif') {
+//             return ['success' => false, 'message' => "Cet élève a déjà payé son inscription."];
+//             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listeElevesp');
+
+//         }
+
+//         // Si le statut est "Inactif", mettre à jour à "Actif" après paiement
+//         $sqlUpdateStatut = "UPDATE eleve SET statut_compte = 'Actif' WHERE id_eleve = :id_eleve";
+//         $stmtUpdate = $this->pdo->prepare($sqlUpdateStatut);
+//         $stmtUpdate->execute([':id_eleve' => $data['id_eleve']]);
+//     }
+
+//     // Démarrer la transaction pour l'insertion dans la table paiement
+//     $this->pdo->beginTransaction();
+//     try {
+//         // Préparer l'insertion du paiement
+//         $sql = "INSERT INTO paiement (montant, date_paiement, moyen_paiement, id_eleve, type_paiement, mois) 
+//                 VALUES (:montant, :date_paiement, :moyen_paiement, :id_eleve, :type_paiement, :mois)";
+
+//         $stmt = $this->pdo->prepare($sql);
+
+//         // Définir la valeur du mois seulement si le type de paiement est "mensualite"
+//         $mois = ($data['type_paiement'] === 'mensualite') ? $data['mois_paiement'] : null;
+
+//         // Exécuter la requête avec des valeurs sécurisées
+//         $stmt->execute([
+//             ':montant' => $data['montant'],
+//             ':date_paiement' => $data['date_paiement'],
+//             ':moyen_paiement' => $data['moyen_paiement'],
+//             ':id_eleve' => $data['id_eleve'],
+//             ':type_paiement' => $data['type_paiement'],
+//             ':mois' => $mois
+//         ]);
+
+//         // Valider la transaction
+//         $this->pdo->commit();
+//         return ['success' => true];
+//     } catch (Exception $e) {
+//         // Annuler la transaction en cas d'erreur
+//         $this->pdo->rollBack();
+//         error_log("Erreur d'insertion dans la base de données : " . $e->getMessage());
+//         return ['success' => false, 'errors' => ['Une erreur est survenue : ' . $e->getMessage()]];
+//     }
+// }
+
+
+
+// private function validerDonnees($data) {
+//     $errors = [];
+
+//     // Validation de l'ID élève
+//     if (empty($data['id_eleve']) || !is_numeric($data['id_eleve'])) {
+//         $errors[] = "L'ID de l'élève est requis et doit être valide.";
+//     }
+
+//     // Validation du montant
+//     if (empty($data['montant']) || !is_numeric($data['montant'])) {
+//         $errors[] = "Le montant est requis et doit être un nombre.";
+//     }
+
+//     // Validation de la date de paiement
+//     if (empty($data['date_paiement'])) {
+//         $errors[] = "La date de paiement est requise.";
+//     }
+
+//     // Validation du moyen de paiement
+//     if (empty($data['moyen_paiement'])) {
+//         $errors[] = "Le moyen de paiement est requis.";
+//     }
+
+//     // Validation du type de paiement
+//     if (empty($data['type_paiement'])) {
+//         $errors[] = "Le type de paiement est requis.";
+//     }
+
+//     // Validation du mois si le type de paiement est "mensualité"
+//     if ($data['type_paiement'] === 'mensualite' && empty($data['mois_paiement'])) {
+//         $errors[] = "Le mois est requis pour les mensualités.";
+//     }
+
+//     return $errors;
+// }
+
+
 
 // Récupérer le statut du compte pour un élève donné
 public function getStatutCompte($id_eleve) {

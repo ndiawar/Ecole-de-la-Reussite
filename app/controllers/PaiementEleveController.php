@@ -85,6 +85,44 @@ class PaiementEleveController {
         require '../app/views/paiementEleves/listPaieEleves.php';
     }
     
+    // public function ajouter() {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $data = $_POST;
+    
+    //         // Vérifier que l'ID de l'élève est présent
+    //         if (!isset($data['id_eleve']) || empty($data['id_eleve'])) {
+    //             echo 'Erreur : L\'ID de l\'élève est manquant.';
+    //             return;
+    //         }
+    
+    //         // Appeler le modèle pour ajouter le paiement
+    //         $result = $this->paiementModel->ajouterPaiement($data);
+    
+    //         // Vérifier si l'ajout du paiement a réussi
+    //         if ($result['success']) {
+    //             // Redirection en cas de succès vers la liste des paiements des élèves
+    //             header('Location: http://localhost/Ecole-de-la-Reussite/public/index.php?action=listeElevesp');
+    //             exit();
+    //         } else {
+    //             // Si un message spécifique est retourné (ex : déjà payé), afficher un message temporaire
+    //             if (isset($result['message'])) {
+    //                 $message = $result['message'];
+    //             }
+    
+    //             // Sinon, afficher les erreurs si l'ajout échoue
+    //             if (isset($result['errors'])) {
+    //                 $errors = $result['errors'];
+    //                 echo '<pre>'; print_r($errors); echo '</pre>';
+    //             }
+    //         }
+    //     }
+    
+    //     // Inclure la vue si le formulaire n'a pas encore été soumis ou en cas d'erreur
+    //     require '../app/views/paiementEleves/listPaieEleves.php';
+    // }
+    
+
+    
     // Méthode dans le contrôleur pour gérer la liste des élèves et leurs statuts
     
  
